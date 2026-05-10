@@ -1,0 +1,10 @@
+build/
+game.z64
+game.pak
+*.o
+*.d
+*.elf
+*.elf.sym
+*.elf.stripped
+*.map
+*.dfs
