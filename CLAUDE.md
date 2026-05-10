@@ -14,12 +14,16 @@ Builds run inside **MSYS2 bash** (`C:\msys64\usr\bin\bash.exe`). The SDK lives a
 
 ```bash
 # From MSYS2 bash, in the project directory
-cd /c/dev/n64
+cd /c/dev/n64/test
 make          # build game.z64
+make run      # build and launch in Ares
 make clean    # clean build artifacts
 ```
 
-To run after building, launch Ares manually: `C:\ares-v147\ares.exe` and load `game.z64`.
+Claude invokes the build via PowerShell like this:
+```powershell
+& "C:\msys64\usr\bin\bash.exe" -lc "cd /c/dev/n64/test && make run"
+```
 
 ## SDK Layout
 
@@ -45,10 +49,11 @@ include $(N64_INST)/include/t3d.mk
 ## Project Structure
 
 ```
-C:\dev\n64\
+C:\dev\n64\test\
 ├── Makefile          # build system
 ├── CLAUDE.md         # this file
 ├── NOTES.md          # N64 concepts and learnings
+├── DESIGN.md         # game design document
 ├── src/
 │   └── main.c        # entry point and game loop
 └── filesystem/       # contents become the ROM's DFS (rom:// prefix at runtime)
