@@ -131,7 +131,6 @@ int main(void) {
      *   modelMatFP — fixed-point (T3DMat4FP), what the RSP actually reads
      *
      * modelMatFP must also be uncached — the RSP DMA's it each frame. */
-    T3DMat4    modelMat;
     T3DMat4FP *modelMatFP = malloc_uncached(sizeof(T3DMat4FP));
 
     /* A viewport holds the camera (view matrix) and lens (projection matrix).
@@ -148,12 +147,8 @@ int main(void) {
     /* Rail position — the camera's Z coordinate along the forward axis.
      * Starts far back, advances each frame. The cube sits at Z=0.
      * When the camera passes the cube we loop back to the start. */
-    float railZ = -80.0f;
-
-    /* The cube doesn't move, so its model matrix is a fixed identity.
-     * Set it once here — no need to rebuild it every frame. */
-    t3d_mat4_identity(&modelMat);
-    t3d_mat4_to_fixed(modelMatFP, &modelMat);
+    float railZ   = -80.0f;
+    float rotAngle = 0.0f;
 
     /* Display list: records RSP commands once, replayed every frame.
      *
@@ -170,8 +165,19 @@ int main(void) {
         /* Advance the camera along the rail. 0.4 units/frame at 60fps =
          * 24 units/second. The cube is 20 units wide so it takes roughly
          * 5 seconds to fly from first sight to passing through it. */
-        railZ += 0.4f;
+        railZ    += 0.4f;
+        rotAngle += 0.02f;
         if (railZ > 30.0f) railZ = -80.0f; /* loop back for testing */
+
+        /* Rebuild the model matrix each frame with the new rotation.
+         * t3d_mat4fp_from_srt_euler writes directly to fixed-point — no
+         * intermediate float matrix needed. The RSP DMA's this address on
+         * every rspq_block_run, so the new rotation is picked up automatically. */
+        t3d_mat4fp_from_srt_euler(modelMatFP,
+            (float[3]){1.0f, 1.0f, 1.0f},           /* scale  — no change */
+            (float[3]){rotAngle * 0.4f, rotAngle, 0.0f}, /* pitch, yaw, roll */
+            (float[3]){0.0f, 0.0f, 0.0f}             /* position — at origin */
+        );
 
         /* Camera sits 15 units behind and 8 units above the rail position,
          * looking 10 units ahead. As railZ increases the whole window slides
