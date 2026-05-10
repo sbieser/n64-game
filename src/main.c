@@ -244,7 +244,7 @@ int main(void) {
              * Vertex index reference:
              *   0(-10,-10,-10) 1(+10,-10,-10) 2(+10,-10,+10) 3(-10,-10,+10)
              *   4(-10,+10,-10) 5(+10,+10,-10) 6(+10,+10,+10) 7(-10,+10,+10) */
-            t3d_tri_draw(0, 1, 5); t3d_tri_draw(0, 5, 4); /* front  (z=-10) */
+            t3d_tri_draw(0, 5, 1); t3d_tri_draw(0, 4, 5); /* front  (z=-10) */
             t3d_tri_draw(2, 6, 7); t3d_tri_draw(2, 7, 3); /* back   (z=+10) */
             t3d_tri_draw(0, 3, 7); t3d_tri_draw(0, 7, 4); /* left   (x=-10) */
             t3d_tri_draw(1, 5, 6); t3d_tri_draw(1, 6, 2); /* right  (x=+10) */
