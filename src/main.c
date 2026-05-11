@@ -10,6 +10,7 @@
 #include <libdragon.h>
 #include <t3d/t3d.h>
 #include <t3d/t3dmath.h>
+#include <math.h>
 
 /* -------------------------------------------------------------------------
  * CUBE GEOMETRY
@@ -169,14 +170,16 @@ int main(void) {
         rotAngle += 0.02f;
         if (railZ > 30.0f) railZ = -80.0f; /* loop back for testing */
 
-        /* Rebuild the model matrix each frame with the new rotation.
-         * t3d_mat4fp_from_srt_euler writes directly to fixed-point — no
-         * intermediate float matrix needed. The RSP DMA's this address on
-         * every rspq_block_run, so the new rotation is picked up automatically. */
+        /* Scale pulses between 0.5 and 1.5 using a sine wave.
+         * Position oscillates left/right on X using a slower sine wave.
+         * Both are driven by rotAngle so everything stays in sync. */
+        float scale = 1.0f + 0.5f * sinf(rotAngle * 1.5f);
+        float posX  = sinf(rotAngle * 0.8f) * 15.0f;
+
         t3d_mat4fp_from_srt_euler(modelMatFP,
-            (float[3]){1.0f, 1.0f, 1.0f},           /* scale  — no change */
-            (float[3]){rotAngle * 0.4f, rotAngle, 0.0f}, /* pitch, yaw, roll */
-            (float[3]){0.0f, 0.0f, 0.0f}             /* position — at origin */
+            (float[3]){scale, scale, scale},
+            (float[3]){rotAngle * 0.4f, rotAngle, 0.0f},
+            (float[3]){posX, 0.0f, 0.0f}
         );
 
         /* Camera sits 15 units behind and 8 units above the rail position,
