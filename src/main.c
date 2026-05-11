@@ -121,6 +121,10 @@ int main(void) {
      * stack depth of 8, etc.). */
     t3d_init((T3DInitParams){});
 
+    /* joypad_init sets up the controller subsystem. joypad_poll() is called
+     * once per frame to snapshot the current button and stick state. */
+    joypad_init();
+
     /* Allocate and fill cube vertices in uncached memory. */
     cubeVerts = malloc_uncached(sizeof(T3DVertPacked) * 4);
     initCubeVerts();
@@ -148,8 +152,10 @@ int main(void) {
     /* Rail position — the camera's Z coordinate along the forward axis.
      * Starts far back, advances each frame. The cube sits at Z=0.
      * When the camera passes the cube we loop back to the start. */
-    float railZ   = -80.0f;
-    float rotAngle = 0.0f;
+    float railZ       = -80.0f;
+    float rotAngle    = 0.0f;
+    float lateralPos  = 0.0f;  /* camera X offset from rail centre, updated by stick */
+    float verticalPos = 0.0f;  /* camera Y offset from base height, updated by stick */
 
     /* Display list: records RSP commands once, replayed every frame.
      *
@@ -163,34 +169,42 @@ int main(void) {
     for (;;) {
         /* ---- UPDATE ---- */
 
-        /* Advance the camera along the rail. 0.4 units/frame at 60fps =
-         * 24 units/second. The cube is 20 units wide so it takes roughly
-         * 5 seconds to fly from first sight to passing through it. */
+        /* Read the analog stick. stick_x/stick_y are int8_t, roughly -84..+84.
+         * Dividing by 85 normalises to -1..+1. The stick is velocity-based:
+         * holding it left accelerates the camera leftward each frame, rather
+         * than snapping to a fixed position. This matches the feel of classic
+         * rail shooters like Star Fox 64. */
+        joypad_poll();
+        joypad_inputs_t pad = joypad_get_inputs(JOYPAD_PORT_1);
+        float stickX = pad.stick_x / 85.0f;
+        float stickY = pad.stick_y / 85.0f;
+
+        lateralPos  += stickX * 0.5f;
+        verticalPos += stickY * 0.5f;
+
+        /* Clamp to the play area. The camera can drift ±20 units left/right
+         * and ±6 units up/down from the rail centre. */
+        if (lateralPos  >  20.0f) lateralPos  =  20.0f;
+        if (lateralPos  < -20.0f) lateralPos  = -20.0f;
+        if (verticalPos >   6.0f) verticalPos =   6.0f;
+        if (verticalPos <  -6.0f) verticalPos =  -6.0f;
+
         railZ    += 0.4f;
         rotAngle += 0.02f;
-        if (railZ > 30.0f) railZ = -80.0f; /* loop back for testing */
+        if (railZ > 30.0f) railZ = -80.0f;
 
-        /* Scale pulses between 0.5 and 1.5 using a sine wave.
-         * Position oscillates left/right on X using a slower sine wave.
-         * Both are driven by rotAngle so everything stays in sync. */
         float scale = 1.0f + 0.5f * sinf(rotAngle * 1.5f);
-        float posX  = sinf(rotAngle * 0.8f) * 15.0f;
-
         t3d_mat4fp_from_srt_euler(modelMatFP,
             (float[3]){scale, scale, scale},
             (float[3]){rotAngle * 0.4f, rotAngle, 0.0f},
-            (float[3]){posX, 0.0f, 0.0f}
+            (float[3]){0.0f, 0.0f, 0.0f}
         );
 
-        /* Camera sits 15 units behind and 8 units above the rail position,
-         * looking 10 units ahead. As railZ increases the whole window slides
-         * forward — the cube ahead grows, passes, disappears behind.
-         *
-         * This is the simplest possible rails camera: a fixed offset from a
-         * moving point. In the real game the player's lateral input will shift
-         * the camera left/right/up/down within this window. */
-        T3DVec3 camPos    = {{0.0f, 8.0f, railZ - 15.0f}};
-        T3DVec3 camTarget = {{0.0f, 0.0f, railZ + 10.0f}};
+        /* Camera position follows the stick directly. The look-at target uses
+         * smaller multipliers so the camera tilts/banks naturally as you steer
+         * — it leans into the turn rather than just sliding flat. */
+        T3DVec3 camPos    = {{lateralPos,        8.0f + verticalPos,        railZ - 15.0f}};
+        T3DVec3 camTarget = {{lateralPos * 0.6f, verticalPos * 0.4f, railZ + 10.0f}};
 
         t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(70.0f), 10.0f, 200.0f);
         t3d_viewport_look_at(&viewport, &camPos, &camTarget, &(T3DVec3){{0,1,0}});
