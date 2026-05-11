@@ -1,10 +1,9 @@
 /**
- * N64 Learn — Rails Movement
+ * N64 Learn — Rails with Obstacles
  *
- * Step 1 toward The Colossus: the camera flies forward along a fixed rail
- * through space. The cube sits still as a fixed obstacle. This establishes
- * the core feel of the game — propulsion toward something, the sense that
- * you are moving and the universe is not.
+ * Camera flies forward on a fixed rail through 300 units of space. Five
+ * distinct obstacle shapes are scattered along the path. Steer with the
+ * analog stick to avoid them. Hitting one flashes the background red.
  */
 
 #include <libdragon.h>
@@ -13,85 +12,248 @@
 #include <math.h>
 
 /* -------------------------------------------------------------------------
- * CUBE GEOMETRY
+ * CONSTANTS
+ * -------------------------------------------------------------------------*/
+#define RAIL_START      -250.0f
+#define RAIL_END          50.0f
+#define LATERAL_MAX       20.0f
+#define VERTICAL_MAX       6.0f
+#define HIT_FLASH_FRAMES  30
+#define NUM_OBSTACLES     12
+
+#define SHAPE_CUBE     0
+#define SHAPE_TETRA    1
+#define SHAPE_OCTA     2
+#define SHAPE_PYRAMID  3
+#define SHAPE_PRISM    4
+
+/* -------------------------------------------------------------------------
+ * OBSTACLE TABLE
  *
- * The N64's RSP (Reality Signal Processor) works with vertices loaded into a
- * small on-chip cache (70 slots max). We define our 8 corners here, packed
- * into T3DVertPacked structs. Each struct holds TWO vertices interleaved —
- * this layout is required so a single DMA burst fills a full 32-byte cache
- * line on the RSP.
+ * worldZ   — fixed position along the rail (camera travels from -250 to +50)
+ * x, y     — lateral and vertical offset from path center
+ * hitRadius — collision sphere radius (play area is ±20 lateral, ±6 vertical)
+ * shape     — which geometry to draw
+ * rotSpeedX/Y — per-obstacle rotation multipliers on the global angle counter
+ * rotPhase  — starting offset so obstacles don't all spin in sync
+ * -------------------------------------------------------------------------*/
+typedef struct {
+    float worldZ, x, y, hitRadius;
+    int   shape;
+    float rotSpeedX, rotSpeedY, rotPhase;
+} Obstacle;
+
+static const Obstacle obstacles[NUM_OBSTACLES] = {
+    {-220,  0,  0, 9.0f, SHAPE_CUBE,    0.3f, 1.0f, 0.0f},
+    {-195,  8, -2, 9.0f, SHAPE_TETRA,   0.4f, 0.7f, 1.0f},
+    {-170, -6,  3, 9.0f, SHAPE_OCTA,    0.2f, 1.2f, 2.1f},
+    {-148,  0, -2, 9.0f, SHAPE_PYRAMID, 0.5f, 0.4f, 0.5f},
+    {-125, 10,  0, 9.0f, SHAPE_PRISM,   0.3f, 0.8f, 3.2f},
+    { -98, -8,  2, 9.0f, SHAPE_CUBE,    0.6f, 0.5f, 1.7f},
+    { -74,  0,  4, 9.0f, SHAPE_TETRA,   0.4f, 1.1f, 2.8f},
+    { -50,-10, -3, 9.0f, SHAPE_OCTA,    0.2f, 0.9f, 0.3f},
+    { -28,  7,  0, 9.0f, SHAPE_PYRAMID, 0.5f, 0.6f, 1.4f},
+    {  -8,  0,  0, 9.0f, SHAPE_PRISM,   0.3f, 1.3f, 4.1f},
+    {  12, -8,  3, 9.0f, SHAPE_CUBE,    0.4f, 0.7f, 2.2f},
+    {  30,  5, -4, 9.0f, SHAPE_OCTA,    0.6f, 0.4f, 3.7f},
+};
+
+/* -------------------------------------------------------------------------
+ * GEOMETRY
  *
- * Corner layout (Y-up, right-handed):
+ * Each shape lives in its own uncached vertex buffer. T3DVertPacked holds
+ * TWO vertices interleaved — the RSP DMA's them in 32-byte cache-line pairs.
  *
- *      7 ------- 6
- *     /|         /|
- *    4 ------- 5  |
- *    |  3 -----|- 2
- *    | /       | /
- *    0 ------- 1
+ * All faces are wound CCW when viewed from outside (back-face culling on).
+ * Normals use the outward direction of each vertex — approximate for shared
+ * vertices, but correct enough for smooth lighting at N64 resolution.
  *
- * Normals are the outward diagonal at each corner (e.g. corner 0 at
- * (-1,-1,-1) gets normal (-1,-1,-1) normalized). Lighting will be smooth
- * across faces — proper flat shading would require duplicating vertices
- * so each face has its own set, but 8 shared vertices teaches the concept
- * more clearly.
- *
- * Vertices must live in UNCACHED memory. The RSP's DMA engine reads directly
- * from RDRAM, bypassing the CPU cache. If this were cached memory, the CPU's
- * writes might not have flushed to RDRAM yet when the RSP reads, causing the
- * RSP to see stale data.
+ * Vertex counts and packed-struct counts:
+ *   Cube     8 verts → 4 packed structs
+ *   Tetra    4 verts → 2 packed structs
+ *   Octa     6 verts → 3 packed structs
+ *   Pyramid  5 verts → 3 packed structs (last struct uses only slot A)
+ *   Prism    6 verts → 3 packed structs
  * -------------------------------------------------------------------------*/
 
-#define CUBE_HALF 10  /* half-size of the cube in world units */
+static T3DVertPacked *cubeVerts;
+static T3DVertPacked *tetraVerts;
+static T3DVertPacked *octaVerts;
+static T3DVertPacked *pyramidVerts;
+static T3DVertPacked *prismVerts;
 
-static T3DVertPacked *cubeVerts; /* allocated in main() via malloc_uncached */
-
-/* Packs a corner normal from a float direction. The RSP stores normals in
- * 5.6.5 bit format (5 bits X, 6 bits Y, 5 bits Z) to save DMEM space. */
 static uint16_t packNorm(float x, float y, float z) {
     T3DVec3 v = {{x, y, z}};
     t3d_vec3_norm(&v);
     return t3d_vert_pack_normal(&v);
 }
 
+/* -- CUBE ------------------------------------------------------------------
+ *
+ *   7---6
+ *  /|  /|    vertices 0–3: bottom ring (y=-10)
+ * 4---5 |    vertices 4–7: top ring    (y=+10)
+ * | 3-|-2
+ * |/  |/
+ * 0---1
+ */
 static void initCubeVerts(void) {
-    /* Each T3DVertPacked holds two vertices. Fields:
-     *   posA/posB  — s16 position (world units, integer part of s16.16)
-     *   normA/normB — packed normal (for lighting)
-     *   rgbaA/rgbaB — vertex color 0xRRGGBBAA
-     *   stA/stB    — UV coords (unused here, left as 0) */
+    const int H = 10;
     cubeVerts[0] = (T3DVertPacked){
-        .posA  = {-CUBE_HALF, -CUBE_HALF, -CUBE_HALF}, /* vert 0: front-bottom-left  */
-        .normA = packNorm(-1,-1,-1),
-        .rgbaA = 0xFF3333FF,                            /* red    */
-        .posB  = { CUBE_HALF, -CUBE_HALF, -CUBE_HALF}, /* vert 1: front-bottom-right */
-        .normB = packNorm( 1,-1,-1),
-        .rgbaB = 0xFFFF33FF,                            /* yellow */
+        .posA={-H,-H,-H}, .normA=packNorm(-1,-1,-1), .rgbaA=0xFF3333FF,
+        .posB={ H,-H,-H}, .normB=packNorm( 1,-1,-1), .rgbaB=0xFFFF33FF,
     };
     cubeVerts[1] = (T3DVertPacked){
-        .posA  = { CUBE_HALF, -CUBE_HALF,  CUBE_HALF}, /* vert 2: back-bottom-right  */
-        .normA = packNorm( 1,-1, 1),
-        .rgbaA = 0x33FF33FF,                            /* green  */
-        .posB  = {-CUBE_HALF, -CUBE_HALF,  CUBE_HALF}, /* vert 3: back-bottom-left   */
-        .normB = packNorm(-1,-1, 1),
-        .rgbaB = 0x33FFFFFF,                            /* cyan   */
+        .posA={ H,-H, H}, .normA=packNorm( 1,-1, 1), .rgbaA=0x33FF33FF,
+        .posB={-H,-H, H}, .normB=packNorm(-1,-1, 1), .rgbaB=0x33FFFFFF,
     };
     cubeVerts[2] = (T3DVertPacked){
-        .posA  = {-CUBE_HALF,  CUBE_HALF, -CUBE_HALF}, /* vert 4: front-top-left     */
-        .normA = packNorm(-1, 1,-1),
-        .rgbaA = 0x3333FFFF,                            /* blue   */
-        .posB  = { CUBE_HALF,  CUBE_HALF, -CUBE_HALF}, /* vert 5: front-top-right    */
-        .normB = packNorm( 1, 1,-1),
-        .rgbaB = 0xFFFFFFFF,                            /* white  */
+        .posA={-H, H,-H}, .normA=packNorm(-1, 1,-1), .rgbaA=0x3333FFFF,
+        .posB={ H, H,-H}, .normB=packNorm( 1, 1,-1), .rgbaB=0xFFFFFFFF,
     };
     cubeVerts[3] = (T3DVertPacked){
-        .posA  = { CUBE_HALF,  CUBE_HALF,  CUBE_HALF}, /* vert 6: back-top-right     */
-        .normA = packNorm( 1, 1, 1),
-        .rgbaA = 0xFF8833FF,                            /* orange  */
-        .posB  = {-CUBE_HALF,  CUBE_HALF,  CUBE_HALF}, /* vert 7: back-top-left      */
-        .normB = packNorm(-1, 1, 1),
-        .rgbaB = 0xFF33FFFF,                            /* magenta */
+        .posA={ H, H, H}, .normA=packNorm( 1, 1, 1), .rgbaA=0xFF8833FF,
+        .posB={-H, H, H}, .normB=packNorm(-1, 1, 1), .rgbaB=0xFF33FFFF,
     };
+}
+
+static void drawCube(void) {
+    t3d_vert_load(cubeVerts, 0, 8);
+    t3d_tri_draw(0,5,1); t3d_tri_draw(0,4,5); /* front  z=-10 */
+    t3d_tri_draw(2,6,7); t3d_tri_draw(2,7,3); /* back   z=+10 */
+    t3d_tri_draw(0,3,7); t3d_tri_draw(0,7,4); /* left   x=-10 */
+    t3d_tri_draw(1,5,6); t3d_tri_draw(1,6,2); /* right  x=+10 */
+    t3d_tri_draw(0,1,2); t3d_tri_draw(0,2,3); /* bottom y=-10 */
+    t3d_tri_draw(4,7,6); t3d_tri_draw(4,6,5); /* top    y=+10 */
+    t3d_tri_sync();
+}
+
+/* -- TETRAHEDRON -----------------------------------------------------------
+ *
+ * Apex at top (y=+12). Three base vertices at y=-5:
+ *   0=apex, 1=back(+Z), 2=front-left(-X,-Z), 3=front-right(+X,-Z)
+ */
+static void initTetraVerts(void) {
+    tetraVerts[0] = (T3DVertPacked){
+        .posA={ 0, 12,  0}, .normA=packNorm( 0, 1, 0), .rgbaA=0x00FFFFFF,
+        .posB={ 0, -5, 11}, .normB=packNorm( 0,-1, 1), .rgbaB=0x3333FFFF,
+    };
+    tetraVerts[1] = (T3DVertPacked){
+        .posA={-9, -5, -5}, .normA=packNorm(-1,-1,-1), .rgbaA=0x00AAFFFF,
+        .posB={ 9, -5, -5}, .normB=packNorm( 1,-1,-1), .rgbaB=0x8888FFFF,
+    };
+}
+
+static void drawTetra(void) {
+    t3d_vert_load(tetraVerts, 0, 4);
+    t3d_tri_draw(1, 2, 3); /* bottom */
+    t3d_tri_draw(0, 3, 2); /* front  */
+    t3d_tri_draw(0, 1, 3); /* right  */
+    t3d_tri_draw(0, 2, 1); /* left   */
+    t3d_tri_sync();
+}
+
+/* -- OCTAHEDRON ------------------------------------------------------------
+ *
+ * Two square pyramids base-to-base.
+ *   0=top, 1=right(+X), 2=back(+Z), 3=left(-X), 4=front(-Z), 5=bottom
+ *
+ * Equatorial ring goes CCW from above: 1 → 4 → 3 → 2 → 1
+ */
+static void initOctaVerts(void) {
+    octaVerts[0] = (T3DVertPacked){
+        .posA={ 0, 12,  0}, .normA=packNorm( 0, 1, 0), .rgbaA=0x00FF44FF,
+        .posB={10,  0,  0}, .normB=packNorm( 1, 0, 0), .rgbaB=0x88FF00FF,
+    };
+    octaVerts[1] = (T3DVertPacked){
+        .posA={ 0,  0, 10}, .normA=packNorm( 0, 0, 1), .rgbaA=0x00CC44FF,
+        .posB={-10, 0,  0}, .normB=packNorm(-1, 0, 0), .rgbaB=0x44FFAAFF,
+    };
+    octaVerts[2] = (T3DVertPacked){
+        .posA={ 0,  0,-10}, .normA=packNorm( 0, 0,-1), .rgbaA=0xAAFF00FF,
+        .posB={ 0,-12,  0}, .normB=packNorm( 0,-1, 0), .rgbaB=0x007733FF,
+    };
+}
+
+static void drawOcta(void) {
+    t3d_vert_load(octaVerts, 0, 6);
+    t3d_tri_draw(0,1,4); t3d_tri_draw(0,4,3); /* top: right-front, front-left */
+    t3d_tri_draw(0,3,2); t3d_tri_draw(0,2,1); /* top: left-back,   back-right */
+    t3d_tri_draw(5,4,1); t3d_tri_draw(5,3,4); /* bot: right-front, front-left */
+    t3d_tri_draw(5,2,3); t3d_tri_draw(5,1,2); /* bot: left-back,   back-right */
+    t3d_tri_sync();
+}
+
+/* -- SQUARE PYRAMID --------------------------------------------------------
+ *
+ * Apex at y=+12, square base at y=-5.
+ *   0=apex, 1=front-left(-X,-Z), 2=front-right(+X,-Z),
+ *   3=back-right(+X,+Z), 4=back-left(-X,+Z)
+ */
+static void initPyramidVerts(void) {
+    pyramidVerts[0] = (T3DVertPacked){
+        .posA={ 0, 12,  0}, .normA=packNorm( 0, 1, 0), .rgbaA=0xFFCC00FF,
+        .posB={-10,-5,-10}, .normB=packNorm(-1,-1,-1), .rgbaB=0xFF8800FF,
+    };
+    pyramidVerts[1] = (T3DVertPacked){
+        .posA={ 10,-5,-10}, .normA=packNorm( 1,-1,-1), .rgbaA=0xFFAA00FF,
+        .posB={ 10,-5, 10}, .normB=packNorm( 1,-1, 1), .rgbaB=0xFFDD44FF,
+    };
+    pyramidVerts[2] = (T3DVertPacked){
+        .posA={-10,-5, 10}, .normA=packNorm(-1,-1, 1), .rgbaA=0xFFBB22FF,
+        /* slot B unused — only 5 vertices needed */
+    };
+}
+
+static void drawPyramid(void) {
+    t3d_vert_load(pyramidVerts, 0, 5);
+    t3d_tri_draw(1,2,3); t3d_tri_draw(1,3,4); /* base  */
+    t3d_tri_draw(0,2,1);                        /* front */
+    t3d_tri_draw(0,3,2);                        /* right */
+    t3d_tri_draw(0,4,3);                        /* back  */
+    t3d_tri_draw(0,1,4);                        /* left  */
+    t3d_tri_sync();
+}
+
+/* -- TRIANGULAR PRISM ------------------------------------------------------
+ *
+ * Ridge runs along the X axis. Left triangle at x=-10, right at x=+10.
+ *   0=L-front-bot, 1=L-back-bot, 2=L-apex
+ *   3=R-front-bot, 4=R-back-bot, 5=R-apex
+ */
+static void initPrismVerts(void) {
+    prismVerts[0] = (T3DVertPacked){
+        .posA={-10, 0,-10}, .normA=packNorm(-1,-1,-1), .rgbaA=0xAA33FFFF,
+        .posB={-10, 0, 10}, .normB=packNorm(-1,-1, 1), .rgbaB=0x6633CCFF,
+    };
+    prismVerts[1] = (T3DVertPacked){
+        .posA={-10,12,  0}, .normA=packNorm(-1, 1, 0), .rgbaA=0xFF88FFFF,
+        .posB={ 10, 0,-10}, .normB=packNorm( 1,-1,-1), .rgbaB=0xCC44FFFF,
+    };
+    prismVerts[2] = (T3DVertPacked){
+        .posA={ 10, 0, 10}, .normA=packNorm( 1,-1, 1), .rgbaA=0x9922CCFF,
+        .posB={ 10,12,  0}, .normB=packNorm( 1, 1, 0), .rgbaB=0xEEAAFFFF,
+    };
+}
+
+static void drawPrism(void) {
+    t3d_vert_load(prismVerts, 0, 6);
+    t3d_tri_draw(0,1,2);                        /* left face  */
+    t3d_tri_draw(3,5,4);                        /* right face */
+    t3d_tri_draw(0,3,1); t3d_tri_draw(1,3,4);  /* bottom     */
+    t3d_tri_draw(0,2,5); t3d_tri_draw(0,5,3);  /* front slope*/
+    t3d_tri_draw(1,5,2); t3d_tri_draw(1,4,5);  /* back slope */
+    t3d_tri_sync();
+}
+
+static void drawShape(int shape) {
+    switch (shape) {
+        case SHAPE_CUBE:    drawCube();    break;
+        case SHAPE_TETRA:   drawTetra();   break;
+        case SHAPE_OCTA:    drawOcta();    break;
+        case SHAPE_PYRAMID: drawPyramid(); break;
+        case SHAPE_PRISM:   drawPrism();   break;
+    }
 }
 
 /* -------------------------------------------------------------------------
@@ -99,111 +261,103 @@ static void initCubeVerts(void) {
  * -------------------------------------------------------------------------*/
 
 int main(void) {
-    /* Debug output — readable in Ares via Tools → Debug Log, and over USB on
-     * real hardware. Always include this during development. */
     debug_init_isviewer();
     debug_init_usblog();
 
-    /* Initialize the display: 320x240 pixels, 16-bit color (RGB565), 3
-     * framebuffers (triple buffering), no gamma correction, resample AA.
-     *
-     * Triple buffering: the TV is showing buffer A, the RDP is drawing into
-     * buffer B, and the CPU is building commands for buffer C. This prevents
-     * tearing and keeps the pipeline full. */
     display_init(RESOLUTION_320x240, DEPTH_16_BPP, 3, GAMMA_NONE, FILTERS_RESAMPLE);
-
-    /* rdpq is libdragon's RDP command queue — the RDP is the rasterizer that
-     * turns triangles into pixels. We never talk to the RDP directly; we queue
-     * commands and the hardware drains the queue. */
     rdpq_init();
-
-    /* Initialize tiny3d. The empty T3DInitParams uses all defaults (matrix
-     * stack depth of 8, etc.). */
     t3d_init((T3DInitParams){});
-
-    /* joypad_init sets up the controller subsystem. joypad_poll() is called
-     * once per frame to snapshot the current button and stick state. */
     joypad_init();
 
-    /* Allocate and fill cube vertices in uncached memory. */
-    cubeVerts = malloc_uncached(sizeof(T3DVertPacked) * 4);
+    /* Allocate all vertex buffers in uncached RDRAM. The RSP DMA engine reads
+     * directly from RDRAM — if these were in cached memory the RSP might see
+     * stale data that hasn't been flushed from the CPU cache yet. */
+    cubeVerts    = malloc_uncached(sizeof(T3DVertPacked) * 4);
+    tetraVerts   = malloc_uncached(sizeof(T3DVertPacked) * 2);
+    octaVerts    = malloc_uncached(sizeof(T3DVertPacked) * 3);
+    pyramidVerts = malloc_uncached(sizeof(T3DVertPacked) * 3);
+    prismVerts   = malloc_uncached(sizeof(T3DVertPacked) * 3);
+
     initCubeVerts();
+    initTetraVerts();
+    initOctaVerts();
+    initPyramidVerts();
+    initPrismVerts();
 
-    /* The model matrix moves/rotates/scales the cube in world space.
-     *
-     * We keep two representations:
-     *   modelMat   — float (T3DMat4), easy to build with standard math
-     *   modelMatFP — fixed-point (T3DMat4FP), what the RSP actually reads
-     *
-     * modelMatFP must also be uncached — the RSP DMA's it each frame. */
-    T3DMat4FP *modelMatFP = malloc_uncached(sizeof(T3DMat4FP));
+    /* One model matrix per obstacle in a single contiguous uncached block.
+     * rdpq_detach_show() at the end of each frame acts as a full pipeline
+     * sync — the RSP is guaranteed done with all matrices before the next
+     * frame's CPU writes begin, so one matrix per obstacle (not three) is safe. */
+    T3DMat4FP *obsMats = malloc_uncached(sizeof(T3DMat4FP) * NUM_OBSTACLES);
 
-    /* A viewport holds the camera (view matrix) and lens (projection matrix).
-     * t3d_viewport_create() initializes it to the full screen size. */
     T3DViewport viewport = t3d_viewport_create();
 
-    /* Lighting: a dim blue ambient so nothing is fully black, plus one warm
-     * directional light from the upper-right. */
-    uint8_t ambientColor[4]     = {40,  40,  80,  0xFF};
+    uint8_t ambientColor[4]     = {40,  40,  80, 0xFF};
     uint8_t directionalColor[4] = {200, 200, 160, 0xFF};
     T3DVec3 lightDir = {{1.0f, 1.0f, -0.5f}};
     t3d_vec3_norm(&lightDir);
 
-    /* Rail position — the camera's Z coordinate along the forward axis.
-     * Starts far back, advances each frame. The cube sits at Z=0.
-     * When the camera passes the cube we loop back to the start. */
-    float railZ       = -80.0f;
+    float railZ       = RAIL_START;
     float rotAngle    = 0.0f;
-    float lateralPos  = 0.0f;  /* camera X offset from rail centre, updated by stick */
-    float verticalPos = 0.0f;  /* camera Y offset from base height, updated by stick */
-
-    /* Display list: records RSP commands once, replayed every frame.
-     *
-     * The N64 CPU and RSP run concurrently. Rather than sending one command at
-     * a time and waiting, we build a buffer of commands (the display list), then
-     * hand the whole buffer to the RSP in one go. The RSP executes it while the
-     * CPU is already preparing the next frame. This is the fundamental N64
-     * rendering pattern. */
-    rspq_block_t *dplDraw = NULL;
+    float lateralPos  = 0.0f;
+    float verticalPos = 0.0f;
+    int   hitFlash    = 0;
 
     for (;;) {
         /* ---- UPDATE ---- */
 
-        /* Read the analog stick. stick_x/stick_y are int8_t, roughly -84..+84.
-         * Dividing by 85 normalises to -1..+1. The stick is velocity-based:
-         * holding it left accelerates the camera leftward each frame, rather
-         * than snapping to a fixed position. This matches the feel of classic
-         * rail shooters like Star Fox 64. */
         joypad_poll();
         joypad_inputs_t pad = joypad_get_inputs(JOYPAD_PORT_1);
-        float stickX = pad.stick_x / 85.0f;
-        float stickY = pad.stick_y / 85.0f;
 
-        lateralPos  += stickX * 0.5f;
-        verticalPos += stickY * 0.5f;
-
-        /* Clamp to the play area. The camera can drift ±20 units left/right
-         * and ±6 units up/down from the rail centre. */
-        if (lateralPos  >  20.0f) lateralPos  =  20.0f;
-        if (lateralPos  < -20.0f) lateralPos  = -20.0f;
-        if (verticalPos >   6.0f) verticalPos =   6.0f;
-        if (verticalPos <  -6.0f) verticalPos =  -6.0f;
+        /* Velocity-based steering: holding the stick accelerates the camera
+         * sideways each frame rather than snapping to a fixed offset. */
+        lateralPos  += (pad.stick_x / 85.0f) * 0.5f;
+        verticalPos += (pad.stick_y / 85.0f) * 0.5f;
+        if (lateralPos  >  LATERAL_MAX)  lateralPos  =  LATERAL_MAX;
+        if (lateralPos  < -LATERAL_MAX)  lateralPos  = -LATERAL_MAX;
+        if (verticalPos >  VERTICAL_MAX) verticalPos =  VERTICAL_MAX;
+        if (verticalPos < -VERTICAL_MAX) verticalPos = -VERTICAL_MAX;
 
         railZ    += 0.4f;
         rotAngle += 0.02f;
-        if (railZ > 30.0f) railZ = -80.0f;
+        if (railZ > RAIL_END) railZ = RAIL_START;
 
-        float scale = 1.0f + 0.5f * sinf(rotAngle * 1.5f);
-        t3d_mat4fp_from_srt_euler(modelMatFP,
-            (float[3]){scale, scale, scale},
-            (float[3]){rotAngle * 0.4f, rotAngle, 0.0f},
-            (float[3]){0.0f, 0.0f, 0.0f}
-        );
+        /* Build each obstacle's model matrix from its world position plus
+         * its individual rotation speed and phase. */
+        for (int i = 0; i < NUM_OBSTACLES; i++) {
+            const Obstacle *o = &obstacles[i];
+            float angle = rotAngle + o->rotPhase;
+            t3d_mat4fp_from_srt_euler(&obsMats[i],
+                (float[3]){1.0f, 1.0f, 1.0f},
+                (float[3]){o->rotSpeedX * angle, o->rotSpeedY * angle, 0.0f},
+                (float[3]){o->x, o->y, o->worldZ}
+            );
+        }
 
-        /* Camera position follows the stick directly. The look-at target uses
-         * smaller multipliers so the camera tilts/banks naturally as you steer
-         * — it leans into the turn rather than just sliding flat. */
-        T3DVec3 camPos    = {{lateralPos,        8.0f + verticalPos,        railZ - 15.0f}};
+        /* Collision — camera sits 15 units behind railZ on the Z axis.
+         * We check a flat cylinder: within ±8 units in Z and within hitRadius
+         * in the XY (lateral/vertical) plane. Squaring both sides avoids
+         * a sqrtf every frame. */
+        float camZ = railZ - 15.0f;
+        if (hitFlash > 0) {
+            hitFlash--;
+        } else {
+            for (int i = 0; i < NUM_OBSTACLES; i++) {
+                const Obstacle *o = &obstacles[i];
+                float dz = camZ - o->worldZ;
+                if (dz > -12.0f && dz < 2.0f) {
+                    float dx = lateralPos - o->x;
+                    float dy = verticalPos - o->y;
+                    if (dx*dx + dy*dy < o->hitRadius * o->hitRadius) {
+                        hitFlash = HIT_FLASH_FRAMES;
+                    }
+                }
+            }
+        }
+
+        /* Camera follows the stick. The look-at target uses smaller lateral
+         * multipliers so the camera tilts into turns rather than sliding flat. */
+        T3DVec3 camPos    = {{lateralPos,        8.0f + verticalPos, camZ}};
         T3DVec3 camTarget = {{lateralPos * 0.6f, verticalPos * 0.4f, railZ + 10.0f}};
 
         t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(70.0f), 10.0f, 200.0f);
@@ -211,85 +365,36 @@ int main(void) {
 
         /* ---- DRAW ---- */
 
-        /* Target the current framebuffer + its depth buffer. display_get()
-         * rotates through the 3 buffers automatically. */
         rdpq_attach(display_get(), display_get_zbuf());
-
-        /* Reset RSP state for a new frame. */
         t3d_frame_start();
-
-        /* Apply the viewport: uploads the projection and view matrices to the
-         * RSP, and sets the scissor rectangle to the screen bounds. */
         t3d_viewport_attach(&viewport);
-
-        /* Tell the RDP to shade pixels using vertex colors (interpolated across
-         * each triangle). RDPQ_COMBINER_SHADE is the simplest mode: final pixel
-         * color = vertex color * light. */
         rdpq_mode_combiner(RDPQ_COMBINER_SHADE);
 
-        /* Clear the color buffer (dark navy) and the depth buffer. The depth
-         * buffer stores how far each pixel is from the camera so that closer
-         * triangles correctly overdraw farther ones. */
-        t3d_screen_clear_color(RGBA32(10, 10, 30, 0xFF));
+        /* Flash red on hit — just change the sky color, simple and effective. */
+        t3d_screen_clear_color(hitFlash > 0
+            ? RGBA32(100, 20, 20, 0xFF)
+            : RGBA32( 50, 50,100, 0xFF));
         t3d_screen_clear_depth();
 
-        /* Set up lighting. Directional lights must be re-applied after each
-         * t3d_viewport_attach because the view matrix affects how the RSP
-         * transforms the light direction into view space. */
+        /* Directional lights must be re-applied after each t3d_viewport_attach
+         * because the view matrix affects how the RSP transforms them. */
         t3d_light_set_ambient(ambientColor);
         t3d_light_set_directional(0, directionalColor, &lightDir);
         t3d_light_set_count(1);
 
-        /* Drawing flags for this geometry:
-         *   SHADED    — interpolate vertex colors across triangles
-         *   DEPTH     — write/test the depth buffer (correct occlusion)
-         *   CULL_BACK — skip triangles whose normal faces away from camera.
-         *               Winding order: CCW = front face (standard convention).
-         *               This halves the RSP work for a closed mesh. */
         t3d_state_set_drawflags(T3D_FLAG_SHADED | T3D_FLAG_DEPTH | T3D_FLAG_CULL_BACK);
 
-        /* Record the draw commands the first frame, replay every frame after.
-         *
-         * t3d_matrix_push uploads modelMatFP to the RSP matrix stack via DMA.
-         * Even though the block is recorded once, the DMA reads the CURRENT
-         * contents of modelMatFP each time the block runs — so the matrix
-         * update above is always reflected. This works because modelMatFP is
-         * in uncached memory (writes go straight to RDRAM, not a CPU cache). */
-        if (!dplDraw) {
-            rspq_block_begin();
-
-            t3d_matrix_push(modelMatFP); /* DMA the model matrix → RSP stack   */
-            t3d_vert_load(cubeVerts, 0, 8); /* DMA 8 vertices → RSP vertex cache  */
-            t3d_matrix_pop(1);           /* pop matrix (vertices already transformed) */
-
-            /* 12 triangles — 2 per face. All wound CCW when viewed from outside.
-             *
-             * Vertex index reference:
-             *   0(-10,-10,-10) 1(+10,-10,-10) 2(+10,-10,+10) 3(-10,-10,+10)
-             *   4(-10,+10,-10) 5(+10,+10,-10) 6(+10,+10,+10) 7(-10,+10,+10) */
-            t3d_tri_draw(0, 5, 1); t3d_tri_draw(0, 4, 5); /* front  (z=-10) */
-            t3d_tri_draw(2, 6, 7); t3d_tri_draw(2, 7, 3); /* back   (z=+10) */
-            t3d_tri_draw(0, 3, 7); t3d_tri_draw(0, 7, 4); /* left   (x=-10) */
-            t3d_tri_draw(1, 5, 6); t3d_tri_draw(1, 6, 2); /* right  (x=+10) */
-            t3d_tri_draw(0, 1, 2); t3d_tri_draw(0, 2, 3); /* bottom (y=-10) */
-            t3d_tri_draw(4, 7, 6); t3d_tri_draw(4, 6, 5); /* top    (y=+10) */
-
-            /* Sync must be called after the last triangle batch. It tells the
-             * system that the RSP is done writing triangle commands to the RDP,
-             * so the RDP can safely rasterize them. Without this, the RDP might
-             * start before the RSP has finished writing all commands. */
-            t3d_tri_sync();
-
-            dplDraw = rspq_block_end();
+        /* Draw all obstacles. Push matrix → load and transform vertices → pop.
+         * The pop can come after the tri draws because vertices are already
+         * in the RSP cache, transformed; the matrix stack is no longer needed. */
+        for (int i = 0; i < NUM_OBSTACLES; i++) {
+            t3d_matrix_push(&obsMats[i]);
+            drawShape(obstacles[i].shape);
+            t3d_matrix_pop(1);
         }
 
-        rspq_block_run(dplDraw);
-
-        /* Flip to the completed framebuffer. This implicitly syncs — it waits
-         * for the RDP to finish rasterizing before presenting, which in turn
-         * means the RSP has also finished. Safe to overwrite modelMatFP on the
-         * next iteration because the RSP is done with it by the time we return
-         * here. */
+        /* Flip to screen. This syncs the full RSP/RDP pipeline — safe to
+         * overwrite obsMats[] on the next frame. */
         rdpq_detach_show();
     }
 
