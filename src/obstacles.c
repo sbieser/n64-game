@@ -12,18 +12,18 @@
 #include "obstacles.h"
 
 const Obstacle obstacles[NUM_OBSTACLES] = {
-    {-220,  0,  0, 9.0f, SHAPE_CUBE,    0.3f, 1.0f, 0.0f},
-    {-195,  8, -2, 9.0f, SHAPE_TETRA,   0.4f, 0.7f, 1.0f},
-    {-170, -6,  3, 9.0f, SHAPE_OCTA,    0.2f, 1.2f, 2.1f},
-    {-148,  0, -2, 9.0f, SHAPE_PYRAMID, 0.5f, 0.4f, 0.5f},
-    {-125, 10,  0, 9.0f, SHAPE_PRISM,   0.3f, 0.8f, 3.2f},
-    { -98, -8,  2, 9.0f, SHAPE_CUBE,    0.6f, 0.5f, 1.7f},
-    { -74,  0,  4, 9.0f, SHAPE_TETRA,   0.4f, 1.1f, 2.8f},
-    { -50,-10, -3, 9.0f, SHAPE_OCTA,    0.2f, 0.9f, 0.3f},
-    { -28,  7,  0, 9.0f, SHAPE_PYRAMID, 0.5f, 0.6f, 1.4f},
-    {  -8,  0,  0, 9.0f, SHAPE_PRISM,   0.3f, 1.3f, 4.1f},
-    {  12, -8,  3, 9.0f, SHAPE_CUBE,    0.4f, 0.7f, 2.2f},
-    {  30,  5, -4, 9.0f, SHAPE_OCTA,    0.6f, 0.4f, 3.7f},
+    {-570,   0,   0, 7.0f, SHAPE_CUBE,    0.3f, 1.0f, 0.0f},
+    {-520,  14,  -4, 7.0f, SHAPE_TETRA,   0.4f, 0.7f, 1.0f},
+    {-470,  -9,   7, 7.0f, SHAPE_OCTA,    0.2f, 1.2f, 2.1f},
+    {-420,   0,  -6, 7.0f, SHAPE_PYRAMID, 0.5f, 0.4f, 0.5f},
+    {-370,  18,   0, 7.0f, SHAPE_PRISM,   0.3f, 0.8f, 3.2f},
+    {-320, -15,   5, 7.0f, SHAPE_CUBE,    0.6f, 0.5f, 1.7f},
+    {-270,   0,   8, 7.0f, SHAPE_TETRA,   0.4f, 1.1f, 2.8f},
+    {-220, -16,  -7, 7.0f, SHAPE_OCTA,    0.2f, 0.9f, 0.3f},
+    {-170,  12,   0, 7.0f, SHAPE_PYRAMID, 0.5f, 0.6f, 1.4f},
+    {-120,   0,   6, 7.0f, SHAPE_PRISM,   0.3f, 1.3f, 4.1f},
+    { -70, -11,  -8, 7.0f, SHAPE_CUBE,    0.4f, 0.7f, 2.2f},
+    { -20,   9,   4, 7.0f, SHAPE_OCTA,    0.6f, 0.4f, 3.7f},
 };
 
 /* One model matrix per obstacle in a contiguous uncached block.
@@ -35,9 +35,13 @@ void obstacles_init(void) {
     obsMats = malloc_uncached(sizeof(T3DMat4FP) * NUM_OBSTACLES);
 }
 
-void obstacles_update(float rotAngle) {
+#define DRAW_DIST 160.0f
+
+void obstacles_update(float rotAngle, float camZ) {
     for (int i = 0; i < NUM_OBSTACLES; i++) {
         const Obstacle *o = &obstacles[i];
+        float dz = o->worldZ - camZ;
+        if (dz < -20.0f || dz > DRAW_DIST) continue;
         float angle = rotAngle + o->rotPhase;
         t3d_mat4fp_from_srt_euler(&obsMats[i],
             (float[3]){1.0f, 1.0f, 1.0f},
@@ -47,14 +51,14 @@ void obstacles_update(float rotAngle) {
     }
 }
 
-/* Returns 1 if the camera overlaps any obstacle, 0 otherwise.
- * Uses a forward-weighted Z window (-12 to +2) so the hit registers
- * while the shape is visually in front, not after it has flown past. */
-int obstacles_check_collision(float camZ, float lateralPos, float verticalPos) {
+/* Returns 1 if the player figure overlaps any obstacle, 0 otherwise.
+ * playerZ is the figure's world Z (railZ - 3). The Z window is symmetric
+ * around the obstacle center — obstacles extend ±10 units, player ±2. */
+int obstacles_check_collision(float playerZ, float lateralPos, float verticalPos) {
     for (int i = 0; i < NUM_OBSTACLES; i++) {
         const Obstacle *o = &obstacles[i];
-        float dz = camZ - o->worldZ;
-        if (dz > -12.0f && dz < 2.0f) {
+        float dz = playerZ - o->worldZ;
+        if (dz > -10.0f && dz < 10.0f) {
             float dx = lateralPos - o->x;
             float dy = verticalPos - o->y;
             if (dx*dx + dy*dy < o->hitRadius * o->hitRadius)
@@ -64,10 +68,13 @@ int obstacles_check_collision(float camZ, float lateralPos, float verticalPos) {
     return 0;
 }
 
-void obstacles_draw(void) {
+void obstacles_draw(float camZ) {
     for (int i = 0; i < NUM_OBSTACLES; i++) {
+        const Obstacle *o = &obstacles[i];
+        float dz = o->worldZ - camZ;
+        if (dz < -20.0f || dz > DRAW_DIST) continue;
         t3d_matrix_push(&obsMats[i]);
-        draw_shape(obstacles[i].shape);
+        draw_shape(o->shape);
         t3d_matrix_pop(1);
     }
 }

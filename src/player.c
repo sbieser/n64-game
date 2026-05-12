@@ -46,27 +46,27 @@ static void initPlayerVerts(void) {
 
     /* Pack 0: v0(waist), v1(body front-left) */
     playerVerts[0] = (T3DVertPacked){
-        .posA={ 0,  2,  0}, .normA=packNorm( 0, 1, 0),   .rgbaA=0xAADDFFFF,
-        .posB={-3, -3, -3}, .normB=packNorm(-1,-1,-1),   .rgbaB=0x4488CCFF,
+        .posA={ 0,  1,  0}, .normA=packNorm( 0, 1, 0),   .rgbaA=0xAADDFFFF,
+        .posB={-2, -2, -2}, .normB=packNorm(-1,-1,-1),   .rgbaB=0x4488CCFF,
     };
     /* Pack 1: v2(body front-right), v3(body back-right) */
     playerVerts[1] = (T3DVertPacked){
-        .posA={ 3, -3, -3}, .normA=packNorm( 1,-1,-1),   .rgbaA=0x4488CCFF,
-        .posB={ 3, -3,  3}, .normB=packNorm( 1,-1, 1),   .rgbaB=0x4488CCFF,
+        .posA={ 2, -2, -2}, .normA=packNorm( 1,-1,-1),   .rgbaA=0x4488CCFF,
+        .posB={ 2, -2,  2}, .normB=packNorm( 1,-1, 1),   .rgbaB=0x4488CCFF,
     };
     /* Pack 2: v4(body back-left), v5(head front-left) */
     playerVerts[2] = (T3DVertPacked){
-        .posA={-3, -3,  3}, .normA=packNorm(-1,-1, 1),   .rgbaA=0x4488CCFF,
-        .posB={-2,  5, -2}, .normB=packNorm(-1, 1,-1),   .rgbaB=0xFFEEDDFF,
+        .posA={-2, -2,  2}, .normA=packNorm(-1,-1, 1),   .rgbaA=0x4488CCFF,
+        .posB={-1,  3, -1}, .normB=packNorm(-1, 1,-1),   .rgbaB=0xFFEEDDFF,
     };
     /* Pack 3: v6(head front-right), v7(head back-right) */
     playerVerts[3] = (T3DVertPacked){
-        .posA={ 2,  5, -2}, .normA=packNorm( 1, 1,-1),   .rgbaA=0xFFEEDDFF,
-        .posB={ 2,  5,  2}, .normB=packNorm( 1, 1, 1),   .rgbaB=0xFFEEDDFF,
+        .posA={ 1,  3, -1}, .normA=packNorm( 1, 1,-1),   .rgbaA=0xFFEEDDFF,
+        .posB={ 1,  3,  1}, .normB=packNorm( 1, 1, 1),   .rgbaB=0xFFEEDDFF,
     };
     /* Pack 4: v8(head back-left), slot B unused */
     playerVerts[4] = (T3DVertPacked){
-        .posA={-2,  5,  2}, .normA=packNorm(-1, 1, 1),   .rgbaA=0xFFEEDDFF,
+        .posA={-1,  3,  1}, .normA=packNorm(-1, 1, 1),   .rgbaA=0xFFEEDDFF,
     };
 }
 

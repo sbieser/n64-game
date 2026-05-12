@@ -14,10 +14,10 @@
 #include "starfield.h"
 #include "player.h"
 
-#define RAIL_START      -250.0f
+#define RAIL_START      -600.0f
 #define RAIL_END          50.0f
-#define LATERAL_MAX       20.0f
-#define VERTICAL_MAX       6.0f
+#define LATERAL_MAX       35.0f
+#define VERTICAL_MAX      18.0f
 #define HIT_FLASH_FRAMES  30
 
 int main(void) {
@@ -66,15 +66,16 @@ int main(void) {
         rotAngle += 0.02f;
         if (railZ > RAIL_END) railZ = RAIL_START;
 
-        obstacles_update(rotAngle);
-        player_update(lateralPos, verticalPos, railZ);
+        /* Camera sits 15 units behind railZ; player figure is 3 units behind. */
+        float camZ    = railZ - 15.0f;
+        float playerZ = railZ -  3.0f;
 
-        /* Camera sits 15 units behind railZ. */
-        float camZ = railZ - 15.0f;
+        obstacles_update(rotAngle, camZ);
+        player_update(lateralPos, verticalPos, railZ);
 
         if (hitFlash > 0) {
             hitFlash--;
-        } else if (obstacles_check_collision(camZ, lateralPos, verticalPos)) {
+        } else if (obstacles_check_collision(playerZ, lateralPos, verticalPos)) {
             hitFlash = HIT_FLASH_FRAMES;
         }
 
@@ -112,7 +113,7 @@ int main(void) {
 
         t3d_state_set_drawflags(T3D_FLAG_SHADED | T3D_FLAG_DEPTH | T3D_FLAG_CULL_BACK);
         player_draw();
-        obstacles_draw();
+        obstacles_draw(camZ);
 
         /* Flip to screen. Syncs the full RSP/RDP pipeline — safe to
          * overwrite obstacle matrices on the next frame. */
