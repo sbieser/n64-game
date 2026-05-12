@@ -11,6 +11,8 @@
 #include <t3d/t3dmath.h>
 #include "shapes.h"
 #include "obstacles.h"
+#include "starfield.h"
+#include "player.h"
 
 #define RAIL_START      -250.0f
 #define RAIL_END          50.0f
@@ -29,6 +31,8 @@ int main(void) {
 
     shapes_init();
     obstacles_init();
+    starfield_init(RAIL_START, RAIL_END);
+    player_init();
 
     T3DViewport viewport = t3d_viewport_create();
 
@@ -63,6 +67,7 @@ int main(void) {
         if (railZ > RAIL_END) railZ = RAIL_START;
 
         obstacles_update(rotAngle);
+        player_update(lateralPos, verticalPos, railZ);
 
         /* Camera sits 15 units behind railZ. */
         float camZ = railZ - 15.0f;
@@ -100,8 +105,13 @@ int main(void) {
         t3d_light_set_directional(0, directionalColor, &lightDir);
         t3d_light_set_count(1);
 
-        t3d_state_set_drawflags(T3D_FLAG_SHADED | T3D_FLAG_DEPTH | T3D_FLAG_CULL_BACK);
+        /* Stars render without lighting — they glow at full vertex color.
+         * Player and obstacles use lighting for solid 3D shading. */
+        t3d_state_set_drawflags(T3D_FLAG_SHADED | T3D_FLAG_DEPTH | T3D_FLAG_CULL_BACK | T3D_FLAG_NO_LIGHT);
+        starfield_draw();
 
+        t3d_state_set_drawflags(T3D_FLAG_SHADED | T3D_FLAG_DEPTH | T3D_FLAG_CULL_BACK);
+        player_draw();
         obstacles_draw();
 
         /* Flip to screen. Syncs the full RSP/RDP pipeline — safe to
