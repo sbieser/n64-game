@@ -72,5 +72,8 @@ void scene_select_draw(void) {
         rdpq_text_print(NULL, 1, tx + 4, ty + TILE_H + 12, s->name);
     }
 
+    rdpq_text_print(NULL, 1, 8,  20, "DEMO SELECT");
+    rdpq_text_print(NULL, 1, 8, 228, "D-PAD move   A enter   B back");
+
     rdpq_detach_show();
 }
