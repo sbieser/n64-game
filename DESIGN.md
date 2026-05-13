@@ -159,6 +159,100 @@ On subsequent runs, those positions are loaded and rendered as frozen figures �
 
 ---
 
+## Generative Systems
+
+The game uses procedural and generative approaches so no two runs are identical and the universe feels organic and alive. These are rules the artist sets; the system takes over from there.
+
+### 1. Seeded Run Generation (Foundation)
+Every run derives a single `uint32_t` seed — read from the N64 hardware timer (`TICKS_READ()`) at the moment the run begins, or derived from the SRAM run count. Pass this seed into a fast pseudo-random number generator (LCG or xorshift32 — both are trivial to implement in C and cheap on the CPU). Every system below that needs randomness draws from this seeded PRNG, so the entire run is deterministic from that single value. If the seed were stored, a run could be replayed exactly. Everything else builds on this.
+
+```c
+// xorshift32 — fast, good enough distribution
+uint32_t rng_state;
+uint32_t rng_next() {
+    rng_state ^= rng_state << 13;
+    rng_state ^= rng_state >> 17;
+    rng_state ^= rng_state << 5;
+    return rng_state;
+}
+```
+
+### 2. Value Noise for Environment
+Use value noise (simpler than Perlin, sufficient for this use case) to drive star field density, nebula color cloud placement, and debris clustering. Sample a 2D noise function seeded per run. High noise values = denser debris or brighter nebula region. Low values = empty void. This gives space an organic, non-uniform feeling without hand-placing anything. The noise function itself is just a seeded hash over a grid with smoothed interpolation between grid points — implementable in ~20 lines of C.
+
+### 3. Generative Music via Phase-Offset Loops
+Compose 4–6 short ambient audio loops, each a different length (e.g. 7s, 11s, 13s, 17s, 19s, 23s — prime lengths prevent repetition). Play all simultaneously via libdragon's audio mixer. Because their lengths are incommensurable, the combination drifts continuously and never exactly repeats within any practical timeframe. Control the emotional state by fading individual loop volumes in and out based on game state — Act 1 layers are urgent and sparse, Act 2 layers are slower and deeper, Act 3 layers are whatever serves the ambiguity. ~30 seconds of composed audio yields an effectively infinite score.
+
+### 4. Vertex Displacement on the Colossus
+Each frame, displace each vertex of the Colossus mesh along its normal by a sum of sine waves:
+
+```c
+float displacement = 
+    0.3f * sinf(vertex.x * 0.8f + time * 0.4f) +
+    0.2f * sinf(vertex.y * 1.1f + time * 0.27f) +
+    0.1f * sinf(vertex.z * 1.4f + time * 0.13f);
+vertex.pos += vertex.normal * displacement;
+```
+
+Two or three sine waves of different spatial and temporal frequencies produce complex, organic, non-repeating surface motion. He breathes. He does not pulse with hostility — he simply exists, vast and slow. Keep displacement amplitude small relative to his scale.
+
+### 5. Ghost Figure Degradation
+Each ghost record in SRAM stores a `run_index` — which run the player died on. When rendering a ghost, use that index to scale a noise-based vertex offset:
+
+```c
+float age_factor = (float)(current_run - ghost.run_index) / MAX_RUNS;
+float drift = age_factor * 2.0f * sinf(vertex.id * 17.3f); // deterministic per vertex
+vertex.pos += drift;
+```
+
+Older ghosts dissolve — their geometry drifts toward illegibility. The oldest seekers are barely recognizable shapes. Memory fading as geometry.
+
+### 6. Proximity-Reactive Particles
+Each particle has a base drift vector (set at spawn from seeded PRNG) and a pull vector (directed toward the Colossus position). Blend between them based on player distance to Colossus:
+
+```c
+float t = 1.0f - clamp(distance / MAX_DISTANCE, 0.0f, 1.0f);
+particle.velocity = lerp(particle.base_drift, particle.pull_toward_colossus, t);
+```
+
+At full distance: pure random drift, cold color. At close range: pulled toward him, warm color. His gravity is felt before he is seen.
+
+### 7. Colossus Evolution Across Runs — OPEN, DO NOT IMPLEMENT YET
+A small float stored in SRAM accumulates across runs tracking the player's collective journey history. The Colossus changes subtly in response. **How he changes is not yet decided.** Possibilities being held open:
+- He becomes more defined — as if being perceived reveals him
+- He becomes more vast — scale asserting itself gradually
+- He becomes more still — more glacial, more ancient
+- He becomes less readable — drifting toward something less humanoid, more cosmic
+- He does not change at all — the ghosts accumulate around him, the change is always in the seeker
+
+Do not resolve this creatively or in code until the direction feels right.
+
+---
+
+## Star Field
+
+A hybrid of three layers creating the illusion of infinite depth at N64 cost.
+
+### Layer 1 — Background RDP Star Carpet
+Drawn directly to the framebuffer before any 3D rendering. Hundreds of points and tiny quads at varied brightness, positioned by run seed. Essentially free — the RDP handles this before tiny3d touches anything.
+
+### Layer 2 — Midground Billboard Sprites
+A handful of larger star clusters or nebula wisps as flat sprites that always face the camera. Slight parallax shift based on player lateral movement creates a powerful illusion of depth. These give the space atmosphere.
+
+### Layer 3 — Foreground 3D Geometry Stars
+10–20 actual vertex stars — simple shapes (crosses, small tetrahedra) in true 3D space. The player flies near or through them. Real parallax, real presence. Some may serve as subtle spatial landmarks.
+
+**Depth through brightness:** Background stars seeded dim, foreground bright. Enormous perceived depth from simple rules.
+
+**As the player approaches the Colossus:**
+- Color temperature shifts — cold blue-white → warm orange-white
+- Geometry stars drift subtly toward him — space feels like it's leaning
+- Star density shifts — Act 1 dense and chaotic, Act 2 sparse, Act 3 almost empty
+
+**Ghost figures here:** Frozen in true 3D space like geometry stars. Real parallax, real presence. Completely still inside flowing space. That stillness will be haunting.
+
+---
+
 ## Design Philosophy — Questions This Game Does Not Answer
 
 These are open intentionally. Do not resolve them in code, visuals, audio, or text:
@@ -167,5 +261,6 @@ These are open intentionally. Do not resolve them in code, visuals, audio, or te
 - Is the Colossus alive or dead — does it even know?
 - Are the frozen seekers who didn't reach him failures, or did they arrive differently?
 - Does scale make the distinction between life and death meaningless?
+- How does the Colossus change across runs, and what does that change mean?
 
 The player should carry these questions out of the game with them. Any implementation decision that accidentally answers one of them should be reconsidered. The game's job is to make the questions feel vast and okay, not to resolve them.
