@@ -253,6 +253,44 @@ A handful of larger star clusters or nebula wisps as flat sprites that always fa
 
 ---
 
+## Rendering Techniques (from Star Fox 64 source study)
+
+These patterns come from studying the Star Fox 64 recompilation codebase. They are proven N64 techniques worth applying.
+
+### Frame-Count Flicker for Ghosts
+
+Alternate a lighting or color value every other frame using `gGameFrameCount % 2`. No texture animation, no extra geometry — a free shimmer effect that makes ghost figures feel unstable and eerie. Ghosts should feel like they are almost not there. The flicker reinforces that.
+
+```c
+// In ghost draw — dim the ambient every other frame
+uint8_t flicker_amb = (frame_count % 2 == 0) ? 60 : 40;
+t3d_light_set_ambient((uint8_t[]){flicker_amb, flicker_amb + 20, 180, 0xFF});
+```
+
+### Color Table Particle Aging
+
+Store color+alpha at each particle age stage in a lookup table. As a particle ages, increment an index into the table. Fire: orange → yellow → white → transparent. Debris: solid → fading. No per-particle color math at runtime — just a table lookup per frame.
+
+```c
+static const uint8_t smoke_colors[][4] = {
+    {255, 120,  40, 220},  /* young — orange */
+    {255, 200,  80, 160},  /* mid   — yellow */
+    {255, 255, 180,  80},  /* old   — white  */
+    {200, 200, 200,  20},  /* dying — grey   */
+};
+uint8_t *col = smoke_colors[particle.age_index];
+```
+
+### Contrail / Trail via Z-Scaled Mesh
+
+Stretch a simple sphere or quad along the Z axis to fake a motion trail without trail geometry. `Matrix_Scale(1.0f, 1.0f, trail_length)` on a ball mesh creates a convincing teardrop contrail. Apply this to proximity-reactive particles near the Colossus — as they get pulled in, stretch them along their velocity vector.
+
+### Starfield Density — 3000 Stars
+
+Star Fox 64 uses 3000 stars scattered across screen space with a seeded LCG, rendered as 1×1 pixel triangles via ortho projection. Our current starfield uses 150 world-space geometry stars which gives real parallax but lower density. The two approaches can coexist: their method for a dense backdrop carpet, ours for foreground presence stars.
+
+---
+
 ## Design Philosophy — Questions This Game Does Not Answer
 
 These are open intentionally. Do not resolve them in code, visuals, audio, or text:

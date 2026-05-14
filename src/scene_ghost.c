@@ -31,9 +31,13 @@ static T3DMat4FP *ghostMats;
 
 static uint8_t ambientColor[4]     = {60,  60, 120, 0xFF};
 static uint8_t directionalColor[4] = {200, 200, 160, 0xFF};
-static uint8_t ghostAmbient[4]     = {60,  80, 180, 0xFF};
 static uint8_t ghostDir[4]         = {30,  40,  90, 0xFF};
 static T3DVec3 lightDir;
+static uint32_t frameCount = 0;
+
+/* Two alternating ambient values — flicker makes ghosts feel unstable */
+static const uint8_t ghostAmbientA[4] = {60,  80, 180, 0xFF};
+static const uint8_t ghostAmbientB[4] = {40,  55, 130, 0xFF};
 
 static void ghost_mat_rebuild(int i) {
     t3d_mat4fp_from_srt_euler(&ghostMats[i],
@@ -131,6 +135,7 @@ void scene_ghost_update(void) {
     T3DVec3 camPos    = {{0.0f, 8.0f, -50.0f}};
     T3DVec3 camTarget = {{0.0f, 0.0f,   0.0f}};
     t3d_viewport_look_at(&viewport, &camPos, &camTarget, &(T3DVec3){{0,1,0}});
+    frameCount++;
 }
 
 void scene_ghost_draw(void) {
@@ -144,8 +149,8 @@ void scene_ghost_draw(void) {
 
     t3d_state_set_drawflags(T3D_FLAG_SHADED | T3D_FLAG_DEPTH | T3D_FLAG_CULL_BACK);
 
-    /* Ghosts: blue ambient + faint directional so the shape reads in 3D */
-    t3d_light_set_ambient(ghostAmbient);
+    /* Ghosts: flicker ambient every other frame — makes them feel unstable */
+    t3d_light_set_ambient((frameCount % 2 == 0) ? ghostAmbientA : ghostAmbientB);
     t3d_light_set_directional(0, ghostDir, &lightDir);
     t3d_light_set_count(1);
     for (int i = 0; i < ghostCount; i++) {
