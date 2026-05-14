@@ -1,3 +1,108 @@
+/*
+ * scene_synth.c — Software synthesizer demo
+ *
+ * Everything here runs on the N64's MIPS R4300i CPU. There is no dedicated
+ * audio DSP on the N64 — the RSP handles 3D geometry, but audio is purely
+ * CPU work. This means synthesis has to be cheap enough to share the CPU
+ * with the game loop.
+ *
+ * HOW THE AUDIO PIPELINE WORKS
+ * ─────────────────────────────
+ * libdragon's audio system owns a ring of internal buffers (we allocate 4).
+ * The AI (Audio Interface) hardware DMA's from those buffers into the DAC at
+ * a fixed rate — 22050 stereo samples per second here. Our job is to keep
+ * those buffers fed. Each frame, audio_can_write() tells us if a buffer slot
+ * is free; audio_write_begin() hands us a pointer to fill; audio_write_end()
+ * hands it back for DMA. If we're too slow and a buffer runs dry, the DAC
+ * repeats or glitches — so we fill as many as are ready each update().
+ *
+ * SAMPLES FORMAT
+ * ─────────────
+ * The buffer holds stereo interleaved 16-bit signed integers:
+ *   [L0][R0][L1][R1][L2][R2]...
+ * Full scale is ±32767. We use ±28000 to leave a small headroom cushion
+ * so multiple oscillators summing together don't hard-clip.
+ *
+ * THE OSCILLATOR MODEL
+ * ────────────────────
+ * Each oscillator is a phase accumulator:
+ *   phase += frequency / sample_rate   (per sample)
+ *   when phase >= 1.0, wrap to 0
+ * The waveform is then read from phase — a sine table lookup, a comparison
+ * for square, arithmetic for sawtooth/triangle, or an xorshift PRNG for noise.
+ * This is sample-accurate and frequency-correct regardless of sample rate.
+ *
+ * WHY A SIN LOOKUP TABLE?
+ * ───────────────────────
+ * sinf() on the N64's MIPS CPU is expensive — dozens of cycles per call.
+ * At 22050 Hz with 6 oscillators, calling sinf() every sample would consume
+ * a huge fraction of the frame budget. Instead we precompute 512 evenly-spaced
+ * sine values at init and index into that table with integer arithmetic.
+ * One multiply + one bitwise AND + one array read ≈ 5 cycles vs ~80 for sinf.
+ *
+ * ENVELOPES (AD — Attack/Decay)
+ * ──────────────────────────────
+ * Percussive sounds need amplitude that rises instantly and falls over time.
+ * We use a pure Decay model (no Attack — the trigger sets env=1.0 instantly):
+ *   env *= env_decay   (per sample)
+ * env_decay is a value just below 1.0 chosen so the envelope fades to near
+ * zero in the desired time. For example, 0.9990 raised to 4605 samples
+ * (≈0.21s at 22050 Hz) equals ~0.01 — effectively silent.
+ * The LFO triggers a retrigger (env reset to 1.0) each time its phase wraps,
+ * so the envelope fires at the LFO rate. This is how the Beat Box preset
+ * creates a kick drum pattern without any timing code — just physics.
+ *
+ * LFO DUAL ROLE
+ * ─────────────
+ * In drone mode (use_env=false): the LFO modulates amplitude smoothly,
+ * creating slow swells. The formula 0.5 + 0.5*sin(lfo_phase) maps the sine
+ * output from (-1..1) to (0..1) so amplitude never goes negative.
+ *
+ * In envelope mode (use_env=true): the LFO only serves as a metronome.
+ * When its phase wraps from 1 back to 0, env resets to 1.0 and freq_env
+ * resets to its start value. The LFO rate IS the trigger rate — 1.67 Hz
+ * means the kick fires 1.67 times per second.
+ *
+ * PITCH ENVELOPES (BLOOP / KICK)
+ * ──────────────────────────────
+ * A bloop or kick needs pitch that starts high and drops fast.
+ * We add a second accumulator: freq_env, which starts at freq_env_start
+ * on trigger and decays toward 0 each sample (freq_env *= freq_env_decay).
+ * The actual frequency played = freq_base + freq_env.
+ * Result: the oscillator starts at (base + env_start) Hz and slides down
+ * to freq_base as freq_env decays. For the kick: 240 Hz → 40 Hz in ~50ms.
+ * For the bloops: 600 Hz → 200 Hz in ~60ms. The pitch drop IS the character
+ * of both sounds.
+ *
+ * XORSHIFT NOISE
+ * ──────────────
+ * White noise is produced by an xorshift32 PRNG — three XOR-and-shift
+ * operations per sample produces a full-period pseudo-random sequence.
+ * Each noise oscillator has its own state, seeded differently at init, so
+ * they don't correlate. The integer output is divided by 2^31 to normalize
+ * to (-1..1). This is what the hi-hat and snare use: noise burst + fast decay.
+ *
+ * PRESETS
+ * ───────
+ * Each preset is a table of 6 PresetOsc configs loaded into the live Osc
+ * array by preset_load(). Switching presets resets all runtime state (phase,
+ * env, freq_env, lfo_phase) so the new sound starts clean.
+ * The four presets demonstrate the full range of the engine:
+ *   Space Drone  — sine, no envelope, slow LFO amplitude swell
+ *   Chip Tune    — square wave, AD envelope, staggered arpeggio phases
+ *   Bloop Machine— sine, pitch-drop envelope, async LFO rates
+ *   Beat Box     — sine kick (pitch drop) + noise snare/hat, rhythmic LFOs
+ *
+ * OSCILLOSCOPE
+ * ────────────
+ * synth_fill() writes every output sample into a ring buffer (scope_buf).
+ * scene_synth_draw() reads the last 240 samples from that buffer and plots
+ * each one as a 1×1 rectangle. The Y position = center - (sample / 28000 * 42).
+ * This is the same technique used by hardware oscilloscopes: capture samples
+ * over time, display them left-to-right, repeat. The waveform changes character
+ * dramatically by preset — sine is smooth, square is a staircase, noise is static.
+ */
+
 #include <libdragon.h>
 #include <math.h>
 #include "scene.h"

@@ -1,3 +1,80 @@
+/*
+ * scene_ghost.c — 3D ghost placement with EEPROM persistence
+ *
+ * This scene is a proof-of-concept for the game's core ghost mechanic:
+ * positions planted here persist across power cycles, then render as dim
+ * frozen figures. In the final game these positions come from player deaths
+ * along the rail — here you place them manually to explore the feel.
+ *
+ * CONTROLS
+ * ────────
+ * Analog stick moves the cursor left/right and up/down in world space.
+ * L/R buttons move it forward/backward (Z depth). A plants a ghost at the
+ * cursor's current position. Z clears all ghosts. B returns to the menu.
+ *
+ * EEPROM SAVE SYSTEM
+ * ──────────────────
+ * The N64 cartridge has a small EEPROM chip — either 4Kbit (512 bytes) or
+ * 16Kbit depending on the game. We request 4Kbit in the Makefile via
+ * N64_ED64ROMCONFIGFLAGS = -w eeprom4k, which writes a header that Ares
+ * and flashcarts read to automatically configure save hardware.
+ *
+ * The save layout (GhostSave struct, 104 bytes, packed to avoid padding):
+ *   [0..3]   magic number 0x47484F53 ("GHOS") — validates the save
+ *   [4..7]   ghost count
+ *   [8..39]  x positions (8 floats × 4 bytes)
+ *   [40..71] y positions
+ *   [72..103] z positions
+ *
+ * On boot, eeprom_load() reads those bytes and checks the magic number.
+ * If it matches, ghost positions are restored and their matrices rebuilt.
+ * If it doesn't (first boot, or corrupted save), we start fresh.
+ *
+ * Why __attribute__((packed))?
+ * The C compiler may insert padding bytes between struct members to keep
+ * them aligned on natural boundaries. packed forces zero padding so the
+ * struct's byte layout exactly matches what we write/read. This matters
+ * because eeprom_write_bytes/read_bytes work on raw bytes — any padding
+ * would silently corrupt the data.
+ *
+ * WHY UNCACHED MEMORY FOR MATRICES?
+ * ──────────────────────────────────
+ * The RSP (Reality Signal Processor) DMA's matrices directly from RDRAM.
+ * The CPU has an 8KB cache — if the matrix lives in cached memory, the RSP
+ * might read stale data that hasn't been flushed from the CPU cache yet.
+ * malloc_uncached() allocates from a region that bypasses the CPU cache
+ * entirely, so the RSP always sees the value the CPU just wrote.
+ *
+ * GHOST RENDERING
+ * ────────────────
+ * Each ghost has a pre-built T3DMat4FP (fixed-point 4×4 matrix) stored in
+ * ghostMats[i]. When a ghost is planted, ghost_mat_rebuild() computes the
+ * transform once using t3d_mat4fp_from_srt_euler (scale/rotation/translation)
+ * and stores it. Every frame we just push that pre-built matrix and draw.
+ * Matrices are only rebuilt when a ghost is planted — not every frame.
+ *
+ * The cursor matrix IS rebuilt every frame (in update) because the cursor
+ * moves continuously with the analog stick.
+ *
+ * VISUAL DIFFERENTIATION
+ * ──────────────────────
+ * The cursor and ghosts use the same octahedron mesh (SHAPE_OCTA) but
+ * different lighting. The cursor gets full warm ambient + directional so
+ * it reads as the "live" object. Ghosts use a dim cool-blue ambient with
+ * a faint directional — they feel cold and still.
+ *
+ * FLICKER EFFECT
+ * ──────────────
+ * Ghost ambient lighting alternates between two values every frame
+ * (ghostAmbientA and ghostAmbientB). At 60fps the flicker is fast enough
+ * to read as a shimmer rather than a flash. This makes ghosts feel unstable
+ * and barely present — a technique taken from Star Fox 64's use of
+ * gGameFrameCount % 2 for visual shimmer on effects.
+ *
+ * The cursor is never flickered — the visual contrast between the stable
+ * cursor and the unstable ghosts reinforces which one is "alive."
+ */
+
 #include <libdragon.h>
 #include <t3d/t3d.h>
 #include <t3d/t3dmath.h>

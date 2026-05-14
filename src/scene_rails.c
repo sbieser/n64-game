@@ -1,3 +1,83 @@
+/*
+ * scene_rails.c — Forward-scrolling rails traversal
+ *
+ * This is the core gameplay loop prototype: the player moves forward
+ * automatically through a fixed corridor of 3D space, steering with
+ * the analog stick to avoid obstacles. It demonstrates the full N64
+ * rendering pipeline — viewport, lighting, depth buffer, draw flags —
+ * and the split between update logic and draw commands.
+ *
+ * THE RAIL SYSTEM
+ * ───────────────
+ * "On rails" means the Z position (depth into the scene) is controlled
+ * by the game, not the player. railZ advances 0.4 world units per frame,
+ * looping from RAIL_START (-600) back to RAIL_START when it passes RAIL_END.
+ * The player can only influence lateral (X) and vertical (Y) position —
+ * they can dodge left/right and up/down but cannot slow down or speed up.
+ *
+ * The camera sits 15 units behind railZ (camZ = railZ - 15), and looks
+ * toward a point 10 units ahead of railZ. Tilting the camera target by
+ * 0.6× and 0.4× of the player's lateral/vertical position gives a subtle
+ * "banking" feel — the view leans into the direction of movement.
+ *
+ * VIEWPORT AND PROJECTION
+ * ────────────────────────
+ * t3d_viewport_set_projection sets the field of view (70°), near clip (10),
+ * and far clip (200). Objects closer than 10 units or farther than 200 are
+ * not drawn. The near plane must not be too small or Z-fighting occurs.
+ * The far plane limits overdraw — obstacles beyond 200 units are simply
+ * not visible, which is fine because they'd be tiny specks anyway.
+ *
+ * LIGHTING
+ * ────────
+ * libdragon's lighting system has one ambient light (flat, no direction —
+ * every surface gets the same color) and up to 7 directional lights.
+ * Directional lights work like the sun: they have a color and a direction
+ * vector but no position, so they affect all geometry equally regardless
+ * of where it is in the world.
+ *
+ * t3d_light_set_count(1) activates exactly one directional light.
+ * The ambient fills in the shadow side so nothing goes completely black.
+ *
+ * Note: lightDir must be re-set every frame AFTER t3d_viewport_attach
+ * because lighting is computed in view space — the direction is transformed
+ * by the camera matrix, which changes every frame as the camera moves.
+ *
+ * DRAW FLAGS
+ * ──────────
+ * t3d_state_set_drawflags controls RSP/RDP pipeline state:
+ *   T3D_FLAG_SHADED    — use vertex colors (not flat white)
+ *   T3D_FLAG_DEPTH     — enable Z-buffer (nearer objects occlude farther ones)
+ *   T3D_FLAG_CULL_BACK — skip triangles facing away from the camera (CCW = front)
+ *   T3D_FLAG_NO_LIGHT  — disable normal-based lighting, use raw vertex color
+ *
+ * The starfield draws with NO_LIGHT so its vertex colors (white/blue/warm)
+ * are used exactly as specified. Everything else draws with lighting on.
+ *
+ * HIT FLASH
+ * ─────────
+ * Collision response is purely visual — no health system yet. When
+ * obstacles_check_collision() returns true, hitFlash is set to 30 frames.
+ * While hitFlash > 0, the screen clears to a dark red instead of the
+ * normal blue. No frame-accurate collision is needed here: even if the
+ * player clips through geometry during the flash window, the game is still
+ * readable because the flash communicates "something happened."
+ *
+ * THE UPDATE / DRAW SPLIT
+ * ────────────────────────
+ * scene_rails_update: runs game logic — reads input, advances the rail,
+ * detects collision, computes the camera matrix. Nothing drawn here.
+ *
+ * scene_rails_draw: issues RSP/RDP commands only — no logic. Starts with
+ * rdpq_attach (locks a framebuffer for this frame), ends with rdpq_detach_show
+ * (flips the buffer to screen). Everything in between is draw commands.
+ *
+ * This split is important because the RSP processes commands asynchronously.
+ * The CPU queues commands into a display list; the RSP executes them while
+ * the CPU is already running the next frame's update. Mixing logic and draw
+ * commands breaks this pipeline.
+ */
+
 #include <libdragon.h>
 #include <t3d/t3d.h>
 #include <t3d/t3dmath.h>

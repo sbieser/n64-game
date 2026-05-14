@@ -1,8 +1,47 @@
+/*
+ * scene_input.c — Live joypad state debugger
+ *
+ * Displays real-time button and stick state for all four controller ports.
+ * Useful for verifying hardware and understanding the joypad API.
+ *
+ * HOW THE JOYPAD API WORKS
+ * ─────────────────────────
+ * joypad_poll() samples all ports and stores the result internally.
+ * After polling, three query functions give different views of the state:
+ *
+ *   joypad_get_inputs(port)         — raw axis values (stick_x, stick_y as
+ *                                     signed 8-bit integers, ±85 at full tilt)
+ *
+ *   joypad_get_buttons_held(port)   — buttons currently held down this frame
+ *
+ *   joypad_get_buttons_pressed(port)— buttons that transitioned from up→down
+ *                                     this frame (one-shot, not held)
+ *
+ * joypad_is_connected(port) checks whether a controller is physically present.
+ * We display this status but always show data regardless — some USB adapters
+ * report as disconnected even when they work. Gating display on connectivity
+ * would hide valid input, which is worse than showing zeros for empty ports.
+ *
+ * FONT SHARING
+ * ────────────
+ * rdpq_text_register_font must be called exactly once per font ID.
+ * Calling it twice on the same ID crashes with an assertion. The builtin
+ * debug font is loaded in scene_init() (scene.c) and registered as ID 1,
+ * so all scenes share it without each needing to load their own copy.
+ * That's why scene_input_init() is empty — nothing to set up.
+ *
+ * NO Z-BUFFER
+ * ───────────
+ * rdpq_attach(display_get(), NULL) passes NULL for the depth buffer.
+ * This scene is pure 2D text — there is no 3D geometry, so depth testing
+ * is unnecessary and omitting it saves a small amount of RDP overhead.
+ */
+
 #include <libdragon.h>
 #include "scene.h"
 
 void scene_input_init(void) {
-    /* font id=1 is loaded and registered by scene_select (the boot scene) */
+    /* font id=1 is loaded once globally by scene_init() in scene.c */
 }
 
 void scene_input_update(void) {
