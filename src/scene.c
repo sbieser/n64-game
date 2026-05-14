@@ -6,14 +6,16 @@ void scene_select_init(void); void scene_select_update(void); void scene_select_
 void scene_rails_init(void);  void scene_rails_update(void);  void scene_rails_draw(void);
 void scene_input_init(void);  void scene_input_update(void);  void scene_input_draw(void);
 void scene_ghost_init(void);  void scene_ghost_update(void);  void scene_ghost_draw(void);
-void scene_synth_init(void);  void scene_synth_update(void);  void scene_synth_draw(void);
+void scene_synth_init(void);     void scene_synth_update(void);     void scene_synth_draw(void);
+void scene_colossus_init(void);  void scene_colossus_update(void);  void scene_colossus_draw(void);
 
 const Scene scenes[] = {
     { "Select", 0x111122FF, scene_select_init, scene_select_update, scene_select_draw },
     { "Rails",  0x2244AAFF, scene_rails_init,  scene_rails_update,  scene_rails_draw  },
     { "Input",  0x226622FF, scene_input_init,  scene_input_update,  scene_input_draw  },
     { "Ghost",  0x662244FF, scene_ghost_init,  scene_ghost_update,  scene_ghost_draw  },
-    { "Synth",  0x226644FF, scene_synth_init,  scene_synth_update,  scene_synth_draw  },
+    { "Synth",    0x226644FF, scene_synth_init,    scene_synth_update,    scene_synth_draw    },
+    { "Colossus", 0x221133FF, scene_colossus_init, scene_colossus_update, scene_colossus_draw },
 };
 
 static const int num_scenes = sizeof(scenes) / sizeof(scenes[0]);

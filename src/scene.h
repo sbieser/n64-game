@@ -13,7 +13,8 @@ typedef struct {
 #define SCENE_RAILS   1
 #define SCENE_INPUT   2
 #define SCENE_GHOST   3
-#define SCENE_SYNTH   4
+#define SCENE_SYNTH      4
+#define SCENE_COLOSSUS   5
 
 void         scene_init(void);
 void         scene_tick(void);
