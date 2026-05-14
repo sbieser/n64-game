@@ -15,6 +15,7 @@ typedef struct {
 #define SCENE_GHOST   3
 #define SCENE_SYNTH      4
 #define SCENE_COLOSSUS   5
+#define SCENE_SEED       6
 
 void         scene_init(void);
 void         scene_tick(void);
