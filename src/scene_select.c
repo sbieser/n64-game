@@ -10,18 +10,13 @@
 #define ROW_STEP  90
 #define BORDER     2
 
-static int          cursor = 0;
-static rdpq_font_t *font   = NULL;
+static int cursor = 0;
 
 static color_t unpack(uint32_t c) {
     return RGBA32((c>>24)&0xFF, (c>>16)&0xFF, (c>>8)&0xFF, c&0xFF);
 }
 
 void scene_select_init(void) {
-    if (!font) {
-        font = rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO);
-        rdpq_text_register_font(1, font);
-    }
     cursor = 0;
 }
 

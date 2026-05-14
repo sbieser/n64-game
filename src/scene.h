@@ -12,6 +12,7 @@ typedef struct {
 #define SCENE_SELECT  0
 #define SCENE_RAILS   1
 #define SCENE_INPUT   2
+#define SCENE_GHOST   3
 
 void         scene_init(void);
 void         scene_tick(void);

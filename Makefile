@@ -21,6 +21,9 @@ all: $(ROM_NAME).z64
 $(BUILD_DIR)/$(ROM_NAME).elf: $(OBJS)
 
 # Embed the DFS archive in the ROM (filesystem/ dir, even when empty).
+# Target-specific variable sets EEPROM 4K save type in the ROM header so
+# Ares and flashcarts auto-configure save hardware without a DB lookup.
+$(ROM_NAME).z64: N64_ED64ROMCONFIGFLAGS = -w eeprom4k
 $(ROM_NAME).z64: $(BUILD_DIR)/$(ROM_NAME).dfs
 
 ARES = /c/ares-v147/ares.exe

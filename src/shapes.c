@@ -181,6 +181,9 @@ static void drawPrism(void) {
 /* ---- PUBLIC API ---- */
 
 void shapes_init(void) {
+    static bool done = false;
+    if (done) return;
+    done = true;
     cubeVerts    = malloc_uncached(sizeof(T3DVertPacked) * 4);
     tetraVerts   = malloc_uncached(sizeof(T3DVertPacked) * 2);
     octaVerts    = malloc_uncached(sizeof(T3DVertPacked) * 3);
