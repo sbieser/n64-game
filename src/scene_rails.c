@@ -87,6 +87,7 @@
 #include "starfield.h"
 #include "player.h"
 #include "ghost.h"
+#include "phenomena.h"
 
 #define RAIL_START      -600.0f
 #define RAIL_END          50.0f
@@ -128,6 +129,7 @@ void scene_rails_init(void) {
 
     obstacles_generate(seed);
     starfield_generate(seed);
+    phenomena_generate(seed);
 
     ghost_load();
 
@@ -163,6 +165,7 @@ void scene_rails_update(void) {
     joypad_inputs_t pad = joypad_get_inputs(JOYPAD_PORT_1);
     lateralPos  += (pad.stick_x / 85.0f) * 0.5f;
     verticalPos += (pad.stick_y / 85.0f) * 0.5f;
+    phenomena_update(railZ, &lateralPos);
     if (lateralPos  >  LATERAL_MAX)  lateralPos  =  LATERAL_MAX;
     if (lateralPos  < -LATERAL_MAX)  lateralPos  = -LATERAL_MAX;
     if (verticalPos >  VERTICAL_MAX) verticalPos =  VERTICAL_MAX;
@@ -195,9 +198,12 @@ void scene_rails_draw(void) {
     t3d_viewport_attach(&viewport);
     rdpq_mode_combiner(RDPQ_COMBINER_SHADE);
 
+    float pull = phenomena_pull();
+    uint8_t bgR = clearR + (pull > 0.0f ? 20 : 0);
+    uint8_t bgB = clearB + (pull < 0.0f ? 25 : 0);
     t3d_screen_clear_color(hitFlash > 0
         ? RGBA32(100, 20, 20, 0xFF)
-        : RGBA32(clearR, clearG, clearB, 0xFF));
+        : RGBA32(bgR, clearG, bgB, 0xFF));
     t3d_screen_clear_depth();
 
     t3d_light_set_ambient(ambientColor);

@@ -17,6 +17,7 @@ typedef struct {
 #define SCENE_COLOSSUS   5
 #define SCENE_SEED       6
 #define SCENE_PHENOMENA  7
+#define SCENE_STARGATE   8
 
 void         scene_init(void);
 void         scene_tick(void);
