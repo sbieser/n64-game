@@ -86,6 +86,7 @@
 #include "obstacles.h"
 #include "starfield.h"
 #include "player.h"
+#include "ghost.h"
 
 #define RAIL_START      -600.0f
 #define RAIL_END          50.0f
@@ -97,6 +98,8 @@ static T3DViewport viewport;
 static float       railZ, rotAngle, lateralPos, verticalPos, camZ;
 static int         hitFlash;
 static bool        initialized = false;
+static bool        dead        = false;
+static uint32_t    frameCount  = 0;
 
 static uint8_t ambientColor[4]     = {40,  40,  80, 0xFF};
 static uint8_t directionalColor[4] = {200, 200, 160, 0xFF};
@@ -104,6 +107,7 @@ static T3DVec3 lightDir;
 
 /* Nebula clear color — derived from run seed each time scene is entered */
 static uint8_t clearR, clearG, clearB;
+
 
 void scene_rails_init(void) {
     /* New seed every run — captures hardware timer at the moment play begins */
@@ -114,15 +118,18 @@ void scene_rails_init(void) {
         obstacles_init();
         starfield_init(RAIL_START, RAIL_END);
         player_init();
-        viewport = t3d_viewport_create();
+        ghost_init();
+        viewport   = t3d_viewport_create();
         t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(70.0f), 10.0f, 200.0f);
-        lightDir = (T3DVec3){{1.0f, 1.0f, -0.5f}};
+        lightDir   = (T3DVec3){{1.0f, 1.0f, -0.5f}};
         t3d_vec3_norm(&lightDir);
         initialized = true;
     }
 
     obstacles_generate(seed);
     starfield_generate(seed);
+
+    ghost_load();
 
     /* Nebula tint — pull separate bits from the seed so we don't draw from
      * the same PRNG stream as the obstacle generator. Keeps the two systems
@@ -136,15 +143,24 @@ void scene_rails_init(void) {
     lateralPos  = 0.0f;
     verticalPos = 0.0f;
     hitFlash    = 0;
+    dead        = false;
+    frameCount  = 0;
 }
 
 void scene_rails_update(void) {
     joypad_poll();
-    joypad_inputs_t  pad = joypad_get_inputs(JOYPAD_PORT_1);
     joypad_buttons_t btn = joypad_get_buttons_pressed(JOYPAD_PORT_1);
 
     if (btn.b) { scene_switch(SCENE_SELECT); return; }
 
+    frameCount++;
+
+    if (dead) {
+        if (--hitFlash <= 0) scene_switch(SCENE_SELECT);
+        return;
+    }
+
+    joypad_inputs_t pad = joypad_get_inputs(JOYPAD_PORT_1);
     lateralPos  += (pad.stick_x / 85.0f) * 0.5f;
     verticalPos += (pad.stick_y / 85.0f) * 0.5f;
     if (lateralPos  >  LATERAL_MAX)  lateralPos  =  LATERAL_MAX;
@@ -162,10 +178,10 @@ void scene_rails_update(void) {
     obstacles_update(rotAngle, camZ);
     player_update(lateralPos, verticalPos, railZ);
 
-    if (hitFlash > 0) {
-        hitFlash--;
-    } else if (obstacles_check_collision(playerZ, lateralPos, verticalPos)) {
-        hitFlash = HIT_FLASH_FRAMES;
+    if (obstacles_check_collision(playerZ, lateralPos, verticalPos)) {
+        ghost_record(lateralPos, verticalPos, railZ);
+        hitFlash = 60;
+        dead     = true;
     }
 
     T3DVec3 camPos    = {{lateralPos,        8.0f + verticalPos, camZ}};
@@ -192,6 +208,13 @@ void scene_rails_draw(void) {
     starfield_draw();
 
     t3d_state_set_drawflags(T3D_FLAG_SHADED | T3D_FLAG_DEPTH | T3D_FLAG_CULL_BACK);
+
+    ghost_draw(camZ, frameCount);
+
+    /* Restore normal lighting for player and obstacles */
+    t3d_light_set_ambient(ambientColor);
+    t3d_light_set_directional(0, directionalColor, &lightDir);
+    t3d_light_set_count(1);
     player_draw();
     obstacles_draw(camZ);
 
