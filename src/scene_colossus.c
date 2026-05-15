@@ -129,6 +129,14 @@ static uint8_t ambientColor[4]     = {  8,   8,  20, 0xFF};
 static uint8_t directionalColor[4] = {160, 160, 220, 0xFF};
 static T3DVec3 lightDir;
 
+/* Arrival sequence — triggered from scene_rails when the player reaches the end */
+static bool arrival_pending = false;  /* set by scene_colossus_arrive() */
+static bool is_arrival      = false;  /* latched in init, drives behavior  */
+static int  arrival_timer   = 0;      /* countdown after merging           */
+static bool merged          = false;  /* true once camera reaches the core */
+
+void scene_colossus_arrive(void) { arrival_pending = true; }
+
 static uint16_t packNorm(float x, float y, float z) {
     T3DVec3 v = {{x, y, z}};
     t3d_vec3_norm(&v);
@@ -145,22 +153,51 @@ void scene_colossus_init(void) {
         t3d_vec3_norm(&lightDir);
         initialized = true;
     }
-    timeVal  = 0.0f;
-    camAngle = 0.0f;
-    camDist  = 110.0f;
+    timeVal       = 0.0f;
+    is_arrival    = arrival_pending;
+    arrival_pending = false;
+    arrival_timer = 0;
+    merged        = false;
+
+    if (is_arrival) {
+        /* Start far out with a slight angle so the approach isn't dead-on */
+        camDist  = 220.0f;
+        camAngle = 0.2f;
+    } else {
+        camDist  = 110.0f;
+        camAngle = 0.0f;
+    }
 }
 
 void scene_colossus_update(void) {
     joypad_poll();
-    joypad_inputs_t  pad = joypad_get_inputs(JOYPAD_PORT_1);
     joypad_buttons_t btn = joypad_get_buttons_pressed(JOYPAD_PORT_1);
+    if (btn.b) { is_arrival = false; scene_switch(SCENE_SELECT); return; }
 
-    if (btn.b) { scene_switch(SCENE_SELECT); return; }
-
-    camAngle += (pad.stick_x / 85.0f) * 0.03f;
-    camDist  -= (pad.stick_y / 85.0f) * 0.8f;
-    if (camDist <  25.0f) camDist =  25.0f;
-    if (camDist > 200.0f) camDist = 200.0f;
+    if (is_arrival) {
+        if (!merged) {
+            /* Slowly spiral in — angle drifts, distance shrinks */
+            camAngle += 0.004f;
+            camDist  -= 0.28f;
+            if (camDist <= 28.0f) {
+                /* Camera is now inside the geometry — the merging moment */
+                merged        = true;
+                arrival_timer = 360;  /* hold for 6 seconds */
+            }
+        } else {
+            if (--arrival_timer <= 0) {
+                is_arrival = false;
+                scene_switch(SCENE_SELECT);
+                return;
+            }
+        }
+    } else {
+        joypad_inputs_t pad = joypad_get_inputs(JOYPAD_PORT_1);
+        camAngle += (pad.stick_x / 85.0f) * 0.03f;
+        camDist  -= (pad.stick_y / 85.0f) * 0.8f;
+        if (camDist <  25.0f) camDist =  25.0f;
+        if (camDist > 200.0f) camDist = 200.0f;
+    }
 
     timeVal += 0.016f;
 
@@ -211,13 +248,24 @@ void scene_colossus_draw(void) {
     t3d_viewport_attach(&viewport);
     rdpq_mode_combiner(RDPQ_COMBINER_SHADE);
 
-    t3d_screen_clear_color(RGBA32(2, 2, 8, 0xFF));
+    /* Arrival: warm orange-dark sky, journey-end lighting.
+     * Demo:    cold near-black, starlight from upper-left. */
+    uint8_t amb[4], dir[4];
+    if (is_arrival) {
+        t3d_screen_clear_color(RGBA32(50, 16, 4, 0xFF));
+        amb[0]=28; amb[1]=11; amb[2]=4;  amb[3]=0xFF;
+        dir[0]=215; dir[1]=145; dir[2]=65; dir[3]=0xFF;
+    } else {
+        t3d_screen_clear_color(RGBA32(2, 2, 8, 0xFF));
+        amb[0]=ambientColor[0]; amb[1]=ambientColor[1]; amb[2]=ambientColor[2]; amb[3]=0xFF;
+        dir[0]=directionalColor[0]; dir[1]=directionalColor[1]; dir[2]=directionalColor[2]; dir[3]=0xFF;
+    }
     t3d_screen_clear_depth();
 
     /* No back-face culling — see comment at top of file */
     t3d_state_set_drawflags(T3D_FLAG_SHADED | T3D_FLAG_DEPTH);
-    t3d_light_set_ambient(ambientColor);
-    t3d_light_set_directional(0, directionalColor, &lightDir);
+    t3d_light_set_ambient(amb);
+    t3d_light_set_directional(0, dir, &lightDir);
     t3d_light_set_count(1);
 
     t3d_matrix_push(modelMat);
@@ -228,9 +276,11 @@ void scene_colossus_draw(void) {
     t3d_tri_sync();
     t3d_matrix_pop(1);
 
-    rdpq_text_print(NULL, 1, 8,  14, "THE COLOSSUS");
-    rdpq_text_printf(NULL, 1, 8,  26, "dist:%.0f", camDist);
-    rdpq_text_print(NULL, 1, 8, 228, "X orbit  Y zoom  B back");
+    if (!is_arrival) {
+        rdpq_text_print(NULL, 1, 8,  14, "THE COLOSSUS");
+        rdpq_text_printf(NULL, 1, 8,  26, "dist:%.0f", camDist);
+        rdpq_text_print(NULL, 1, 8, 228, "X orbit  Y zoom  B back");
+    }
 
     rdpq_detach_show();
 }

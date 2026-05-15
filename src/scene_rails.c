@@ -89,6 +89,8 @@
 #include "ghost.h"
 #include "phenomena.h"
 
+void scene_colossus_arrive(void);  /* defined in scene_colossus.c */
+
 #define RAIL_START      -600.0f
 #define RAIL_END          50.0f
 #define LATERAL_MAX       35.0f
@@ -175,7 +177,11 @@ void scene_rails_update(void) {
 
     railZ    += 0.4f;
     rotAngle += 0.02f;
-    if (railZ > RAIL_END) railZ = RAIL_START;
+    if (railZ > RAIL_END) {
+        scene_colossus_arrive();
+        scene_switch(SCENE_COLOSSUS);
+        return;
+    }
 
     camZ = railZ - 15.0f;
     float playerZ = railZ - 3.0f;
