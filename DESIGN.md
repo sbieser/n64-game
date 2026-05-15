@@ -242,6 +242,10 @@ A handful of larger star clusters or nebula wisps as flat sprites that always fa
 ### Layer 3 — Foreground 3D Geometry Stars
 10–20 actual vertex stars — simple shapes (crosses, small tetrahedra) in true 3D space. The player flies near or through them. Real parallax, real presence. Some may serve as subtle spatial landmarks.
 
+**Why the 2D layer matters:** The 2D backdrop carpet is what makes space feel infinite. Because it responds to camera angle rather than position, it never gets closer — it simply extends forever in every direction. No matter how far the player travels, the background stars are always at the same apparent distance. That's exactly right. The player should never feel like they're running out of sky.
+
+**Stars you actually fly past:** Layer 3 geometry stars provide the counterpoint — real 3D objects with genuine parallax that drift across screen as the player moves laterally. These are what make the player feel like they're actually *moving through* space rather than past a painted backdrop. Both layers are necessary: the 2D carpet for infinity, the 3D stars for velocity.
+
 **Depth through brightness:** Background stars seeded dim, foreground bright. Enormous perceived depth from simple rules.
 
 **As the player approaches the Colossus:**
@@ -285,9 +289,22 @@ uint8_t *col = smoke_colors[particle.age_index];
 
 Stretch a simple sphere or quad along the Z axis to fake a motion trail without trail geometry. `Matrix_Scale(1.0f, 1.0f, trail_length)` on a ball mesh creates a convincing teardrop contrail. Apply this to proximity-reactive particles near the Colossus — as they get pulled in, stretch them along their velocity vector.
 
-### Starfield Density — 3000 Stars
+### Starfield — 2D Skybox, Not 3D Space (SF64 Architecture)
 
-Star Fox 64 uses 3000 stars scattered across screen space with a seeded LCG, rendered as 1×1 pixel triangles via ortho projection. Our current starfield uses 150 world-space geometry stars which gives real parallax but lower density. The two approaches can coexist: their method for a dense backdrop carpet, ours for foreground presence stars.
+Star Fox 64's stars are **entirely 2D**. Stars have no Z coordinate — they are screen-space quads rendered with orthographic projection before any 3D scene. The player cannot fly "past" or "through" them. What looks like depth is pure illusion: stars scroll in response to **camera angle** (pitch/yaw), not camera position. The entire field shifts as if it's infinitely far away and you're rotating toward it.
+
+```c
+// SF64: star position = stored 2D offset + camera-angle-derived scroll
+gStarfieldX = FloatMod(yaw * factor + scrollOffset, starfieldWidth);
+gStarfieldY = FloatMod(pitch * factor + scrollOffset, starfieldHeight);
+// bx = starOffset[i].x + gStarfieldX  — pure 2D, no Z
+```
+
+SF64 generates 3000 stars from a **fixed seed** (same sky every run) and renders them as 1×1 pixel triangle pairs via ortho projection — essentially free fillrate.
+
+**Implication for us:** Our Layer 1 background stars should use the same approach — 2D screen-space quads, ortho projection, scrolling driven by camera angle or rail progress. This gives us hundreds of stars cheaply. Layers 2 and 3 add the actual 3D depth: billboard sprites with parallax, and true 3D geometry stars you can fly near or past. The SF64 technique is the carpet; our foreground layers are the presence.
+
+**Seed-derived variation SF64 doesn't have:** Because we use a run seed (not a fixed one), each run's sky can look subtly different — same PRNG, different initial seed, completely different star pattern. Density per-segment (the Seed Lab "star density" bars) then controls how many of those background stars show in each zone.
 
 ---
 
