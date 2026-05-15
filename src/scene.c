@@ -9,6 +9,7 @@ void scene_ghost_init(void);  void scene_ghost_update(void);  void scene_ghost_d
 void scene_synth_init(void);     void scene_synth_update(void);     void scene_synth_draw(void);
 void scene_colossus_init(void);  void scene_colossus_update(void);  void scene_colossus_draw(void);
 void scene_seed_init(void);      void scene_seed_update(void);      void scene_seed_draw(void);
+void scene_phenomena_init(void); void scene_phenomena_update(void); void scene_phenomena_draw(void);
 
 const Scene scenes[] = {
     { "Select", 0x111122FF, scene_select_init, scene_select_update, scene_select_draw },
@@ -18,6 +19,7 @@ const Scene scenes[] = {
     { "Synth",    0x226644FF, scene_synth_init,    scene_synth_update,    scene_synth_draw    },
     { "Colossus", 0x221133FF, scene_colossus_init, scene_colossus_update, scene_colossus_draw },
     { "Seed Lab", 0x113322FF, scene_seed_init,     scene_seed_update,     scene_seed_draw     },
+    { "Phenom",   0x332211FF, scene_phenomena_init, scene_phenomena_update, scene_phenomena_draw },
 };
 
 static const int num_scenes = sizeof(scenes) / sizeof(scenes[0]);
