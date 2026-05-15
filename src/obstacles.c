@@ -11,20 +11,37 @@
 #include <t3d/t3dmath.h>
 #include "obstacles.h"
 
-const Obstacle obstacles[NUM_OBSTACLES] = {
-    {-570,   0,   0, 7.0f, SHAPE_CUBE,    0.3f, 1.0f, 0.0f},
-    {-520,  14,  -4, 7.0f, SHAPE_TETRA,   0.4f, 0.7f, 1.0f},
-    {-470,  -9,   7, 7.0f, SHAPE_OCTA,    0.2f, 1.2f, 2.1f},
-    {-420,   0,  -6, 7.0f, SHAPE_PYRAMID, 0.5f, 0.4f, 0.5f},
-    {-370,  18,   0, 7.0f, SHAPE_PRISM,   0.3f, 0.8f, 3.2f},
-    {-320, -15,   5, 7.0f, SHAPE_CUBE,    0.6f, 0.5f, 1.7f},
-    {-270,   0,   8, 7.0f, SHAPE_TETRA,   0.4f, 1.1f, 2.8f},
-    {-220, -16,  -7, 7.0f, SHAPE_OCTA,    0.2f, 0.9f, 0.3f},
-    {-170,  12,   0, 7.0f, SHAPE_PYRAMID, 0.5f, 0.6f, 1.4f},
-    {-120,   0,   6, 7.0f, SHAPE_PRISM,   0.3f, 1.3f, 4.1f},
-    { -70, -11,  -8, 7.0f, SHAPE_CUBE,    0.4f, 0.7f, 2.2f},
-    { -20,   9,   4, 7.0f, SHAPE_OCTA,    0.6f, 0.4f, 3.7f},
-};
+Obstacle obstacles[NUM_OBSTACLES];
+
+/* Rail bounds — must match scene_rails.c */
+#define OBS_RAIL_START  -600.0f
+#define OBS_RAIL_END      50.0f
+#define OBS_LAT_MAX       28.0f   /* slightly inside LATERAL_MAX so nothing hugs the wall */
+#define OBS_VERT_MAX      14.0f   /* slightly inside VERTICAL_MAX */
+
+static uint32_t rng_state;
+
+static uint32_t rng_next(void) {
+    rng_state ^= rng_state << 13;
+    rng_state ^= rng_state >> 17;
+    rng_state ^= rng_state << 5;
+    return rng_state;
+}
+
+void obstacles_generate(uint32_t seed) {
+    rng_state = seed;
+    float rail_len = OBS_RAIL_END - OBS_RAIL_START - 60.0f; /* leave buffer at end */
+    for (int i = 0; i < NUM_OBSTACLES; i++) {
+        obstacles[i].worldZ    = OBS_RAIL_START + (rng_next() % 10000) / 10000.0f * rail_len;
+        obstacles[i].x         = ((int)(rng_next() % 1000) - 500) / 500.0f * OBS_LAT_MAX;
+        obstacles[i].y         = ((int)(rng_next() % 1000) - 500) / 500.0f * OBS_VERT_MAX;
+        obstacles[i].hitRadius = 7.0f;
+        obstacles[i].shape     = (int)(rng_next() % 5);
+        obstacles[i].rotSpeedX = 0.2f + (rng_next() % 100) / 250.0f;
+        obstacles[i].rotSpeedY = 0.2f + (rng_next() % 100) / 250.0f;
+        obstacles[i].rotPhase  = (rng_next() % 628) / 100.0f;
+    }
+}
 
 /* One model matrix per obstacle in a contiguous uncached block.
  * Safe to use one per obstacle (not three) because rdpq_detach_show()

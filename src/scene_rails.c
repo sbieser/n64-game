@@ -102,7 +102,13 @@ static uint8_t ambientColor[4]     = {40,  40,  80, 0xFF};
 static uint8_t directionalColor[4] = {200, 200, 160, 0xFF};
 static T3DVec3 lightDir;
 
+/* Nebula clear color — derived from run seed each time scene is entered */
+static uint8_t clearR, clearG, clearB;
+
 void scene_rails_init(void) {
+    /* New seed every run — captures hardware timer at the moment play begins */
+    uint32_t seed = (uint32_t)TICKS_READ();
+
     if (!initialized) {
         shapes_init();
         obstacles_init();
@@ -114,6 +120,17 @@ void scene_rails_init(void) {
         t3d_vec3_norm(&lightDir);
         initialized = true;
     }
+
+    obstacles_generate(seed);
+    starfield_generate(seed);
+
+    /* Nebula tint — pull separate bits from the seed so we don't draw from
+     * the same PRNG stream as the obstacle generator. Keeps the two systems
+     * independent even though they share one seed. */
+    clearR = 25 + ((seed >>  0) & 0x1F);  /* 25–56  — faint red shift  */
+    clearG = 18 + ((seed >>  5) & 0x0F);  /* 18–33  — almost no green  */
+    clearB = 70 + ((seed >> 10) & 0x3F);  /* 70–133 — dominant blue    */
+
     railZ       = RAIL_START;
     rotAngle    = 0.0f;
     lateralPos  = 0.0f;
@@ -164,7 +181,7 @@ void scene_rails_draw(void) {
 
     t3d_screen_clear_color(hitFlash > 0
         ? RGBA32(100, 20, 20, 0xFF)
-        : RGBA32( 50, 50,100, 0xFF));
+        : RGBA32(clearR, clearG, clearB, 0xFF));
     t3d_screen_clear_depth();
 
     t3d_light_set_ambient(ambientColor);

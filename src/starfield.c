@@ -27,33 +27,30 @@
 
 static T3DVertPacked *starBuf;    /* 2 packed structs per star = NUM_STARS * 2 */
 static T3DMat4FP     *identityMat;
+static float          sRailStart, sRailEnd;
 
-/* Reproducible LCG — avoids stdlib rand() and gives the same star pattern
- * every boot, which is what we want for a fixed background. */
 static unsigned int lcgNext(unsigned int *s) {
     *s = *s * 1664525u + 1013904223u;
-    return *s >> 16;  /* top 16 bits have better randomness in LCGs */
+    return *s >> 16;
 }
 
 void starfield_init(float railStart, float railEnd) {
+    sRailStart = railStart;
+    sRailEnd   = railEnd;
     starBuf     = malloc_uncached(sizeof(T3DVertPacked) * NUM_STARS * 2);
     identityMat = malloc_uncached(sizeof(T3DMat4FP));
-
-    /* Identity: scale 1, no rotation, no translation.
-     * Pushing this matrix means vertex positions reach the RSP unchanged —
-     * model space == world space. */
     t3d_mat4fp_from_srt_euler(identityMat,
         (float[3]){1,1,1}, (float[3]){0,0,0}, (float[3]){0,0,0});
+}
 
-    float railLen = railEnd - railStart;
-    unsigned int seed = 0xDEADBEEFu;
+void starfield_generate(uint32_t seed) {
+    float railLen = sRailEnd - sRailStart;
+    unsigned int s = (unsigned int)seed;
 
     for (int i = 0; i < NUM_STARS; i++) {
-        /* Scatter wide in X and Y to fill the peripheral space around the rail.
-         * Y is offset +8 to center on the camera's height. */
-        float x = (float)(lcgNext(&seed) % 161) - 80.0f;
-        float y = (float)(lcgNext(&seed) % 141) - 70.0f + 8.0f;
-        float z = railStart + (float)(lcgNext(&seed) % 10000) / 10000.0f * railLen;
+        float x = (float)(lcgNext(&s) % 161) - 80.0f;
+        float y = (float)(lcgNext(&s) % 141) - 70.0f + 8.0f;
+        float z = sRailStart + (float)(lcgNext(&s) % 10000) / 10000.0f * railLen;
 
         /* Mostly white, occasional blue-tinted or warm stars. */
         uint32_t color;
@@ -63,13 +60,6 @@ void starfield_init(float railStart, float railEnd) {
             default: color = 0xFFFFFFFF; break; /* white      */
         }
 
-        /* Quad vertices, all at the same Z (flat face):
-         *   v0: bottom-left   v1: bottom-right
-         *   v2: top-right     v3: top-left
-         *
-         * Winding (0,2,1) and (0,3,2) produces a normal in -Z, which is the
-         * direction the camera approaches from. The face is front-facing to
-         * the camera and back-face culling leaves it visible. */
         float S = STAR_HALF;
         int b = i * 2;
         starBuf[b] = (T3DVertPacked){
