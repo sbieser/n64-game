@@ -102,13 +102,15 @@ static bool        initialized = false;
 static bool        dead        = false;
 static uint32_t    frameCount  = 0;
 
-static uint8_t ambientColor[4]     = {40,  40,  80, 0xFF};
-static uint8_t directionalColor[4] = {200, 200, 160, 0xFF};
 static T3DVec3 lightDir;
 
 /* Nebula clear color — derived from run seed each time scene is entered */
 static uint8_t clearR, clearG, clearB;
 
+
+static uint8_t lerp8(uint8_t a, uint8_t b, float t) {
+    return (uint8_t)(a + (b - a) * t);
+}
 
 void scene_rails_init(void) {
     /* New seed every run — captures hardware timer at the moment play begins */
@@ -198,16 +200,29 @@ void scene_rails_draw(void) {
     t3d_viewport_attach(&viewport);
     rdpq_mode_combiner(RDPQ_COMBINER_SHADE);
 
+    /* Journey progress [0=start, 1=Colossus] drives color temperature */
+    float t = (railZ - RAIL_START) / (RAIL_END - RAIL_START);
+    if (t < 0.0f) t = 0.0f;
+    if (t > 1.0f) t = 1.0f;
+
+    /* Ambient: cold blue-purple → warm amber */
+    uint8_t amb[4] = { lerp8(40, 90, t), lerp8(40, 50, t), lerp8(80, 20, t), 0xFF };
+    /* Directional: cool white-blue → warm sunlight */
+    uint8_t dir[4] = { lerp8(180, 255, t), lerp8(180, 185, t), lerp8(220, 80, t), 0xFF };
+
+    /* Clear: seed nebula color → deep warm orange; phenomena pull adds tint */
     float pull = phenomena_pull();
-    uint8_t bgR = clearR + (pull > 0.0f ? 20 : 0);
-    uint8_t bgB = clearB + (pull < 0.0f ? 25 : 0);
+    uint8_t bgR = lerp8(clearR, 90, t) + (uint8_t)(pull > 0.0f ? 20 : 0);
+    uint8_t bgG = lerp8(clearG, 25, t);
+    uint8_t bgB = lerp8(clearB, 10, t) + (uint8_t)(pull < 0.0f ? 25 : 0);
+
     t3d_screen_clear_color(hitFlash > 0
         ? RGBA32(100, 20, 20, 0xFF)
-        : RGBA32(bgR, clearG, bgB, 0xFF));
+        : RGBA32(bgR, bgG, bgB, 0xFF));
     t3d_screen_clear_depth();
 
-    t3d_light_set_ambient(ambientColor);
-    t3d_light_set_directional(0, directionalColor, &lightDir);
+    t3d_light_set_ambient(amb);
+    t3d_light_set_directional(0, dir, &lightDir);
     t3d_light_set_count(1);
 
     t3d_state_set_drawflags(T3D_FLAG_SHADED | T3D_FLAG_DEPTH | T3D_FLAG_CULL_BACK | T3D_FLAG_NO_LIGHT);
@@ -217,9 +232,9 @@ void scene_rails_draw(void) {
 
     ghost_draw(camZ, frameCount);
 
-    /* Restore normal lighting for player and obstacles */
-    t3d_light_set_ambient(ambientColor);
-    t3d_light_set_directional(0, directionalColor, &lightDir);
+    /* Restore lighting after ghost (which sets its own) */
+    t3d_light_set_ambient(amb);
+    t3d_light_set_directional(0, dir, &lightDir);
     t3d_light_set_count(1);
     player_draw();
     obstacles_draw(camZ);
