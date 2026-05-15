@@ -91,6 +91,100 @@ On subsequent runs, those positions are loaded and rendered as frozen figures �
 
 ---
 
+## Obstacle Variety
+
+All obstacles share one philosophy: **the universe is indifferent, not hostile.** Nothing is trying to kill the player. Things simply exist, and the player must navigate around them. Each obstacle type should feel like a natural phenomenon with its own logic, not a game designer placing enemies.
+
+Implementation note: obstacles are generated from the run seed, so each phenomenon's position and parameters come from `xorshift32` draws. The mechanic code lives in `obstacles.c`; the visual rendering uses existing shape primitives plus new quad/ring geometry.
+
+---
+
+### Debris Field *(planned — Act 1)*
+Dense clusters of rotating geometry shapes — the dead worlds the Colossus has already passed through. The current obstacle system is already a proto-debris field. Authentic version: clusters of obstacles concentrated in a short Z range, forcing the player to weave. Density derived from the run seed's star-density values (reuse the same draw).
+
+**N64 implementation:** existing shape system, just cluster Z positions more tightly per-segment.
+
+---
+
+### Gravitational Field *(planned — Act 1/2)*
+An invisible zone that pulls the player laterally. The player must fight the stick to hold their course — full correction overpowers it, but inattention drifts them into debris or walls. The pull direction and strength come from the seed. Visually: a faint distortion shimmer at the field boundary (dim translucent quad ring), the field interior having a subtle ambient color shift (slightly warmer, heavier).
+
+**N64 implementation:** in `update()`, add a lateral force `lateralPos += pull_x * pull_strength` while inside the Z range. No geometry required — purely a force applied to the existing player position.
+
+---
+
+### Pulsar Beam *(planned — Act 1/2)*
+A dense neutron star off to one side of the rail fires a rotating beam — a lighthouse sweeping in a predictable rhythm. The beam sweeps a wide arc across the play area. The player must time their dodge: hold left, let it pass, return to center. The star itself is a stationary brilliant white-blue point. The beam is two long narrow quads pivoting around it.
+
+**Visual:** tiny blazing point (bright vertex-colored cube), two long quads rotating on a timer. The rotation speed is slow enough to learn but fast enough that hesitation kills.
+
+**Gameplay:** purely rhythmic — watch the sweep, move with it, don't fight it. A second beat layer: the pulsar fires an irregular radial ring pulse (same expanding ring primitive) that forces the player to dodge in the gap between the ring and the beam. The irregular pulse cannot be learned by rhythm alone.
+
+---
+
+### Magnetar Starquake *(Act 2)*
+A pulsar's dangerous cousin. Twin gamma-ray jets lancing from the poles are permanent and must be avoided on approach. The real threat: an unpredictable starquake fires a full radial shockwave ring — same primitive as the pulsar pulse but irregular timing, so it cannot be anticipated. Nearby metallic debris is pulled into a slow inward spiral by the magnetic field.
+
+**Visual:** brilliant blue-white point, two long thin quad jets from poles, expanding ring on starquake.
+
+**N64 implementation:** rotating quad jets (always on), expanding ring (spawned on irregular timer from seed-derived interval), nearby obstacles get a slow radial drift applied in `obstacles_update()`.
+
+---
+
+### Gamma Ray Burst *(Act 2 — rare)*
+The most dramatic event in the universe becomes the most dramatic moment in a run. A distant star at the edge of the playfield suddenly blazes white — the only warning. A few seconds later, a shockwave ring rushes toward the player from that direction. No reaction time on a first encounter; it is a "survive or learn" moment. Used sparingly — maximum once per run, seed-determined.
+
+**Visual:** distant star vertex snaps to full white bloom (`rgba = 0xFFFFFFFF`), full-screen white quad overlay at peak intensity fading over 10 frames, then expanding ring.
+
+**Gameplay secondary effect:** player controls become sluggish for 3 seconds (multiply stick input by 0.3) — the EMP equivalent. No rendering cost; purely a code mechanic applied to input scaling.
+
+---
+
+### Dark Nebula / Stellar Nursery *(Act 2)*
+A dense molecular cloud — black, opaque, eating the starfield. The player flies into it and the background stars disappear entirely. Obstacles are still present but visible later (closer draw distance inside the cloud). Bright pink-magenta jets erupt laterally from buried protostars, firing "knot" projectiles across the corridor. Acts as a natural difficulty spike without adding new geometry types — just reduced visibility.
+
+**Visual:** ambient light drops to near-black on entry (smooth lerp over 1 second). Background clear color becomes deep brown-black. Star draw skipped inside the volume. Pink-magenta thin quads for jets. Existing obstacle shapes as knots.
+
+**N64 implementation:** zone entry/exit triggers ambient color lerp in `scene_rails_draw()`. Lateral projectiles are existing shapes launched with a fixed transverse velocity added in `obstacles_update()`.
+
+---
+
+### Rogue Planet with Aurora *(Act 2/3)*
+The largest obstacle — a cold, dark planet the rail curves around. Nearly invisible itself (deep red-brown vertex colors, almost black). The hazard is its aurora zone: rings of crackling blue-green light extending well past the surface. Threading the gap between the planet and the aurora boundary without clipping it is the challenge. The planet looms close enough to fill most of the screen as the player skirts past — overwhelming by presence, not complexity.
+
+**Visual:** an icosahedron or subdivided shape at large scale, dark vertex colors. Aurora: a ring of translucent quads fanned around the polar axis, vertex-colored black at base to bright blue-green at tip. Color cycles slowly each frame — no texture needed.
+
+**Gameplay:** the rail bends around the planet (camera target shifts laterally), aurora zone is a collision volume. Touching it deals damage. Threading the magnetic pole gap exactly rewards the player with a brief speed boost.
+
+---
+
+### Stargate Transition *(Act boundary / warp mechanic)*
+Directly inspired by the "Jupiter and Beyond the Infinite" sequence from *2001: A Space Odyssey*. Douglas Trumbull created the original using slit-scan photography — a camera tracking slowly toward a vertical slit while artwork moved behind it, each frame a long exposure that stretched the art into infinite receding lines. The result: two walls of colored geometric light converging at a vanishing point, palette cycling continuously from electric blue to violet to orange to acid green.
+
+On N64 this is approximated as a tunnel of colored rectangular frames at increasing Z depths, rushing toward the camera:
+
+```c
+// 8 rectangular frames at exponentially increasing Z
+// Each frame: 4 quads (top/bottom/left/right strip)
+// Color indexed from palette, offset by frame index
+// Each tick: shift all frames one step closer, wrap farthest back
+
+static const uint32_t stargate_palette[] = {
+    0x0033FFFF,  /* electric blue  */
+    0x00AAFFFF,  /* cyan-blue      */
+    0x4400CCFF,  /* deep violet    */
+    0xFF6600FF,  /* hot orange     */
+    0xFFDD00FF,  /* acid yellow    */
+    0xCC00FFFF,  /* magenta-purple */
+    0x00FF88FF,  /* bright green   */
+    0xFF0033FF,  /* hot red-pink   */
+};
+```
+
+Cost: 64 triangles, one color table lookup per frame. Used as a 10-second transition zone between acts — no obstacles, pure spectacle. Signals a boundary: the player has crossed into something different. Also usable as the visual signature of a warp speed boost (player enters briefly, the rail advances faster, they emerge further along).
+
+---
+
 ## Visual Direction
 
 **Aesthetic:** Lo-fi N64 polygon style embraced fully — not apologized for. The hardware constraints *are* the art direction. Think how 2001: A Space Odyssey feels sparse and overwhelming — that's the target emotion, achieved through simplicity not detail.
