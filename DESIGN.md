@@ -79,14 +79,14 @@ The ending must not answer whether becoming the Colossus is death or transcenden
 
 ## Ghost Mechanic
 
-When the player dies, their position along the rail, their lateral/vertical offset, and their run index are written to **SRAM** on cartridge.
+When the player dies, their position along the rail, their lateral/vertical offset, and their run index are written to **EEPROM** on cartridge (4 Kbit cartridge EEPROM, accessed via libdragon's `eeprom_read/write_bytes` API).
 
 On subsequent runs, those positions are loaded and rendered as frozen figures — people, drifting in the exact spot and posture they died, still reaching forward. They become part of the environment of Act 2, growing denser closer to The Colossus.
 
 - They are the player's own death history made visible
 - They are also environmental storytelling — other seekers who came before
 - Their effect on gameplay (purely cosmetic vs soft hazard) TBD — iterate
-- Cap stored deaths at a reasonable number given SRAM limits (TBD, ~5–10)
+- Cap: 8 ghosts (current implementation); oldest evicted when full
 - Ghost figures should feel still and sad, not threatening
 
 ---
