@@ -10,6 +10,20 @@ Free-roaming. No fixed path. No explicit objective. The player has full control 
 
 ---
 
+## Controls
+
+Auto-forward thrust. The ship is always moving in the direction it faces at a slow base speed — the player is never stationary unless dead. The player steers by changing direction, not by choosing when to move.
+
+- **Analog stick:** yaw (left/right) and pitch (up/down) — turns the ship, which changes heading
+- **A button:** boost — increases speed temporarily
+- The ship gradually aligns to the input direction; movement follows facing
+
+This fits the tone: the player is drifting through space, pulled by curiosity, not piloting aggressively. Steering toward the signal is the primary act. The auto-forward also makes audio navigation natural — turning to face the signal and hearing it grow louder is the feedback loop.
+
+**Open:** Does oxygen deplete faster when boosting? Not yet decided.
+
+---
+
 ## What Is Happening
 
 The player is following a signal. The game does not name it, explain it, or point to it. There is no waypoint. There is a sound — irregular, not mechanical, almost organic — that shifts in panning and volume as the player moves. Louder means closer. More centered means facing it. The player must decide to trust their ears.
@@ -43,16 +57,23 @@ The universe kills through indifference. The player has a finite oxygen supply t
 
 **The loop:**
 - The player dies → becomes a ghost at that position → that ghost has oxygen
-- Future runs find that ghost → take its oxygen → get further
+- Future visits find that ghost → take its oxygen → get further
 - The world accumulates the player's death history as a survival resource
 
-Early runs: the space is almost empty. One tank. The signal is far. You may not make it.  
-Later runs: ghost clusters form where previous attempts ended. The accumulated dead make the journey possible.
+Early visits: the space is almost empty. One tank. The signal is far. You may not make it.  
+Over time: ghost clusters form where previous attempts ended. The accumulated dead make the journey possible.
 
 **Open questions:**
 - Does oxygen deplete faster when boosting?
-- Is each ghost a one-time source, or does it replenish between runs?
 - What is the visual indicator for oxygen level — a sound, a color shift, both?
+
+**Decided:**
+- Each ghost is a one-time oxygen source per attempt. Once drained within an attempt it goes fully static and dark — the player can see at a glance what they've already spent on this run.
+- Drained state is **not saved to SRAM**. Every new attempt at Stage 1 starts with all ghosts full. This is essential: if drain state persisted, a player could exhaust all nearby oxygen sources and find themselves unable to progress on future attempts, dying in the same place repeatedly with no recourse.
+- Ghost **positions** are permanent and saved to SRAM. The accumulation mechanic still works — more deaths over time means more ghost ships means more potential oxygen sources per attempt. The stage gets more forgiving as history builds up.
+- The oxygen indicator is a **venting atmosphere effect** — not a UI element, not a flicker. A wrecked ship still has pressurized air inside; a hull breach leaks it slowly into vacuum. This appears as a faint trickle of tiny cold blue-white particles drifting from one spot on the hull. When drained: the vent stops, the ship is completely static. The presence or absence of the vent tells the player everything without instruction.
+- Ghost ships **slowly tumble** — no attitude control, dead in space. Each ghost rotates at a low constant rate (axis and speed derived from its position in the ghost array, so no two spin identically). Living ships hold attitude. Dead ones don't.
+- The debris field is part of the ghost ship model — hull panels, a strut, a small component box scattered nearby. These rotate with the main hull, as if the whole wreckage is one slowly tumbling mass.
 
 ---
 
@@ -68,7 +89,15 @@ This is not a flaw. The players who stay are the ones who seek. The game is find
 
 Stage 1 ghosts are people who got lost. They cluster near the beacon but not at it — they ran out before arriving, or arrived and couldn't continue.
 
-Their pattern on subsequent runs tells the story of the search without words: a field of frozen figures in the void, all roughly facing the same direction, all stopped short.
+Their pattern across visits tells the story of the search without words: a field of wrecked ships in the void, all roughly oriented the same direction, all stopped short.
+
+**Ghost visuals:** Player-death ghosts in Stage 1 render as a wrecked ship — hull, broken wing, loose debris field. Dark, cold coloring throughout. Slowly tumbling. The humanoid `ghost_reacher` figure is reserved for the beacon ghost specifically — the one frozen figure at the signal source, still reaching forward.
+
+**Undrained ghost:** Tumbling wreck + faint atmospheric vent particles drifting from one point on the hull. Cold blue-white, barely visible, irregular. The vent says "something is still happening here" without explaining what.
+
+**Drained ghost (within an attempt):** Tumbling wreck only. No vent. Completely static coloring. The player reads it immediately — that one's empty this run. Next attempt, it's full again.
+
+**Why no smoke:** There is no atmosphere in space. Nothing burns. What a wrecked ship actually does in vacuum: tumble, shed debris, vent residual pressure through hull breaches, hold residual heat on exposed surfaces. The vent effect is physically grounded, not decorative.
 
 ---
 

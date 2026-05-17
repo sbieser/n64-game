@@ -4,6 +4,18 @@
 
 ---
 
+## Structure
+
+The game is stage-based, not run-based. Completing a stage unlocks the next one. Stages can be revisited freely. There is no requirement to complete the journey in a single sitting — the player progresses through stages over as many sessions as they need.
+
+What persists between sessions: stage unlock state, and ghost positions in every stage. What does not persist: the player's position within a stage. Each visit to a stage starts fresh from its beginning. Ghosts accumulate permanently — they are world state, not session state.
+
+This means Stage 1 on a first visit is nearly empty. Stage 1 after many visits by the same player (or different players on the same cartridge) is populated with the history of every attempt. The space remembers everyone who tried.
+
+Save backend: SRAM (32 KB cartridge SRAM). Compatible with SummerCart 64 and EverDrive flash cartridges, and all major emulators. Stage unlock state fits in a single byte bitmask. Ghost pools for all stages fit comfortably within the 32 KB limit.
+
+---
+
 ## The Arc
 
 The game's structure mirrors its emotional arc. The player begins with full agency and ends with none — and that loss of control *is* the transformation.
@@ -40,7 +52,7 @@ This means stage 1 ghosts tell a different story than later ghosts:
 - Stage 1 ghosts: people who got lost searching
 - Stage 3–4 ghosts: people who almost reached him
 
-**When oxygen runs out:** The player drifts to a stop and becomes a ghost at exactly that position. Recorded to EEPROM. On the next run, that ghost is there — visible proof of how far they made it. Stage 1 deaths cluster near the beacon but not at it. The pattern of ghosts tells the story of the search.
+**When oxygen runs out:** The player drifts to a stop and becomes a ghost at exactly that position. Recorded to SRAM. On future visits, that ghost is there — visible proof of how far they made it. Stage 1 deaths cluster near the beacon but not at it. The pattern of ghosts tells the story of the search.
 
 ---
 
@@ -84,12 +96,14 @@ Then: the selector. No explanation. No score. No ending screen.
 
 ## Open Questions
 
-- **How many stages?** SF64 runs 7 stages per run. Our arc fits naturally into 4–5. More stages could add texture between the defined beats — an additional strange zone in Stage 2, or two distinct phases of the rail. Not decided.
+- **How many stages?** The arc fits naturally into 4–5. More stages could add texture between the defined beats — an additional strange zone in Stage 2, or two distinct phases of the rail. Not decided.
 
 - **Does oxygen persist beyond Stage 1?** It could be Stage 1 only — a mechanic that teaches you the universe is indifferent and then recedes, letting new layers take over. Or it could persist at reduced importance. The latter risks diluting the later stages' distinct identity.
 
 - **How explicit is the ghost narrative?** The player finds a frozen figure at the beacon. They are not told it is a previous seeker. They are not told the signal came from them. They can infer — or not. This is consistent with the game's philosophy of holding questions open.
 
-- **Stage count and run length:** Targeting a 30–50 minute casual run (SF64 reference: ~45 min). Each stage probably 5–10 minutes. Means 4–6 stages is the right range.
+- **Stage length:** Targeting 10–20 minutes per stage for a first visit. Return visits to early stages are shorter since the player knows the space. Means a complete first playthrough across all stages is roughly 45–90 minutes.
+
+- **What does "completing" a stage feel like?** It should feel like arrival, not victory. No fanfare, no score. Something changes — the next stage opens — and that is all.
 
 - **What does Stage 2 feel like as a place?** The void gives way to something. A debris field? A dying star system? What is the visual and audio identity that makes it feel distinct from Stage 1 and Stage 3?
