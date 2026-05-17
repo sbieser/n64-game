@@ -68,9 +68,12 @@ Over time: ghost clusters form where previous attempts ended. The accumulated de
 - What is the visual indicator for oxygen level — a sound, a color shift, both?
 
 **Decided:**
-- Each ghost is a one-time oxygen source per attempt. Once drained within an attempt it goes fully static and dark — the player can see at a glance what they've already spent on this run.
-- Drained state is **not saved to SRAM**. Every new attempt at Stage 1 starts with all ghosts full. This is essential: if drain state persisted, a player could exhaust all nearby oxygen sources and find themselves unable to progress on future attempts, dying in the same place repeatedly with no recourse.
-- Ghost **positions** are permanent and saved to SRAM. The accumulation mechanic still works — more deaths over time means more ghost ships means more potential oxygen sources per attempt. The stage gets more forgiving as history builds up.
+- Each ghost has a **charge count** (target: 5). Each attempt, the player can take oxygen from a ghost once — that uses one charge. The charge count is saved to SRAM and never resets.
+- At 0 charges: the ghost is permanently an empty shell. No vent. Dark and static. Never usable again.
+- Within a single attempt: each ghost can only be used once regardless of remaining charges. This prevents camping a single ghost. The per-attempt drain flag is runtime-only and not saved.
+- Ghost **positions and charge counts** are saved to SRAM. Ghost positions accumulate permanently. Charges only go down, never up.
+
+**Why this works:** Early attempts lean on a handful of nearby ghosts with fresh charges. Over many attempts, those familiar ghosts slowly deplete. When the nearest ghost runs dry the player is gently pushed to either die deeper (leaving fresh ghosts further in) or push further before dying. The space near a recurring death spot gets used up. The game nudges forward without locking out.
 - The oxygen indicator is a **venting atmosphere effect** — not a UI element, not a flicker. A wrecked ship still has pressurized air inside; a hull breach leaks it slowly into vacuum. This appears as a faint trickle of tiny cold blue-white particles drifting from one spot on the hull. When drained: the vent stops, the ship is completely static. The presence or absence of the vent tells the player everything without instruction.
 - Ghost ships **slowly tumble** — no attitude control, dead in space. Each ghost rotates at a low constant rate (axis and speed derived from its position in the ghost array, so no two spin identically). Living ships hold attitude. Dead ones don't.
 - The debris field is part of the ghost ship model — hull panels, a strut, a small component box scattered nearby. These rotate with the main hull, as if the whole wreckage is one slowly tumbling mass.
@@ -95,7 +98,9 @@ Their pattern across visits tells the story of the search without words: a field
 
 **Undrained ghost:** Tumbling wreck + faint atmospheric vent particles drifting from one point on the hull. Cold blue-white, barely visible, irregular. The vent says "something is still happening here" without explaining what.
 
-**Drained ghost (within an attempt):** Tumbling wreck only. No vent. Completely static coloring. The player reads it immediately — that one's empty this run. Next attempt, it's full again.
+**Partially drained ghost (charges remaining, already used this attempt):** Tumbling wreck, vent still present (charges remain), but player cannot take oxygen again until next attempt.
+
+**Permanently depleted ghost (0 charges):** Tumbling wreck only. No vent. Completely static and dark. The player reads it immediately — that one is gone for good. Its debris field remains as a landmark and part of the accumulating graveyard.
 
 **Why no smoke:** There is no atmosphere in space. Nothing burns. What a wrecked ship actually does in vacuum: tumble, shed debris, vent residual pressure through hull breaches, hold residual heat on exposed surfaces. The vent effect is physically grounded, not decorative.
 
