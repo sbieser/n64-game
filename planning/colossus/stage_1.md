@@ -18,7 +18,7 @@ Auto-forward thrust. The ship is always moving in the direction it faces at a sl
 - **A button:** boost — increases speed temporarily
 - The ship gradually aligns to the input direction; movement follows facing
 
-This fits the tone: the player is drifting through space, pulled by curiosity, not piloting aggressively. Steering toward the signal is the primary act. The auto-forward also makes audio navigation natural — turning to face the signal and hearing it grow louder is the feedback loop.
+**Traversal is fully 3D.** The signal can be in any direction — above, below, beside. The player pitches toward it and auto-forward carries them there. No explicit vertical thrust buttons needed; heading IS movement. No roll — the world-up vector is locked so the camera always knows which way is up regardless of ship attitude. This prevents disorientation and keeps audio navigation readable.
 
 **Open:** Does oxygen deplete faster when boosting? Not yet decided.
 
