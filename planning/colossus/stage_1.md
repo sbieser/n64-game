@@ -72,12 +72,70 @@ Their pattern on subsequent runs tells the story of the search without words: a 
 
 ---
 
+## Visual Design
+
+### First Impression
+
+The player appears in the void. Stars in every direction. Two faint color regions shape the darkness without explaining themselves. A few bright stars sit in true 3D space. Cosmic dust drifts. There is no UI, no arrow, no prompt. Then they hear it. They start moving. A foreground star drifts past. The dust streams. And somewhere out there, something barely pulses.
+
+Not spectacle — presence.
+
+### Layer 1 — Background Star Carpet
+
+A dense field of stars surrounding the player in all directions. Unlike the rail stages where stars are world-space quads distributed along Z, Stage 1 needs a starfield that responds to camera *orientation* rather than position — stars that always feel infinitely far regardless of where the player points. The SF64 approach: 2D screen-space stars scrolling based on camera angle. The player cannot fly toward or past them. They are always at the same apparent distance. This is what makes space feel infinite.
+
+Color-varied: mostly cold white, occasional blue-white, a few faint warm points. Dense enough to feel overwhelming in the good way — you are inside something vast.
+
+### Layer 2 — Nebula Color Washes
+
+Two or three enormous translucent quads at extreme distance, giving different regions of the void distinct color identity. A cold violet region toward the signal. A deep blue region behind. Almost invisible individually — they don't read as objects, only as a quality of the darkness. Together they make the void feel *shaped* rather than uniform, and they give the player subtle directional cues without being explicit.
+
+Nearly free to render. A handful of large quads with alpha blending.
+
+### Layer 3 — Foreground 3D Stars
+
+Three or four actual 3D geometry stars — bright point quads or small crosses — close enough that the player can fly near or past them. When the player moves, these drift across screen with real parallax. That drift is what makes Stage 1 feel like flight rather than floating. A hundred background stars do less work than three foreground ones that visibly move.
+
+These are also spatial landmarks. The player may navigate partly by them.
+
+### Layer 4 — Cosmic Dust Particles
+
+Twenty to thirty small slow-drifting points moving past the player as they fly. When moving they stream past the camera. When stopped they settle. Pure velocity feedback — the player feels their own movement through the dust even in featureless space. Almost no render cost.
+
+### Layer 5 — The Beacon
+
+The most important single visual in Stage 1. The ghost at the signal source needs a visual counterpart to the audio — something faint and irregular that the player may notice before they understand what it is.
+
+A very slow expanding ring pulse, nearly invisible, centered on the ghost. Dim, irregular timing — not a clean game-mechanic pulse but something stranger. The first time the player sees it they may not recognize what they're looking at. The moment of noticing — *what is that* — is the discovery. It should not read as "follow me." It should read as "something is there."
+
+The ghost itself, when found, renders with the existing flicker lighting — alternating ambient every other frame. In the void with almost no other light, this flicker will be eerie and visible from a distance.
+
+### Existing Demo Pieces That Carry Forward
+
+| System | Status | Notes |
+|---|---|---|
+| Ghost rendering + flicker | Ready | Core to Stage 1's visual language |
+| Shapes system | Ready | Sparse debris if needed |
+| Color temperature (cold palette) | Ready | Stage 1 stays at the cold end throughout |
+| Expanding ring primitive | Ready | Basis for the beacon pulse |
+
+### New Visual Work Required
+
+| Element | Notes |
+|---|---|
+| Orientation-based starfield | Replace rail starfield with camera-angle-driven 2D carpet |
+| Nebula color wash quads | Large translucent background quads, 2–3 regions |
+| Foreground 3D stars | 3–4 bright geometry stars with real parallax |
+| Cosmic dust particles | 20–30 slow-drifting points, velocity-relative |
+| Beacon pulse | Irregular slow ring pulse centered on ghost, very dim |
+
 ## Atmosphere
 
 - Deep black, almost no ambient light
-- Stars: sparse, cold, distant — the seeker's domain, not the Colossus's yet
+- Stars in every direction — the seeker's domain, not the Colossus's yet
+- Two faint color regions shape the void without naming themselves
 - Audio: the signal is the dominant sound. Everything else is silence or near-silence.
-- No music yet, or music that is barely there — texture, not melody
+- No music, or music that is barely there — texture, not melody. The signal IS the music.
 
 ---
 
