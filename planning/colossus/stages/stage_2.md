@@ -1,82 +1,75 @@
 # Stage 2 — The Wake
 
-*He has been here. Something enormous passed through this space. You are moving through what it left.*
+*Something enormous passed through here. You are moving through what it left — not wreckage, but consequence.*
 
 ---
 
 ## Mode
 
-Transitional. Still nominally free-roaming, but the space is no longer empty. A lateral drift the player feels but cannot immediately explain. Something is pulling — not strongly yet, not enough to name.
+Free-roaming. Full player thrust authority. The same controls as Stage 1. What changes is the space.
 
 ---
 
 ## What Is Happening
 
-The player has found the direction. They are moving through the Colossus's wake — the aftermath of his passage. Debris from worlds that used to exist. Evidence of something incomprehensibly large moving through this space before the player arrived.
+The Colossus passed through this region long ago. Its mass disturbed the dust and gas here — compressed it, shifted it, changed the conditions. The Colossus didn't intend this. It simply moved, and matter responded to something that massive moving through it.
 
-Stage 2 tells the player about the Colossus before they ever see him. The scale of the destruction implies the scale of the thing that caused it.
+New stars are forming in its wake. Not many. A few. Young, bright, electromagnetically loud. The space is alive in a way Stage 1 wasn't.
 
----
-
-## The Pull Begins
-
-The drift is subtle at first. The player may correct for it without noticing it. Over time it becomes undeniable — something is exerting force. The player is not yet on rails, but they are no longer entirely free.
-
-The transition from Stage 2 to Stage 3 (full rails) should be imperceptible at the moment it happens. No announcement. No cutscene. The player should realize they've lost forward control only after they've already lost it.
-
-### How the Transition Works (Technical Design)
-
-A single float — `control_authority` — slides from 1.0 (full free-roam) to 0.0 (full rails) over the length of this stage. Player input and gravity fill the complement of each other:
-
-```
-player_velocity_z  = player_input_z * control_authority
-gravity_velocity_z = rail_speed     * (1.0 - control_authority)
-actual_z_movement  = player_velocity_z + gravity_velocity_z
-```
-
-At 1.0: the player drives everything. At 0.0: the rail drives everything. At 0.5: a genuine tug of war — the player can resist the pull but cannot stop or reverse. No single frame feels different from the previous one.
-
-The corridor bounds narrow by the same factor — `LATERAL_MAX` and `VERTICAL_MAX` shrink proportionally over the same distance. Wide open space becomes a channel without a wall ever visibly appearing.
-
-The perceptual key: if the player is occupied — dodging debris, finding oxygen from ghosts, reading the wake — they are not testing the edges of their movement. They discover they're on rails only when they try something the rails won't allow. By then, they've been on rails for a while.
-
-**Stage 2 is the transition mechanism.** The whole stage is the gradient. The player enters free and exits captured.
-
-*Not yet implemented. The current test project (scene_rails.c) starts at full rail speed with no free-roam mode. This will need a new scene type that blends the two.*
+The player enters a place that has light in it, and warmth, and noise. For the first time, they are not alone in the void.
 
 ---
 
-## Oxygen
+## The Seeking Challenge
 
-Ghosts from Stage 1 may appear here — seekers who made it further than most. Oxygen replenishment still possible but sources are sparser. The player is deeper in.
+Stage 1 taught the seeking loop in silence. Stage 2 is the first test of that skill against interference.
+
+Young stars broadcast. Whatever they emit — electromagnetic radiation, charged particles, the noise of something still igniting — it competes with the Colossus's signal. The signal is still there. It hasn't changed. But now there are other things in the frequency, and the player must learn to hold the thread.
+
+What makes the Colossus's signal distinct is not explained. It is discovered. The player loses the signal near a young star. They stop. They rotate. They find it again on the far side of the noise. Over time they develop an ear for it — something in the signal's irregularity, its organic quality, that the stellar noise doesn't share. The stellar noise is loud but regular. The Colossus's signal is quieter but alive.
+
+See `mechanics/seeking_mechanic.md` — **Noise Interference**.
 
 ---
 
-## Atmosphere
+## The Ghost Narrative
 
-- The void gives way to something. Geometry begins to appear — dark, irregular, slow-moving debris.
-- Color temperature still cold, but the character of the darkness has changed. This is not empty space. This is aftermath.
-- Audio: the signal is still present but now accompanied by something else — a low, structural sound, felt more than heard. The Colossus's presence before his appearance.
+Stage 2 ghosts are seekers who got distracted by the light.
+
+They had the signal. They were moving. Then the young stars appeared — warm, bright, the first color that wasn't cold blue — and something in them turned toward the light instead of the signal. Not a mistake exactly. The stars are beautiful. The warmth is real. But the signal is elsewhere, and they followed the wrong thing until they ran out of oxygen.
+
+Their wrecks are near the young stars, not along the signal path. Oriented toward the light, not the source. The player reads this pattern across visits — all those ships pointing toward the bright things — and understands something about the danger of beauty in a place that's trying to kill you.
 
 ---
 
 ## Visual Identity
 
-Things that were whole and are now slightly apart. Not exploded — undone. The Colossus's passage separated things that used to be together through gravity alone, over time. A planet doesn't explode in his wake; it comes apart slowly, its pieces still roughly in formation, still following the same orbital memory, just no longer bound.
+For the first time, the space has points of warm light. Young stars at various distances — the nearest large enough to navigate around, the farthest just bright points. Dust clouds between them, catching the light on their edges. The cold of Stage 1 is still dominant, but there are warm notes in it now.
 
-- Large dark masses moving very slowly relative to each other. The player threads between them.
-- A directionality to everything — debris oriented the same way, as if pushed by a single vast passage.
-- Surfaces that were once interiors, now exposed.
-- Faint warm edges on the leading faces of debris — residual heat from tidal compression during his passage. Not fire. Old warmth.
+Color temperature: still predominantly cold, but with warm interruptions. The young stars introduce the warm end of the palette that will eventually dominate near the Colossus.
 
-The feeling is aftermath silence, not destruction energy. He didn't rage through here. He moved through, and things came apart in his wake the way water comes apart around a hull.
+The dust clouds have visible depth — the player flies through or around them, density shifting. Some regions brighter, some darker. Not a debris field. Not wreckage. Something growing.
+
+---
 
 ## Audio Identity
 
-Low structural resonance — vibrations from something that vast take a long time to decay. Felt more than heard. The signal from Stage 1 is still faintly present but distorted, as if passing through something dense.
+Stage 1 audio: the signal, and silence.
 
-## Open
+Stage 2 audio: the signal, and noise. The young stars contribute a low electromagnetic presence — not music, not mechanical, something between static and hum. Felt more than analyzed. When the player is near a young star the noise rises and the signal becomes harder to isolate. When they move away from the stars, the noise drops and the signal clarifies.
 
-- Is there a specific landmark or moment that defines this stage, the way the ghost-at-beacon defines Stage 1?
-- Does the debris density peak somewhere mid-stage — a denser region the player must navigate — then thin toward the rail transition?
-- How does the narrowing corridor manifest visually before the player hits its edges?
+The player learns to use the noise as spatial information — loud here means near a star, near a star means signal interference, move away from the noise to hear clearly.
+
+---
+
+## Oxygen
+
+Oxygen persists from Stage 1. Ghosts from Stage 1 may appear in the early part of this stage — seekers who made it further than most. As the player moves deeper, sources become sparser. The clusters near the young stars are the Stage 2 ghost accumulation zones. Usable but mislocated — off the signal path, requiring detour.
+
+---
+
+## Open Questions
+
+- Is there a specific landmark or moment that defines the stage end — a formation, a particular star, something that reframes the space the way the ghost_reacher reframes Stage 1? Or does Stage 2 end simply when the signal leads out of the young star field into clearer space?
+- How dense is the star field? A few bright points widely spaced (sparse, navigable) or a crowded nursery (dense, disorienting)?
+- Do the dust clouds create spatial dead zones — areas where the signal drops completely — or only noise interference?
