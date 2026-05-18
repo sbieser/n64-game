@@ -12,6 +12,12 @@ export N64_INST = /pyrite64-sdk
 include $(N64_INST)/include/n64.mk
 include $(N64_INST)/include/t3d.mk
 
+ASSET_GLBS  = $(wildcard assets/*.glb)
+ASSET_T3DMS = $(ASSET_GLBS:assets/%.glb=filesystem/%.t3dm)
+
+filesystem/%.t3dm: assets/%.glb
+	$(T3D_GLTF_TO_3D) $< $@ --base-scale=64 --ignore-materials
+
 SRCS = $(wildcard $(SOURCE_DIR)/*.c)
 OBJS = $(SRCS:$(SOURCE_DIR)/%.c=$(BUILD_DIR)/%.o)
 
@@ -25,6 +31,8 @@ $(BUILD_DIR)/$(ROM_NAME).elf: $(OBJS)
 # Ares and flashcarts auto-configure save hardware without a DB lookup.
 $(ROM_NAME).z64: N64_ED64ROMCONFIGFLAGS = -w eeprom4k
 $(ROM_NAME).z64: $(BUILD_DIR)/$(ROM_NAME).dfs
+
+$(BUILD_DIR)/$(ROM_NAME).dfs: $(ASSET_T3DMS)
 
 ARES = /c/ares-v147/ares.exe
 

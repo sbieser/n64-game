@@ -1,8 +1,8 @@
 #include <libdragon.h>
 #include <t3d/t3d.h>
 #include <t3d/t3dmath.h>
+#include <t3d/t3dmodel.h>
 #include "ghost.h"
-#include "shapes.h"
 
 #define MAX_GHOSTS    8
 #define GHOST_MAGIC   0x52454C53u  /* "RELS" */
@@ -24,6 +24,7 @@ static float      gz[MAX_GHOSTS];
 static T3DMat4FP *mats;
 static bool       eeprom_ok = false;
 static T3DVec3    lightDir;
+static T3DModel  *ghostModel;
 
 static const uint8_t ambA[4]   = {40,  60, 160, 0xFF};
 static const uint8_t ambB[4]   = {25,  40, 110, 0xFF};
@@ -31,8 +32,8 @@ static const uint8_t dirCol[4] = {20,  30,  80, 0xFF};
 
 static void rebuild_mat(int i) {
     t3d_mat4fp_from_srt_euler(&mats[i],
-        (float[3]){1.0f, 1.0f, 1.0f},
-        (float[3]){0.0f, 0.0f, 0.0f},
+        (float[3]){0.05f, 0.05f, 0.05f},
+        (float[3]){0.0f, 3.14159265f, 0.0f},
         (float[3]){gx[i], gy[i], gz[i]}
     );
 }
@@ -47,10 +48,11 @@ static void ghost_save(void) {
 }
 
 void ghost_init(void) {
-    mats      = malloc_uncached(sizeof(T3DMat4FP) * MAX_GHOSTS);
-    eeprom_ok = eeprom_present() != EEPROM_NONE;
-    lightDir  = (T3DVec3){{-0.5f, 1.0f, -0.5f}};
+    mats       = malloc_uncached(sizeof(T3DMat4FP) * MAX_GHOSTS);
+    eeprom_ok  = eeprom_present() != EEPROM_NONE;
+    lightDir   = (T3DVec3){{-0.5f, 1.0f, -0.5f}};
     t3d_vec3_norm(&lightDir);
+    ghostModel = t3d_model_load("rom:/ghost_reacher.t3dm");
 }
 
 void ghost_load(void) {
@@ -93,7 +95,7 @@ void ghost_draw(float camZ, uint32_t frame) {
         float dz = gz[i] - camZ;
         if (dz < -20.0f || dz > DRAW_DIST) continue;
         t3d_matrix_push(&mats[i]);
-        draw_shape(SHAPE_OCTA);
+        t3d_model_draw(ghostModel);
         t3d_matrix_pop(1);
     }
 }

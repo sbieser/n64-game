@@ -78,6 +78,7 @@
 #include <libdragon.h>
 #include <t3d/t3d.h>
 #include <t3d/t3dmath.h>
+#include <t3d/t3dmodel.h>
 #include "scene.h"
 #include "shapes.h"
 
@@ -101,25 +102,28 @@ static float curX, curY, curZ;
 static float ghostX[MAX_GHOSTS];
 static float ghostY[MAX_GHOSTS];
 static float ghostZ[MAX_GHOSTS];
+static float ghostRot[MAX_GHOSTS];   /* accumulated tumble angle per ghost */
 static int   ghostCount;
 
 static T3DMat4FP *cursorMat;
 static T3DMat4FP *ghostMats;
+static T3DModel  *wreckModel;
 
 static uint8_t ambientColor[4]     = {60,  60, 120, 0xFF};
 static uint8_t directionalColor[4] = {200, 200, 160, 0xFF};
-static uint8_t ghostDir[4]         = {30,  40,  90, 0xFF};
+static uint8_t ghostDir[4]         = {80, 100, 200, 0xFF};
 static T3DVec3 lightDir;
 static uint32_t frameCount = 0;
 
 /* Two alternating ambient values — flicker makes ghosts feel unstable */
-static const uint8_t ghostAmbientA[4] = {60,  80, 180, 0xFF};
-static const uint8_t ghostAmbientB[4] = {40,  55, 130, 0xFF};
+static const uint8_t ghostAmbientA[4] = {100, 110, 220, 0xFF};
+static const uint8_t ghostAmbientB[4] = { 60,  70, 160, 0xFF};
 
 static void ghost_mat_rebuild(int i) {
+    float r = ghostRot[i];
     t3d_mat4fp_from_srt_euler(&ghostMats[i],
-        (float[3]){1.0f, 1.0f, 1.0f},
-        (float[3]){0.0f, 0.0f, 0.0f},
+        (float[3]){0.05f, 0.05f, 0.05f},
+        (float[3]){r * 0.31f, r, r * 0.53f},   /* multi-axis tumble */
         (float[3]){ghostX[i], ghostY[i], ghostZ[i]}
     );
 }
@@ -146,6 +150,7 @@ static void eeprom_load(void) {
         ghostX[i] = data.x[i];
         ghostY[i] = data.y[i];
         ghostZ[i] = data.z[i];
+        ghostRot[i] = 0.0f;
         ghost_mat_rebuild(i);
     }
 }
@@ -161,6 +166,7 @@ void scene_ghost_init(void) {
         t3d_vec3_norm(&lightDir);
         eeprom_ok  = eeprom_present() != EEPROM_NONE;
         ghostCount = 0;
+        wreckModel = t3d_model_load("rom:/ghost_wreck.t3dm");
         eeprom_load();
         initialized = true;
     }
@@ -193,7 +199,7 @@ void scene_ghost_update(void) {
         ghostX[ghostCount] = curX;
         ghostY[ghostCount] = curY;
         ghostZ[ghostCount] = curZ;
-        ghost_mat_rebuild(ghostCount);
+        ghostRot[ghostCount] = 0.0f;
         ghostCount++;
         eeprom_save();
     }
@@ -201,6 +207,12 @@ void scene_ghost_update(void) {
     if (btn.z) {
         ghostCount = 0;
         eeprom_save();
+    }
+
+    /* Advance tumble rotation per ghost — each spins at a slightly different rate */
+    for (int i = 0; i < ghostCount; i++) {
+        ghostRot[i] += 0.008f + (i % 4) * 0.003f;
+        ghost_mat_rebuild(i);
     }
 
     t3d_mat4fp_from_srt_euler(cursorMat,
@@ -226,13 +238,13 @@ void scene_ghost_draw(void) {
 
     t3d_state_set_drawflags(T3D_FLAG_SHADED | T3D_FLAG_DEPTH | T3D_FLAG_CULL_BACK);
 
-    /* Ghosts: flicker ambient every other frame — makes them feel unstable */
+    /* Wrecks: cold dim ambient, tumbling slowly */
     t3d_light_set_ambient((frameCount % 2 == 0) ? ghostAmbientA : ghostAmbientB);
     t3d_light_set_directional(0, ghostDir, &lightDir);
     t3d_light_set_count(1);
     for (int i = 0; i < ghostCount; i++) {
         t3d_matrix_push(&ghostMats[i]);
-        draw_shape(SHAPE_OCTA);
+        t3d_model_draw(wreckModel);
         t3d_matrix_pop(1);
     }
 

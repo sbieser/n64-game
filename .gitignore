@@ -1,5 +1,7 @@
 build/
 game.z64
+.claude/
+game.eeprom
 game.pak
 *.o
 *.d
