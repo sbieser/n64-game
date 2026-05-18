@@ -88,3 +88,11 @@ Works that inform the emotional register and specific design decisions:
 **Philosophy and Art**
 - The philosophical sublime (Burke, Kant) — terror without intent; the mountain doesn't want to crush you
 - Caspar David Friedrich — the lone figure before immensity; the human made small as perspective, not defeat
+
+**Games**
+- *Journey* (thatgamecompany, 2012) — the closest overall parallel; linear progression toward something vast, no combat, no UI, no explanation; other players appear as silent echoes; the ending held open between death and apotheosis; proof this emotional register works and has an audience. Contrast: Journey always shows the destination (the mountain, the light). We withhold it entirely.
+- *Outer Wilds* (Mobius Digital, 2019) — "every area is evidence"; the Nomai as previous seekers whose last positions are scattered across the solar system, directly paralleling our ghost mechanic; the Eye of the Universe as sublime destination; the sun exploding is physics, not hostility; the ending is acceptance rather than victory
+- *Shadow of the Colossus* (Team Ico, 2005) — the between-colossus traversal is the game, not the reward; the long lonely ride across a dying world; Wander's transformation is gradual, unacknowledged by the game until complete; the forbidden lands as a place that simply is and doesn't explain itself
+- *Rez* (Tetsuya Mizuguchi, 2001) — rails as transcendence rather than constraint; the player is pulled through space toward something; Area 5's ending: the vessel is shed, the player becomes light, the seeker becomes the signal. Our rail stages should feel like this.
+- *Dear Esther* (The Chinese Room, 2012) — no objectives, no combat, no UI; the island as a document you read while walking; fragmented ambiguous narrative that never resolves; the ending held open. Established that intentional friction and no clear goal is a complete game for the right player.
+- *Homeworld* (Relic Entertainment, 1999) — cold space as emotional truth; you carry your dead with you across the void toward a destination called home; battle wreckage persists in the level — the accumulated dead are visible in the space you move through; "We are going home" as the engine of the whole journey
