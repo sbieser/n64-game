@@ -10,7 +10,7 @@
 
 Obstacles thin toward nothing. The universe stops resisting. Color temperature completes its shift — deep warm orange, cosmic amber. The signal, the debris, the phenomena — all of it falls away. There is only the path and what is at the end of it.
 
-At some point the vessel falls away too. The player figure continues alone, exposed, moving toward him without protection.
+At some point the vessel falls away too. The player figure continues alone, exposed, moving toward him without protection. Oxygen is no longer tracked. The tether to physical existence is gone — the player has become something that doesn't need it. This is the only moment in the game where that anxiety is absent.
 
 ---
 

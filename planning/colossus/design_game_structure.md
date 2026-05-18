@@ -54,7 +54,7 @@ He is here. No combat. No objective. The camera spirals in. The hold. Six second
 
 - **How many seeking stages?** Many — the seeking mechanic has room to develop across a large number of stages before rails begin. Exact count not decided.
 
-- **Does oxygen persist beyond Stage 1?** It could be Stage 1 only — a mechanic that teaches indifference and then recedes, letting new layers take over. Or it could persist at reduced importance. Not decided.
+- **Oxygen scope:** Persists through all stages until arrival. At the arrival stage the vessel is shed — the player no longer needs oxygen because they are no longer in a ship. The oxygen mechanic ends not through depletion but through transformation. See `mechanics/oxygen.md`.
 
 - **Stage length:** Targeting 10–20 minutes per stage for a first visit. Return visits shorter — the player knows the space. Complete first playthrough roughly 45–90 minutes total.
 

@@ -64,7 +64,16 @@ Tumbling wreck only. No vent. Completely static and dark. Gone for good. Its deb
 
 ---
 
+## Scope
+
+Oxygen persists through all stages until arrival. It is not a Stage 1 tutorial mechanic that recedes — it is the physical tether to existence throughout the journey.
+
+At the arrival stage the vessel is shed. The player continues without a ship. Oxygen is no longer relevant because there is no longer a ship to run out of it. The mechanic ends not through depletion but through transformation — the player has become something that doesn't need it.
+
+This makes the arrival stage the only place in the game where oxygen anxiety disappears. That absence is felt.
+
+---
+
 ## Open Questions
 
 - What is the indicator for the player's own low oxygen — a sound, a color shift, both?
-- Does oxygen persist as a mechanic beyond Stage 1, or does it recede as new mechanics take over?
