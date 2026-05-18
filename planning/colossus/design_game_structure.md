@@ -1,109 +1,63 @@
-# Game Structure — Design Notes
+# Game Structure
 
-*Captured from design session. Ideas in progress — nothing here is final.*
+*The structural and architectural design of the game. For themes, the nature of the Colossus, and emotional register — see `colossus.md`.*
 
 ---
 
 ## Structure
 
-The game is stage-based, not run-based. Completing a stage unlocks the next one. Stages can be revisited freely. There is no requirement to complete the journey in a single sitting — the player progresses through stages over as many sessions as they need.
+The game is stage-based, not run-based. Completing a stage unlocks the next one. Stages can be revisited freely. The player progresses over as many sessions as they need.
 
-What persists between sessions: stage unlock state, and ghost positions in every stage. What does not persist: the player's position within a stage. Each visit to a stage starts fresh from its beginning. Ghosts accumulate permanently — they are world state, not session state.
+**What persists:** Stage unlock state. Ghost positions and charge counts in every stage.  
+**What does not persist:** The player's position within a stage. Each visit starts fresh from the beginning.
 
-This means Stage 1 on a first visit is nearly empty. Stage 1 after many visits by the same player (or different players on the same cartridge) is populated with the history of every attempt. The space remembers everyone who tried.
+Ghosts accumulate permanently — they are world state, not session state. Stage 1 on a first visit is nearly empty. Stage 1 after many visits is populated with the history of every attempt. The space remembers everyone who tried.
 
-Save backend: SRAM (32 KB cartridge SRAM). Compatible with SummerCart 64 and EverDrive flash cartridges, and all major emulators. Stage unlock state fits in a single byte bitmask. Ghost pools for all stages fit comfortably within the 32 KB limit.
+**Save backend:** SRAM (32 KB cartridge SRAM). Compatible with SummerCart 64 and EverDrive flash cartridges, and all major emulators. Stage unlock state fits in a single byte bitmask. Ghost pools for all stages fit comfortably within the 32 KB limit.
 
 ---
 
 ## The Arc
 
-The game's structure mirrors its emotional arc. The player begins with full agency and ends with none — and that loss of control *is* the transformation.
-
 ```
-Stage 1      Stage 2       Stage 3        Stage 4       Arrival
-Free-roam → Drift begins → Rails / pull → Full rails → All-range / orbit
-(seeking)   (something     (he has you,   (the universe  (the merging)
-             has you)       you dodge)      resists)
+Many seeking stages → Threshold crossing → Rail stages (last few) → Arrival
+Free-roam seeking  → Physics takes over → Being carried          → Inside
 ```
 
-The transition from free-roam to rails is not a game mechanic choice — it is the Colossus's gravity taking over. You were seeking. Then you were found.
+The seeking stages vary in number, length, and challenge. The signal develops. The space grows stranger. New mechanics and complications to seeking are introduced gradually — sprinkled across stages as the spaces demand, not unlocked in a fixed sequence.
+
+The threshold crossing isn't a moment — it's a gradual realization. The player notices they're drifting. Then they notice they can't stop it. Then they understand they've been inside the gravity well for a while now.
+
+The transition to rails is physics, not a game mechanic. The Colossus is not pulling you. It is simply massive. You got close enough.
 
 ---
 
-## Stage 1 — The Search
+## Stages
 
-**Mode:** Free-roaming in the void. No fixed path. No explicit objective.
+Detailed design for each stage lives in `stages/`. Summaries here.
 
-**What the player is doing:** Following a signal. The signal is not explained. The game does not tell the player what it is or where it leads. They hear something — irregular, strange, almost organic — and it gets louder and more centered as they approach. The player must decide to follow it.
+**Stage 1 — The Search**  
+The void. A signal with no explanation. The first ghost at the signal source. The oxygen mechanic is introduced. See `stages/stage_1.md`.
 
-**This is intentional friction.** Stage 1 will lose some players. The ones who stay are the ones who seek. That self-selection is not a flaw — it is the game finding its audience.
+**Stage 2 — (in design)**  
+The space the Colossus passed through. Evidence of creation — new stars forming in its wake. The drift begins but the player still has thrust authority. Seeking in a noisier, more present environment. See `stages/stage_2.md`.
 
-**Navigation:** 3D positional audio. The signal pulses. Pan and volume shift as the player turns and moves. No waypoint, no map, no arrow.
+**Stage N — Rails Begin (stub)**  
+Some stage deep in the sequence where the threshold has been crossed and the player can no longer thrust free. They can steer but not stop. The Colossus is ahead, not seen. Stage number not decided.
 
-**Resource:** Oxygen. The universe kills through indifference, not hostility. A supply that depletes. The player must manage how far they search against how long they have. Open questions:
-- Does oxygen deplete faster when boosting?
-- Where does the player replenish? Drifting salvage from other seekers? Residual atmosphere on dead debris?
-- The answer shapes what the space feels like
-
-**The beacon is a ghost.** The signal the player is following was left by someone who came before — another seeker who got further than most, close enough to leave a mark, and didn't make it back. Their ghost is near the beacon. The player arrives at a frozen figure in the void, still reaching forward. The signal originated from *them*.
-
-This means stage 1 ghosts tell a different story than later ghosts:
-- Stage 1 ghosts: people who got lost searching
-- Stage 3–4 ghosts: people who almost reached him
-
-**When oxygen runs out:** The player drifts to a stop and becomes a ghost at exactly that position. Recorded to SRAM. On future visits, that ghost is there — visible proof of how far they made it. Stage 1 deaths cluster near the beacon but not at it. The pattern of ghosts tells the story of the search.
-
----
-
-## Stage 2 — The Pull Begins
-
-**Mode:** Still nominally free-roaming, but something is different. A lateral drift the player feels but can't immediately explain. Early debris — the dead worlds the Colossus has already passed through. Obstacles, but sparse.
-
-The player still has control. But they are no longer in empty space.
-
----
-
-## Stage 3 — On Rails
-
-**Mode:** Full rails. Forward motion is no longer the player's. The Colossus's gravity has them.
-
-All phenomena active: gravitational fields, harder obstacles, stranger geometry. The environment grows sparser and more alien as the signal — now clearly directional, clearly *vast* — dominates everything.
-
-The player can only steer left/right/up/down within the corridor. They cannot stop. They cannot go back.
-
----
-
-## Stage 4 — The Approach
-
-**Mode:** Rails at full intensity. Obstacles thin out toward the end — not because the path gets easier, but because nothing else matters at this scale. The universe stops resisting. He's just ahead.
-
-Color temperature shift complete: deep cold blue → warm cosmic orange.
-
----
-
-## Arrival — The Colossus
-
-**Mode:** All-range. Forward motion stops. He is here.
-
-No combat. No objective. The player orbits or drifts toward him. The camera spirals in. At some distance the vessel falls away and the figure continues alone. The geometry of the Colossus surrounds the camera from inside.
-
-The hold. Six seconds of being inside something vast.
-
-Then: the selector. No explanation. No score. No ending screen.
+**Stage N+1 — Arrival (stub)**  
+He is here. No combat. No objective. The camera spirals in. The hold. Six seconds inside something vast. Then the selector. No explanation. No score. The last stage, whatever number it carries.
 
 ---
 
 ## Open Questions
 
-- **How many stages?** The arc fits naturally into 4–5. More stages could add texture between the defined beats — an additional strange zone in Stage 2, or two distinct phases of the rail. Not decided.
+- **How many seeking stages?** Many — the seeking mechanic has room to develop across a large number of stages before rails begin. Exact count not decided.
 
-- **Does oxygen persist beyond Stage 1?** It could be Stage 1 only — a mechanic that teaches you the universe is indifferent and then recedes, letting new layers take over. Or it could persist at reduced importance. The latter risks diluting the later stages' distinct identity.
+- **Does oxygen persist beyond Stage 1?** It could be Stage 1 only — a mechanic that teaches indifference and then recedes, letting new layers take over. Or it could persist at reduced importance. Not decided.
 
-- **How explicit is the ghost narrative?** The player finds a frozen figure at the beacon. They are not told it is a previous seeker. They are not told the signal came from them. They can infer — or not. This is consistent with the game's philosophy of holding questions open.
+- **Stage length:** Targeting 10–20 minutes per stage for a first visit. Return visits shorter — the player knows the space. Complete first playthrough roughly 45–90 minutes total.
 
-- **Stage length:** Targeting 10–20 minutes per stage for a first visit. Return visits to early stages are shorter since the player knows the space. Means a complete first playthrough across all stages is roughly 45–90 minutes.
+- **What does completing a stage feel like?** Arrival, not victory. No fanfare, no score. Something changes — the next stage opens — and that is all.
 
-- **What does "completing" a stage feel like?** It should feel like arrival, not victory. No fanfare, no score. Something changes — the next stage opens — and that is all.
-
-- **What does Stage 2 feel like as a place?** The void gives way to something. A debris field? A dying star system? What is the visual and audio identity that makes it feel distinct from Stage 1 and Stage 3?
+- **How explicit is the ghost narrative?** The player finds a frozen figure at the beacon. They are not told it is a previous seeker. They can infer — or not. This is consistent with the game's philosophy of holding questions open.

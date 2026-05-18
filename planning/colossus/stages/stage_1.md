@@ -12,15 +12,9 @@ Free-roaming. No fixed path. No explicit objective. The player has full control 
 
 ## Controls
 
-Auto-forward thrust. The ship is always moving in the direction it faces at a slow base speed — the player is never stationary unless dead. The player steers by changing direction, not by choosing when to move.
+Stage 1 is the first expression of the base controls — full free-roam, no auto-forward, full player thrust authority. See `controls.md` for the complete movement and oxygen/thrust mechanics.
 
-- **Analog stick:** yaw (left/right) and pitch (up/down) — turns the ship, which changes heading
-- **A button:** boost — increases speed temporarily
-- The ship gradually aligns to the input direction; movement follows facing
-
-**Traversal is fully 3D.** The signal can be in any direction — above, below, beside. The player pitches toward it and auto-forward carries them there. No explicit vertical thrust buttons needed; heading IS movement. No roll — the world-up vector is locked so the camera always knows which way is up regardless of ship attitude. This prevents disorientation and keeps audio navigation readable.
-
-**Open:** Does oxygen deplete faster when boosting? Not yet decided.
+The seeking loop — stop, rotate, listen, find direction, thrust — is introduced here and documented in `seeking_mechanic.md`.
 
 ---
 
@@ -51,32 +45,15 @@ The player will also realize, eventually, that they are leaving traces too. Flyi
 
 ## Oxygen
 
-The universe kills through indifference. The player has a finite oxygen supply that depletes continuously.
+Stage 1 introduces the oxygen mechanic. The full mechanic — charge system, ghost replenishment loop, visual states, SRAM persistence — is in `mechanics/oxygen.md`. The full ghost mechanic is in `mechanics/ghosts.md`.
 
-**Replenishment:** Other ghosts. Each ghost in the world has residual oxygen — a supply that ended when they did, still present, still accessible. The player can approach a ghost and take what's left.
+**What is specific to Stage 1:**
 
-**The loop:**
-- The player dies → becomes a ghost at that position → that ghost has oxygen
-- Future visits find that ghost → take its oxygen → get further
-- The world accumulates the player's death history as a survival resource
+The space starts nearly empty. One ghost, one tank, a long signal to follow. You may not make it on the first visit.
 
-Early visits: the space is almost empty. One tank. The signal is far. You may not make it.  
-Over time: ghost clusters form where previous attempts ended. The accumulated dead make the journey possible.
+Over visits, ghost ships accumulate where previous attempts ended — clustered near the beacon but not at it, stopped short. Early familiar ghosts slowly deplete their charges. As the nearest ghosts run dry, the player is nudged deeper. The accumulated dead make the journey possible.
 
-**Open questions:**
-- Does oxygen deplete faster when boosting?
-- What is the visual indicator for oxygen level — a sound, a color shift, both?
-
-**Decided:**
-- Each ghost has a **charge count** (target: 5). Each attempt, the player can take oxygen from a ghost once — that uses one charge. The charge count is saved to SRAM and never resets.
-- At 0 charges: the ghost is permanently an empty shell. No vent. Dark and static. Never usable again.
-- Within a single attempt: each ghost can only be used once regardless of remaining charges. This prevents camping a single ghost. The per-attempt drain flag is runtime-only and not saved.
-- Ghost **positions and charge counts** are saved to SRAM. Ghost positions accumulate permanently. Charges only go down, never up.
-
-**Why this works:** Early attempts lean on a handful of nearby ghosts with fresh charges. Over many attempts, those familiar ghosts slowly deplete. When the nearest ghost runs dry the player is gently pushed to either die deeper (leaving fresh ghosts further in) or push further before dying. The space near a recurring death spot gets used up. The game nudges forward without locking out.
-- The oxygen indicator is a **venting atmosphere effect** — not a UI element, not a flicker. A wrecked ship still has pressurized air inside; a hull breach leaks it slowly into vacuum. This appears as a faint trickle of tiny cold blue-white particles drifting from one spot on the hull. When drained: the vent stops, the ship is completely static. The presence or absence of the vent tells the player everything without instruction.
-- Ghost ships **slowly tumble** — no attitude control, dead in space. Each ghost rotates at a low constant rate (axis and speed derived from its position in the ghost array, so no two spin identically). Living ships hold attitude. Dead ones don't.
-- The debris field is part of the ghost ship model — hull panels, a strut, a small component box scattered nearby. These rotate with the main hull, as if the whole wreckage is one slowly tumbling mass.
+The pattern of ghosts across many visits tells the story of the search without words: a field of wrecked ships in the void, all roughly oriented the same direction, all stopped short.
 
 ---
 
@@ -90,19 +67,13 @@ This is not a flaw. The players who stay are the ones who seek. The game is find
 
 ## Ghost Narrative in This Stage
 
-Stage 1 ghosts are people who got lost. They cluster near the beacon but not at it — they ran out before arriving, or arrived and couldn't continue.
+Stage 1 ghosts are people who got lost. Ghost mechanics, visual states, and SRAM persistence are in `mechanics/ghosts.md` and `mechanics/oxygen.md`.
 
-Their pattern across visits tells the story of the search without words: a field of wrecked ships in the void, all roughly oriented the same direction, all stopped short.
+**What is specific to Stage 1:**
 
-**Ghost visuals:** Player-death ghosts in Stage 1 render as a wrecked ship — hull, broken wing, loose debris field. Dark, cold coloring throughout. Slowly tumbling. The humanoid `ghost_reacher` figure is reserved for the beacon ghost specifically — the one frozen figure at the signal source, still reaching forward.
+Player-death ghosts render as wrecked ships — not humanoid figures. The `ghost_reacher` model (the frozen humanoid, still reaching forward) is reserved for the beacon ghost at the signal source. That distinction is the first thing the player learns about what ghost form means.
 
-**Undrained ghost:** Tumbling wreck + faint atmospheric vent particles drifting from one point on the hull. Cold blue-white, barely visible, irregular. The vent says "something is still happening here" without explaining what.
-
-**Partially drained ghost (charges remaining, already used this attempt):** Tumbling wreck, vent still present (charges remain), but player cannot take oxygen again until next attempt.
-
-**Permanently depleted ghost (0 charges):** Tumbling wreck only. No vent. Completely static and dark. The player reads it immediately — that one is gone for good. Its debris field remains as a landmark and part of the accumulating graveyard.
-
-**Why no smoke:** There is no atmosphere in space. Nothing burns. What a wrecked ship actually does in vacuum: tumble, shed debris, vent residual pressure through hull breaches, hold residual heat on exposed surfaces. The vent effect is physically grounded, not decorative.
+The beacon ghost is the only one that was *placed* — not the result of a player death. Everyone else stopped short. The beacon ghost got here.
 
 ---
 
