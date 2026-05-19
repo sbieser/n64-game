@@ -84,7 +84,25 @@ Works that inform the emotional register and specific design decisions:
 
 **Literature**
 - *Star Maker* (Olaf Stapledon, 1937) — a cosmic mind that creates universes without awareness of individual life; consciousness scaling up to perceive something that simply is
+- *Last and First Men* (Olaf Stapledon, 1930) — two billion years of human evolution as future history; ends on deep time and the dying sun; the scale makes Star Maker feel intimate
+- *Siddhartha* (Hermann Hesse) — the seeking life; the river; the man who finds that the seeking itself was the point. Short and essential.
+- *The Odyssey* (Homer) — the return journey is the whole poem; Odysseus knows what he's going back to, the question is whether it will still be what he left; return is not arrival
+- *The Divine Comedy* (Dante) — three-part journey structure directly parallel to ours; the pilgrim descends, climbs, ascends to the still center (explicitly the Unmoved Mover), then returns carrying everything he was shown
+- *In Search of Lost Time, Vol. 1: Swann's Way* (Proust) — involuntary memory as positional signal; fragments surface when you encounter the right stimulus, grow stronger as you orient toward their source; the madeleine scene is the founding moment of our return journey mechanic
+- *Solaris* (Stanisław Lem) — the novel, richer than any adaptation; an entity that creates things from human memories without understanding it is doing so; trying to communicate without knowing what communication is
+- *The Drowned World* (J.G. Ballard, 1962) — a world returning to the Triassic; characters feel an irresistible pull toward origin, toward dissolution; one follows the signal inward knowing it leads to death; the forward and return journey understood as the same signal
+- *Childhood's End* (Arthur C. Clarke) — humanity's children transform into something vast and join something larger; the parents watch the last generation depart; whether it is death or transcendence is held open
+- *Pale Blue Dot* (Carl Sagan) — the photograph of Earth from four billion miles; the essay; "our planet is a lonely speck in the great enveloping cosmic dark"
 - *Cosmos* (Carl Sagan) — "We are made of star stuff" as literally true; the return to stars as physics, not metaphor
+
+**Philosophy (Unmoved Mover)**
+- Aristotle's *Metaphysics*, Book XII (Lambda) — the source; the chain of moved movers traced back to a first cause that is pure actuality, pure thought thinking itself; not long, and the logic is beautiful
+- *Aristotle: A Very Short Introduction* (Jonathan Barnes) — read this before the Metaphysics if Aristotle cold feels like too much; the VSI series is exactly what it says
+- Edward Feser's *Aristotle's Proof* — modern philosopher reconstructing the Unmoved Mover argument rigorously and accessibly; takes it seriously as a live argument
+
+**Philosophy (The Sublime)**
+- Edmund Burke's *A Philosophical Enquiry into the Origin of Our Ideas of the Sublime and Beautiful* (1757) — short, readable, foundational; Burke separated the sublime from the beautiful and identified what specifically triggers it: vastness, obscurity, power, darkness, infinity
+- Kant's *Critique of Judgment*, Part I — the mathematical sublime (scale overwhelming reason) and the dynamic sublime (power overwhelming survival instinct); these are the two registers the game works in
 
 **Film**
 - *2001: A Space Odyssey* (Kubrick/Clarke) — each act a different visual language; HAL's gradual takeover maps to `control_authority`; scale revealed through effect, not appearance
