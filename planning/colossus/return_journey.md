@@ -28,6 +28,16 @@ The memories grow stronger as the player moves in the right direction. Fainter w
 
 What the memories are is not stated. They are fragments. Small things. Something that existed before the journey. The player understands gradually what they left behind — not through explanation but through accumulation.
 
+**What the memories are made of:**
+
+Not grand events. Not the things a life summary would include. The memories that carry real weight are the specific, sensory, small ones — the texture of a particular experience rather than the fact of it.
+
+A corner room. Rain on a drain that didn't work right. A tree outside the window hitting the roof in a particular rhythm. Reading something strange and vast late at night while everyone else was asleep. Nothing happened. But that specific configuration of the world — the sound, the quality of the dark, the particular feeling of being alone inside something — *that* is what stays. That is what surfaces.
+
+This is the Proustian register. The grand events of a life are easy to summarize and therefore easy to forget in the real sense. The small specific textures are the ones that carry the actual weight of having been alive. They cannot be reached by trying to remember. They arrive when the sensory environment matches something — a quality of light, a particular sound, a specific feeling — and they arrive complete.
+
+The memories in the return journey should feel like this. Small. Specific. Slightly strange. Not explained. The player encounters a fragment and recognizes it without being told what it is. The cosmic thing encountered on the forward journey, and the small personal thing recovered on the return, turn out to be the same size. Both were always there. The journey was required to see it.
+
 See `mechanics/memories.md`.
 
 ---
