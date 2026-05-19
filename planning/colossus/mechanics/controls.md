@@ -37,6 +37,14 @@ This is not a game mechanic imposed from outside — it is the universe assertin
 
 ---
 
+## Control Authority on the Return Journey
+
+The `control_authority` float that slid from 1.0 toward 0.0 as the Colossus's gravity took hold climbs back toward 1.0 on the return journey. The player emerges from the Colossus still partly carried — the early return stages are still rail-like. Agency returns gradually as the player moves further away.
+
+The moment thrust starts mattering again should feel significant. Not dramatic — quiet. Like remembering how to walk.
+
+---
+
 ## What the Player Never Has
 
 - **Roll.** The world-up vector is always locked.

@@ -66,6 +66,16 @@ The player is always reading evidence. Ghosts are part of the evidence.
 
 ---
 
+## Ghosts on the Return Journey
+
+On the forward journey, ghost ships are resources and navigation tools — oxygen, orientation, the accumulated testimony of previous seekers.
+
+On the return journey they are witnesses. The player passes them again with different eyes. These were people who got this far and no further. The player has been where they were trying to go. What does it mean to pass them now, heading back?
+
+No interaction changes. The ghost ships are the same ghost ships. Oxygen charges still function if available. What changes is what the player brings to the encounter.
+
+---
+
 ## The Loop
 
 - Player dies → ghost placed at that position → ghost has oxygen charges

@@ -4,6 +4,16 @@
 
 ---
 
+## The Unmoved Mover
+
+Aristotle's regression argument: everything that moves was moved by something prior. Trace it back far enough and you reach a first cause — something that moves without being moved. The Unmoved Mover. Not a deity that intervenes. A philosophical necessity. The still center that everything else turns around.
+
+The Colossus is that entity. Not because it chose to be. Because the regression, traced back far enough, ends here. It moves nothing intentionally. It simply is, and things turn around it.
+
+This is also the structure of the game. The forward journey follows the regression outward — the player is moved by something, which was moved by something, which traces back to the Colossus. The return journey traces the regression in reverse — not back to the Colossus, but back to whatever first moved the seeker to seek. That origin is smaller. Personal. Interior. The Unmoved Mover of a specific life.
+
+---
+
 ## What It Is
 
 Not destructive. Not aggressive. Not aware of you.

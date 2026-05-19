@@ -93,6 +93,18 @@ There is no correct answer. The tension is the game.
 
 ---
 
+## The Return Journey and Memories
+
+On the return journey the seeking loop is mechanically identical — stop, rotate, listen, orient, thrust — but the signal inverts completely. Instead of an external cosmic signal, the player follows memories: positional audio fragments of something personal and small, a life before the seeking began.
+
+The same volume, pan, and pitch mechanics apply. The same oxygen cost of thrusting without listening first. The same patience required. The tool is unchanged. The meaning has transformed.
+
+All challenge types documented here — noise interference, dead zones, Doppler shift, thermal, gravitational — may reappear on the return journey as the player moves back through the same spaces. Losing the memory signal in stellar noise carries different weight than losing the Colossus signal, but the mechanic is identical.
+
+See `mechanics/memories.md` for the memory signal specifically.
+
+---
+
 ## The Seeker Becomes the Signal
 
 The player is following a signal left by someone who died. Their ghost broadcasts to future seekers. The player will become that ghost.

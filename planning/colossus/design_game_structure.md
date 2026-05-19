@@ -19,16 +19,27 @@ Ghosts accumulate permanently — they are world state, not session state. Stage
 
 ## The Arc
 
+The game has two journeys. The Colossus is the hinge — the still center — between them.
+
 ```
-Many seeking stages → Threshold crossing → Rail stages (last few) → Arrival
-Free-roam seeking  → Physics takes over → Being carried          → Inside
+FORWARD JOURNEY
+Many seeking stages → Threshold crossing → Rail stages → Arrival
+Exterior signal    → Physics takes over → Carried     → The still center
+
+                        THE COLOSSUS
+                     (the hinge point)
+
+RETURN JOURNEY
+Reverse rails    → Reverse seeking stages → The void
+Agency returns   → Interior signal        → Back to origin
+                   (memories)
 ```
 
-The seeking stages vary in number, length, and challenge. The signal develops. The space grows stranger. New mechanics and complications to seeking are introduced gradually — sprinkled across stages as the spaces demand, not unlocked in a fixed sequence.
+**Forward journey:** The seeking stages vary in number, length, and challenge. The signal develops. The space grows stranger. New sensing modalities are introduced gradually. The threshold crossing is a gradual realization — the player notices the drift, then notices they can't stop it, then understands they've been inside the gravity well for a while. The transition to rails is physics, not a mechanic. The Colossus is not pulling you. It is simply massive.
 
-The threshold crossing isn't a moment — it's a gradual realization. The player notices they're drifting. Then they notice they can't stop it. Then they understand they've been inside the gravity well for a while now.
+**The hinge:** Arrival at the Colossus. The hold. The still center. See `stages/stage_4_arrival.md`.
 
-The transition to rails is physics, not a game mechanic. The Colossus is not pulling you. It is simply massive. You got close enough.
+**Return journey:** The player travels back through all stages in reverse. The seeking loop is mechanically identical but the signal inverts — from external cosmic signal to interior memories. Control authority climbs back toward 1.0 as the player moves away from the Colossus. Ghost ships become witnesses rather than resources. The journey ends in the void of Stage 1, visually identical to the opening, the player carrying everything the journey gave them. See `return_journey.md`.
 
 ---
 
