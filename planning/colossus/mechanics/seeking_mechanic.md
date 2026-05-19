@@ -120,6 +120,94 @@ Reference: the audio visualizer from the sound demo scene — that level of simp
 
 ---
 
+## The Signal Across Senses
+
+Stage 1 teaches one sense: audio. As stages progress, new ways of reading the Colossus's presence are introduced — each grounded in how we actually detect things in space. This is not the player gaining abilities. It is the Colossus becoming more present. Proximity to something that massive affects more and more of the physical world, and the player learns to read each new effect.
+
+The arc: what begins as a faint audio signal becomes something that saturates every sense. By the time the player reaches the Colossus, no instrument is needed. They are inside it.
+
+---
+
+### Audio — Volume and Pan
+*Introduced: Stage 1*
+
+The baseline. EM radiation from the Colossus converted to audio — the plasma wave / chorus phenomenon. Organic, irregular, almost alive-sounding because it is: charged particles interacting with magnetic fields genuinely produce this quality. Volume = distance. Pan = horizontal direction. Pitch shift = vertical direction.
+
+Space is a vacuum — no medium for acoustic sound. But EM fields fill space and can be heard through conversion. NASA has recorded Saturn's radio emissions, Earth's magnetosphere chorus, Jupiter's aurora. The signal sounds like this: something that breathes rather than cycles.
+
+---
+
+### Audio — Noise Interference
+*Introduced: Stage 2*
+
+Same mechanic, tested against competition. Young stars are massive EM emitters — electromagnetically loud, broad, less directional. The Colossus's signal is quieter but has a quality the stellar noise doesn't: it's irregular, organic, alive. The stellar noise is loud but regular. The signal is the thing that sounds like it's breathing.
+
+The player must learn to recognize this distinction. Not taught — discovered through losing the signal and finding it again.
+
+---
+
+### Audio — Doppler Shift
+*Introduced: a later seeking stage*
+
+Still audio, but a new layer. Moving toward the source shifts the signal's pitch slightly higher. Moving away lowers it. Direction is now also encoded in *change over time*, not just instantaneous position. The player has to move to read it — stop thrusting and the information disappears. Deepens the existing audio mechanic rather than replacing it.
+
+Scientific basis: redshift and blueshift. The same physics that lets astronomers measure the velocity of distant stars.
+
+---
+
+### Thermal — Heat Gradient
+*Introduced: a later seeking stage*
+
+The Colossus radiates warmth — not intentionally, as a consequence of what it is at that scale. The ship's hull responds to heat gradients. Not audio. Visual or haptic — the facing direction toward the warmest region. A stage may strip the audio signal entirely and leave only heat: cold dark space, one direction subtly warmer than the others.
+
+Scientific basis: infrared astronomy. The seeking loop becomes about feeling temperature rather than hearing direction.
+
+---
+
+### Haptic — Gravitational Waves
+*Introduced: a later seeking stage*
+
+Ripples in spacetime from something massive enough. The N64 rumble pak becomes the navigation tool. A stage where the audio signal is gone and the only instrument is vibration — intensity and rhythm of the rumble as the player rotates. Navigate a silent stage by feel alone.
+
+Scientific basis: LIGO's detection of gravitational waves from massive objects. The Colossus is massive enough to be felt before it is heard.
+
+---
+
+### Visual — Gravitational Lensing
+*Introduced: a late seeking stage, near the Colossus*
+
+Massive objects bend light. Stars behind the Colossus appear distorted — arced, stretched, curved. No audio signal. The player looks for the place where the stars are behaving wrongly and thrusts toward it. The Colossus makes itself known by what it does to everything else visible, not by any direct emission.
+
+Scientific basis: general relativity. Light curves around mass. A sufficiently massive object produces visible lensing of background stars.
+
+---
+
+### Synthesis — Multiple Senses Simultaneously
+*Introduced: the stages closest to the rails*
+
+No single sense is sufficient. The player must read audio, thermal, haptic, and visual information together to navigate. Each channel is incomplete on its own — the sources overlap, interfere, or point in slightly different directions. Only synthesizing all of them produces a reliable heading.
+
+This is also where the Colossus becomes most present. It is saturating everything. Every instrument the player has developed is registering simultaneously.
+
+---
+
+### Suggested Stage Arc
+
+| Stage | Primary sense | Scientific basis |
+|---|---|---|
+| Stage 1 | Audio — volume + pan | EM plasma waves |
+| Stage 2 | Audio — noise interference | Stellar EM emissions |
+| Stage N | Audio — Doppler shift | Relative velocity redshift |
+| Stage N | Thermal — heat gradient | Infrared radiation |
+| Stage N | Haptic — gravitational waves | Spacetime ripples, rumble pak |
+| Stage N | Visual — gravitational lensing | Spacetime curvature |
+| Stage N | Synthesis — multiple simultaneous | All of the above |
+| Rails | All senses overwhelmed | Inside the field |
+
+Stage numbers are not fixed. These are challenge types to be distributed across the seeking stages as each space's character demands. A single stage may introduce one new sense or combine several.
+
+---
+
 ## References
 
 - *Star Maker* (Stapledon) — consciousness navigating toward a source it can't fully perceive
