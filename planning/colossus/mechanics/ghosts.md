@@ -85,3 +85,40 @@ No interaction changes. The ghost ships are the same ghost ships. Oxygen charges
 At some point the player may find a ghost in a position they recognize — somewhere they've been before. An echo of their own path. They were already leaving traces. Future seekers will follow them as they have followed others.
 
 See `mechanics/oxygen.md` for the full oxygen/charge system.
+
+---
+
+## Ghost Appearance by Environment
+
+In space, ghost ships tumble indefinitely — vacuum preserves them. No force acts on them except their last slow spin. Planets don't work this way. A ghost on a planet is shaped by what that planet does to things left alone.
+
+| Environment | Ghost Appearance | Resource Provided | Notes |
+|---|---|---|---|
+| Space (void) | Tumbling wreck, debris field, flicker lighting | Oxygen charges (5 max, SRAM-persisted) | Accumulates into fields across many visits |
+| Ice moon | Frozen in place, partially encased in ice | Thermal charge (residual reactor heat) | Marks exactly where the cold won |
+| Ocean interior | Pinned to seafloor by pressure, or swept to current's edge | [in design] | |
+| Storm world | Charred hull, debris scattered by wind, partially buried | [in design] | |
+
+The ghost ship's visual state still communicates resource availability — a faint thermal shimmer from a ship still producing reactor heat, gone dark when depleted. See `mechanics/oxygen.md` for the full charge state logic; the same system applies to thermal charges and whatever the other planetary stages use.
+
+---
+
+## The Planet Doesn't Remember
+
+In space, ghosts accumulate across every visit. The void preserves them forever. Fields of dead seekers all facing roughly the same direction — the accumulated testimony of everyone who tried. The space remembers.
+
+Planets don't. The ocean sweeps wrecks along its current and pins them somewhere anonymous. Ice buries what the cold kills. Storms scatter debris until it's indistinguishable from rock.
+
+On planetary stages there is no accumulated field of testimony. No field of seekers pointing the direction. Only the single ancient ghost_reacher at the stage's end, and — somewhere along the rail — the wreck of your own last attempt if you've died here before.
+
+Your death ghost still appears on planetary stages. That consistency is important: the world always remembers you. What changes is that only your ghosts accumulate here, shaped by what the planet did to them. Not a field of predecessors. Just your own history made visible — showing where the planet won last time.
+
+---
+
+## Ghost as Death Marker on Rails
+
+On rail stages the ghost's position serves a different purpose than in open space. In the void, ghost clusters mark where seeking is hard, the signal is faint, oxygen is scarce. On rails the direction is decided — you're surviving, not navigating.
+
+A ghost along the rail marks precisely where the planet won. The frozen ship on the ice moon, encased exactly where thermal reserves ran out. The charred wreck on the storm world, struck at that exact bend. Not testimony pointing toward the goal — evidence pointing at where to be careful.
+
+The player reads it the same way they read everything else in this game: as evidence. What happened here. Where to pay attention.

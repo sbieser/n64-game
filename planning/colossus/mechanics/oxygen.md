@@ -64,6 +64,23 @@ Tumbling wreck only. No vent. Completely static and dark. Gone for good. Its deb
 
 ---
 
+## Planetary Equivalents
+
+On planetary stages, oxygen is not the operative existential limit. The player is on a planet — a different kind of hostile. The principle remains the same: the universe kills through indifference, the form of that indifference changes.
+
+| Stage | Existential Threat | Form of Indifference |
+|---|---|---|
+| Space stages | Oxygen depletion | Vacuum doesn't care you need air |
+| Ice moon | Hull temperature | Cold doesn't care you need warmth |
+| Ocean interior | Hull pressure | Depth doesn't care your hull has limits |
+| Storm world | Electrical discharge | Lightning doesn't care you're in the way |
+
+Ghosts on planetary stages provide the relevant resource rather than oxygen. On the ice moon a ghost's reactor left residual heat — a thermal charge. The charge system is the same (5 charges, SRAM-persisted, once per visit). What the ghost provides changes to match what that world makes scarce.
+
+See `mechanics/ghosts.md` for ghost appearance and resource by environment.
+
+---
+
 ## Scope
 
 Oxygen persists through all stages until arrival. It is not a Stage 1 tutorial mechanic that recedes — it is the physical tether to existence throughout the journey.

@@ -45,19 +45,49 @@ Agency returns   → Interior signal        → Back to origin
 
 ## Stages
 
-Detailed design for each stage lives in `stages/`. Summaries here.
+Detailed design for each stage lives in `stages/`. The rough map below shows the current planned arc — stage numbers and details will shift as design develops.
+
+### Stage Map
+
+Two kinds of rail stages exist and they are different things:
+- **Environmental rails** (planetary stages): The terrain channels the player. Gravity, current, storm corridor. Direction is defined by landscape. The player steers within it.
+- **Colossus-gravity rails** (late journey): The Colossus's mass has taken hold. The player is being pulled regardless of what they do. They can steer but not stop. This is physics, not terrain.
+
+| Stage | Location | Mode | Primary Mechanic | Ghost_Reacher Age |
+|---|---|---|---|---|
+| 1 | The Void | Free-roam | Audio seeking (volume + pan) | Recent |
+| 2 | Young Star Field | Free-roam | Noise interference | Older |
+| 3 | Ice Moon | Environmental rails | Thermal seeking for vents | Old — frozen in ice |
+| 4 | Ocean Interior | Environmental rails | Pressure management | Very old — seafloor |
+| 5 | Storm World | Environmental rails | Timing, electrical threat | Ancient |
+| 6 | Ringed Gas Giant | Free-roam | Visual seeking, gravitational lensing | Ancient |
+| 7 | Pulsar | Free-roam | Rhythmic timing | Very ancient |
+| 8 | Supernova Remnant | Free-roam | Synthesis — all senses | Ancient beyond reckoning |
+| 9 | Dark Nebula | Free-roam | Haptic dominant | Pre-human by millions of years |
+| N | Colossus Gravity Threshold | Colossus-gravity rails | Survival, obstacle avoidance | — |
+| N+1 | Arrival | Still center | — | — |
+
+Stage numbers are not fixed. The table shows order and character, not final count. Additional stages can be inserted anywhere — more seeking stages in space, more planetary stops, a longer approach to the gravity threshold.
+
+### Stage Notes
 
 **Stage 1 — The Search**  
-The void. A signal with no explanation. The first ghost at the signal source. The oxygen mechanic is introduced. See `stages/stage_1.md`.
+The void. A signal with no explanation. The first ghost at the signal source. Audio seeking introduced. See `stages/stage_1.md`.
 
-**Stage 2 — (in design)**  
-The space the Colossus passed through. Evidence of creation — new stars forming in its wake. The drift begins but the player still has thrust authority. Seeking in a noisier, more present environment. See `stages/stage_2.md`.
+**Stage 2 — Young Star Field**  
+The space the Colossus passed through. New stars forming in its wake. Noise interference: stellar EM vs. the organic Colossus signal. Still free-roaming, full thrust authority. See `stages/stage_2.md`.
 
-**Stage N — Rails Begin (stub)**  
-Some stage deep in the sequence where the threshold has been crossed and the player can no longer thrust free. They can steer but not stop. The Colossus is ahead, not seen. Stage number not decided.
+**Stage 3 — Ice Moon**  
+A moon in the Colossus's wake. Environmental rails through ice crevasses and caverns. Thermal seeking replaces audio as primary tool — find geothermal vents or freeze. Ghost_reacher encased in ancient ice. See `stages/stage_3.md`.
+
+**Stages 4–9 — (in design)**  
+Ocean interior, storm world, ringed gas giant, pulsar, supernova remnant, dark nebula. Each introduces or develops a mechanic; planetary stages use environmental rails with stage-specific threats; space stages return to free-roam seeking at increasing scale.
+
+**Stage N — Colossus Gravity Threshold (stub)**  
+The point where the player realizes they can no longer thrust free. The Colossus's gravity has them. They can steer but not stop. Not a designed event — the player notices when it's already true. Stage number not decided.
 
 **Stage N+1 — Arrival (stub)**  
-He is here. No combat. No objective. The camera spirals in. The hold. Six seconds inside something vast. Then the selector. No explanation. No score. The last stage, whatever number it carries.
+He is here. No combat. No objective. The camera spirals in. The hold. The still center. Then the selector. See `stages/stage_4_arrival.md` (currently misnamed; will be renumbered when stage count is decided).
 
 ---
 
