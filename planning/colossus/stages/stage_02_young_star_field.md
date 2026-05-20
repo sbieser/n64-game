@@ -64,7 +64,9 @@ The player learns to use the noise as spatial information — loud here means ne
 
 ## Oxygen
 
-Oxygen persists from Stage 1. Ghosts from Stage 1 may appear in the early part of this stage — seekers who made it further than most. As the player moves deeper, sources become sparser. The clusters near the young stars are the Stage 2 ghost accumulation zones. Usable but mislocated — off the signal path, requiring detour.
+Oxygen mechanic continues from Stage 1 — same rules, same ghost charge system. Ghost pools are per-stage; Stage 1 ghosts remain in Stage 1. Stage 2 accumulates its own history of deaths across visits.
+
+The clusters near the young stars are the Stage 2 ghost accumulation zones — seekers who died following the light rather than the signal. Usable but mislocated, requiring a detour off the signal path to reach them.
 
 ---
 

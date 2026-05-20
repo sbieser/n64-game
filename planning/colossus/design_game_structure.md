@@ -130,7 +130,7 @@ He is here. The hold. The still center. See `stages/stage_arrival.md`.
 
 - **Oxygen scope:** Persists through all stages until arrival. At the arrival stage the vessel is shed — the player no longer needs oxygen because they are no longer in a ship. The oxygen mechanic ends not through depletion but through transformation. See `mechanics/oxygen.md`.
 
-- **Stage length:** Targeting 10–20 minutes per stage for a first visit. Return visits shorter — the player knows the space. Complete first playthrough roughly 45–90 minutes total.
+- **Stage length:** Targeting 10–20 minutes per stage for a first visit. Return visits shorter — the player knows the space. With 13+ stages the complete first playthrough is roughly 2–4 hours. This is longer than most N64 rail games but consistent with the journey's scope — this is not an arcade run, it is a crossing.
 
 - **What does completing a stage feel like?** Arrival, not victory. No fanfare, no score. Something changes — the next stage opens — and that is all.
 

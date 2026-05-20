@@ -54,6 +54,23 @@ The world remembers everyone who tried.
 
 ---
 
+## The Ghost_Reacher Chain
+
+Every stage has exactly one ghost_reacher. These were not placed by the game — they were placed by the journey itself, long before any player arrived. They are an ancient relay chain of seekers, each one having followed the signal from the previous stage to the next, stopped, and stayed.
+
+**The chain mechanic:**
+- The ghost_reacher in each stage *is* the signal source for that stage. The player follows the signal to the ghost_reacher.
+- The ghost_reacher's heading — still reaching forward, still oriented toward what it was seeking — points to the next stage.
+- The player leaves that stage in the direction the ghost_reacher faces.
+
+The ghost_reachers did not intend to form a relay. They simply followed the signal as far as they could and stopped. That they happen to be spaced one per stage, that their headings happen to point onward, is the accumulated structure of a very long chain of individual seekers, each one getting as far as the one before and one stage further.
+
+**Age across the chain:** Each ghost_reacher is older than the one before it. Stage 1's ghost_reacher is recent enough to still have clear form. Stage 2's is older. By Stage 9 (The Rogue) the ghost_reacher has been there for billions of years and looks new because vacuum preserves everything. By Stages 12–13 the ghost_reachers predate human civilization entirely. The age is not stated by the game — the player reads it through what the environment has done to each one.
+
+**Players do not become ghost_reachers.** Player death ghosts are wrecked ships. Ghost_reachers are something else — seekers who completed a stage and stopped at the threshold of the next. Whether they chose to stop, or ran out of something, or simply arrived and stayed, is not answered.
+
+---
+
 ## Ghost Narrative
 
 Ghosts are the game's passive storytelling. Their positions, orientations, and density across a stage tell the history of who came here and what happened to them.

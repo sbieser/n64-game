@@ -83,11 +83,13 @@ See `mechanics/ghosts.md` for ghost appearance and resource by environment.
 
 ## Scope
 
-Oxygen persists through all stages until arrival. It is not a Stage 1 tutorial mechanic that recedes — it is the physical tether to existence throughout the journey.
+Oxygen is the operative resource in **space stages**. It is not a Stage 1 tutorial mechanic that recedes — it persists through every space stage until arrival.
+
+**Planetary stages** use environmental equivalents rather than oxygen: hull temperature, hull pressure, electrical discharge depending on the planet. The underlying logic is identical — a finite resource, ghost replenishment, the same charge system — but the substance changes to match what that world makes scarce. See the Planetary Equivalents section above and `mechanics/ghosts.md` for the per-environment resource table.
 
 At the arrival stage the vessel is shed. The player continues without a ship. Oxygen is no longer relevant because there is no longer a ship to run out of it. The mechanic ends not through depletion but through transformation — the player has become something that doesn't need it.
 
-This makes the arrival stage the only place in the game where oxygen anxiety disappears. That absence is felt.
+This makes the arrival stage the only place in the game where resource anxiety disappears entirely. That absence is felt.
 
 ---
 
