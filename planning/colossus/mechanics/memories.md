@@ -158,6 +158,64 @@ Somewhere specific. A heading, not a destination. The credits roll on orientatio
 
 ---
 
+## Fragment Mechanics
+
+How fragments are found, delivered, and accumulated — the gamification of the memory signal.
+
+---
+
+### Fragments Are Scattered, Not On the Path
+
+Memory signals are not a single heading pointing forward through the stage. They are several — fragments distributed across the space the way ghost ships are distributed in the forward journey. The player must seek them.
+
+Each return stage has **2–3 fragments** at different positions. Some are near the path the player took on the way in. Some require navigating to unusual parts of the stage — a corner of the methane world's coast the player flew past without stopping, a pocket of the supernova remnant far from the central signal. The seeking loop applies exactly: stop, rotate, listen, orient, move toward the signal.
+
+Some fragments are easy to find. Some require working around interference, navigating dead zones, or simply being patient in a space that rewards attention.
+
+This makes the return journey genuinely replayable. A first pass finds some fragments. Later revisits find more. The space that was hostile on the way in — the ice moon, the storm corridor — is navigated again with different attention, looking for something different, finding it or not.
+
+Fragment collection state is saved to SRAM, like ghost charges. Fragments already collected don't need to be found again. Each revisit accumulates further.
+
+---
+
+### Fragments Arrive Incomplete
+
+Early fragments — those found in the deepest return stages (13–10) — arrive partial. The audio is brief, strange, out of context. A sound without what it belongs to. The dark of a familiar room, but only the dark — not yet the room. The sound of chickens, but not yet the morning or the property.
+
+As more fragments accumulate across more stages, earlier fragments fill in. The incomplete ones become legible once the player has enough of the picture. Something heard in Stage 13 that meant nothing becomes recognizable in Stage 7, when the river fragment arrives and suddenly you understand what the dark was the dark of.
+
+This is how Proustian memory actually works: a fragment surfaces, means nothing on its own, then later another fragment arrives and the first one suddenly has a home. The mechanic models the thing it's describing.
+
+**In practice:** Early fragment audio is short — two or three seconds, faint, slightly distorted. Later fragments are longer and warmer. As total fragment count increases, previously found fragments play slightly longer and clearer on the return stage where they were found — a quiet confirmation that the picture is assembling.
+
+---
+
+### The Final Stage Resolves Based on Accumulation
+
+Stage 1 on the return (the void) has no single signal to follow. It has the composite — the accumulated weight of everything collected across all return stages. The memory signal here is not one sound but a layering of all sounds recovered.
+
+**If few fragments have been collected:** the composite is weak. The heading is vague — a general direction, not a precise coordinate. The player orients roughly and the credits roll on a wide heading.
+
+**If most fragments have been collected:** the composite is strong and specific. The heading is clear. A smaller front house on a grandparents' property. A river in the back. A precise direction. The player orients toward something exact.
+
+The game does not lock the ending. The player always gets a heading. What changes is how specific it is — how much they are actually going home versus going somewhere in the general direction of home. The felt difference between the two is the reward for seeking carefully on the return.
+
+No score. No completion percentage. Just: a vague heading or a precise one.
+
+---
+
+### The Crystallization Moment
+
+When the player reaches a fragment's source — the position in the stage where the memory signal is strongest — something quiet happens.
+
+A brief warm color wash across the screen, the palette shifting from the stage's environmental tone toward something interior and small. The fragment audio plays complete for the first time — the full version, not the partial. Two or three seconds of something specific and warm. Then the stage resumes.
+
+Not a cutscene. Not a UI notification. A breath. The same register as reaching the ghost_reacher on the forward journey — arrival, not victory. Something changed. The stage continues.
+
+On subsequent visits to that stage, the crystallized fragment's audio plays faintly in the background at that position — not the full crystallization, just a whisper. Evidence that something was here. The space remembers.
+
+---
+
 ## Relationship to Seeking Mechanic
 
 The memory signal is the interior instance of the seeking mechanic's signal. The full seeking loop documentation, challenge types, and sensory arc all apply on the return journey as the forward journey's challenges reappear in reverse.
