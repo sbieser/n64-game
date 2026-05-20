@@ -53,19 +53,25 @@ Two kinds of rail stages exist and they are different things:
 - **Environmental rails** (planetary stages): The terrain channels the player. Gravity, current, storm corridor. Direction is defined by landscape. The player steers within it.
 - **Colossus-gravity rails** (late journey): The Colossus's mass has taken hold. The player is being pulled regardless of what they do. They can steer but not stop. This is physics, not terrain.
 
-| Stage | Location | Mode | Primary Mechanic | Ghost_Reacher Age |
-|---|---|---|---|---|
-| 1 | The Void | Free-roam | Audio seeking (volume + pan) | Recent |
-| 2 | Young Star Field | Free-roam | Noise interference | Older |
-| 3 | Ice Moon | Environmental rails | Thermal seeking for vents | Old — frozen in ice |
-| 4 | Ocean Interior | Environmental rails | Pressure management | Very old — seafloor |
-| 5 | Storm World | Environmental rails | Timing, electrical threat | Ancient |
-| 6 | Ringed Gas Giant | Free-roam | Visual seeking, gravitational lensing | Ancient |
-| 7 | Pulsar | Free-roam | Rhythmic timing | Very ancient |
-| 8 | Supernova Remnant | Free-roam | Synthesis — all senses | Ancient beyond reckoning |
-| 9 | Dark Nebula | Free-roam | Haptic dominant | Pre-human by millions of years |
-| N | Colossus Gravity Threshold | Colossus-gravity rails | Survival, obstacle avoidance | — |
-| N+1 | Arrival | Still center | — | — |
+Scale progresses from intimate (the void) to cosmic (the dark nebula). Planet stages cluster in the middle — a passage through the Colossus's wake made material. The space stages that follow grow to scales where the journey's origin and destination are both incomprehensible.
+
+| Stage | Location | Mode | Primary Mechanic | Ghost_Reacher | Return: Memory Triggered |
+|---|---|---|---|---|---|
+| 1 | The Void | Free-roam | Audio seeking (volume + pan) | Recent | Silence → the specific quality of solitude |
+| 2 | Young Star Field | Free-roam | Noise interference | Older | Warm lights in cold dark → windows at night |
+| 3 | Ice Moon | Env. rails | Thermal seeking for vents | Old — frozen in ice | Cold → a specific winter, a specific room |
+| 4 | Volcanic Moon | Env. rails | Dangerous heat — seek cool margins | Very old — sulfur-encased | Heat → something that burned with urgency |
+| 5 | Geyser Moon | Env. rails | Direction briefly inverted — plume carries you up | Ancient — at geyser rim, facing outward | Brief wrong direction → a small getting-lost and finding back |
+| 6 | Methane World | Env. rails | Fog navigation — brief windows of clarity | Ancient — submerged in methane lake | Almost-familiar wrongness → something seen in the wrong light |
+| 7 | Ocean Interior | Env. rails | Pressure management — ghost gives depth | Very old — at Ice VII floor, facing up | Suspension in water → swimming somewhere ordinary |
+| 8 | Storm World | Env. rails | Timing — electrical discharge gaps | Ancient — in the eye of a permanent vortex | Turbulence → shelter from it, sound of storm from inside |
+| 9 | The Rogue | Free-roam | Gradient thermal — no vent points | Billions of years old — looks new | Total darkness → solitude that felt sufficient |
+| 10 | Ringed Gas Giant | Free-roam | Visual seeking — gravitational lensing | Ancient | — |
+| 11 | Pulsar | Free-roam | Rhythmic timing | Very ancient | Rhythm → a heartbeat, something that pulsed regularly |
+| 12 | Supernova Remnant | Free-roam | Synthesis — all senses simultaneously | Ancient beyond reckoning | Aftermath → something ended, the silence after |
+| 13 | Dark Nebula | Free-roam | Haptic dominant — rumble pak | Pre-human by millions of years | Vast dark → the dark that felt like a room |
+| N | Colossus Gravity Threshold | Colossus-gravity rails | Survival within the pull | — | — |
+| N+1 | Arrival | Still center | — | — | — |
 
 Stage numbers are not fixed. The table shows order and character, not final count. Additional stages can be inserted anywhere — more seeking stages in space, more planetary stops, a longer approach to the gravity threshold.
 
@@ -78,16 +84,34 @@ The void. A signal with no explanation. The first ghost at the signal source. Au
 The space the Colossus passed through. New stars forming in its wake. Noise interference: stellar EM vs. the organic Colossus signal. Still free-roaming, full thrust authority. See `stages/stage_2.md`.
 
 **Stage 3 — Ice Moon**  
-A moon in the Colossus's wake. Environmental rails through ice crevasses and caverns. Thermal seeking replaces audio as primary tool — find geothermal vents or freeze. Ghost_reacher encased in ancient ice. See `stages/stage_3.md`.
+Environmental rails through ice crevasses and caverns. Thermal seeking for geothermal vents replaces audio as primary tool. Hull temperature is the threat. Ghost_reacher encased in ancient ice. See `stages/stage_3.md`.
 
-**Stages 4–9 — (in design)**  
-Ocean interior, storm world, ringed gas giant, pulsar, supernova remnant, dark nebula. Each introduces or develops a mechanic; planetary stages use environmental rails with stage-specific threats; space stages return to free-roam seeking at increasing scale.
+**Stage 4 — Volcanic Moon**  
+The ice moon's inversion. Tidal heating taken to its extreme: constant eruption, sulfur plains, lava flows. Thermal mechanic reverses — seek cool margins, not warmth. Ghost_reacher preserved in sulfur deposit. See `stages/stage_volcanic_moon.md`.
+
+**Stage 5 — Geyser Moon**  
+Cryovolcanism. The player enters a geyser plume and is briefly carried upward — away from the Colossus. The stage's ghost_reacher faces outward rather than toward the Colossus. See `stages/stage_geyser_moon.md`.
+
+**Stage 6 — Methane World**  
+Titan-like moon. Alien landscape that looks almost familiar — methane lakes, methane rain, orange haze. Navigation through methane fog in brief windows of clarity. Ghost_reacher submerged in methane lake. See `stages/stage_methane_world.md`.
+
+**Stage 7 — Ocean Interior**  
+A waterworld. Convection current descends the player toward a seafloor of high-pressure Ice VII. Pressure is the threat; ghosts provide hull tolerance to go deeper. Ghost_reacher faces upward toward the arriving player — the one encounter where they come from the direction it faces. See `stages/stage_ocean_interior.md`.
+
+**Stage 8 — Storm World**  
+A planet of permanent violent storm. Environmental rails through discharge corridors to a calm vortex eye where the ghost_reacher waits. Timing mechanic: read the lightning rhythm, move in the gaps. See `stages/stage_storm_world.md`.
+
+**Stage 9 — The Rogue**  
+A rogue planet with no star. Total darkness, ship lights to twenty meters, a ghost_reacher that has been preserved in vacuum for billions of years and looks new. The oldest ghost_reacher. The quietest stage. See `stages/stage_rogue_planet.md`.
+
+**Stages 10–13 — (stubs)**  
+Ringed gas giant, pulsar, supernova remnant, dark nebula. Return to open space at increasing scale. Each develops or combines the sensing modalities accumulated across the journey. Stage files not yet written.
 
 **Stage N — Colossus Gravity Threshold (stub)**  
-The point where the player realizes they can no longer thrust free. The Colossus's gravity has them. They can steer but not stop. Not a designed event — the player notices when it's already true. Stage number not decided.
+The point where the player realizes they can no longer thrust free. Not a designed event — the player notices when it's already true. Stage number not decided.
 
 **Stage N+1 — Arrival (stub)**  
-He is here. No combat. No objective. The camera spirals in. The hold. The still center. Then the selector. See `stages/stage_4_arrival.md` (currently misnamed; will be renumbered when stage count is decided).
+He is here. The hold. The still center. See `stages/stage_4_arrival.md` (will be renumbered when stage count is decided).
 
 ---
 
