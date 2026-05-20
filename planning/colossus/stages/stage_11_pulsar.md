@@ -1,0 +1,62 @@
+# Stage — Pulsar
+
+*The most precise clock in the universe. It does not care what time it is for you.*
+
+---
+
+## Setting
+
+A pulsar — the collapsed remnant of a massive star, rotating at extraordinary speed, emitting beams of electromagnetic radiation from its magnetic poles. The beams sweep past like a lighthouse: once per rotation, many times per second for millisecond pulsars. The pulsar cannot be approached directly. It is a neutron star — city-sized, but containing more mass than the sun. Getting near it means death by radiation, tidal force, and physics asserting itself on anything too small to matter.
+
+The player navigates the pulsar's outer environment — far enough to be survivable, close enough that the pulse sweeps are felt. The scale here dwarfs the gas giant. The pulsar was a star before it died. Its death was a supernova. What the player is orbiting is the dense heart of something that burned brighter than a galaxy for a moment.
+
+Millisecond pulsars are so regular they were initially suspected to be artificial signals. They are the most accurate natural timekeepers known. The Colossus is not a clock. But this stage asks the player to move with the rhythm of one.
+
+---
+
+## Mode
+
+Free-roam, with a strong rhythmic constraint. The player can move freely in any direction, but the pulse sweeps across the environment on a precise interval. The interval is constant and learnable.
+
+---
+
+## Seeking — Rhythmic Timing
+
+The pulsar's pulse interferes with the signal — when the sweep passes through, the Colossus signal is briefly overwhelmed. The player must listen for the signal in the gaps between sweeps, orient during those windows, then commit to movement before the next pulse arrives.
+
+The mechanic: the seeking loop now has a third variable. Not just stop, rotate, listen — but stop, wait for the gap, rotate, listen, orient, move before the next pulse. The patience required is rhythmic rather than absolute. The player is not waiting indefinitely. They are waiting for the beat.
+
+The pulse interval is constant. Once learned, it becomes a rhythm the player works within. Not frustrating — the regularity is a gift compared to the storm world's unpredictable lightning. The universe, here, is at least consistent.
+
+See `mechanics/seeking_mechanic.md` for Doppler shift and rhythmic challenge types.
+
+---
+
+## The Ghost_Reacher
+
+Very ancient. The star this pulsar came from burned before the solar system formed. Whatever seeker reached this ghost_reacher did so an immense time ago, in a universe that looked different from this one. The ghost_reacher sits in a stable orbital position relative to the pulsar — the one place where the pulse sweeps are regular and survivable. It found the safe harbor and stopped there.
+
+The signal from this ghost_reacher has the pulsar's rhythm in it — the pulse sweeps affect even the ghost_reacher's transmission. The signal comes in pulses. The player must separate the ghost_reacher's signal from the pulsar's interference to read its direction accurately.
+
+---
+
+## Ghost Behavior
+
+Ghost ships in the outer pulsar environment are subject to the pulse sweep. Ghosts caught in the sweep's path are harder to read — the pulse temporarily overwhelms their vent visual and lighting flicker. Ghost positions matter more here: a ghost in the safe harbor is easy to use; a ghost in the sweep path requires timing to approach.
+
+**Resource:** oxygen charges. Standard space-stage mechanic.
+
+---
+
+## Return Memory Trigger
+
+The regularity of the pulse — the most precise rhythm in the universe. On the return journey this triggers a memory of something that pulsed regularly in an ordinary life. A clock. A heartbeat. A sound that recurred with enough regularity that it became a kind of silence. Something steady that was always there.
+
+---
+
+## Open
+
+- Pulse interval: what feels right as a rhythm — long enough to complete seeking within a gap, short enough to create real timing pressure
+- Visual representation of the pulse sweep on N64 — brightness pulse, chromatic shift, particle front
+- Whether the pulsar itself is visible at all, or only its effects
+- Whether the safe orbital zone around the ghost_reacher is clearly demarcated or must be found through experience

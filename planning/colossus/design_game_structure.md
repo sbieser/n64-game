@@ -11,7 +11,7 @@ The game is stage-based, not run-based. Completing a stage unlocks the next one.
 **What persists:** Stage unlock state. Ghost positions and charge counts in every stage.  
 **What does not persist:** The player's position within a stage. Each visit starts fresh from the beginning.
 
-Ghosts accumulate permanently — they are world state, not session state. Stage 1 on a first visit is nearly empty. Stage 1 after many visits is populated with the history of every attempt. The space remembers everyone who tried.
+Ghosts accumulate permanently — they are world state, not session state. The void on a first visit is nearly empty. After many visits it is populated with the history of every attempt. The space remembers everyone who tried.
 
 **Save backend:** SRAM (32 KB cartridge SRAM). Compatible with SummerCart 64 and EverDrive flash cartridges, and all major emulators. Stage unlock state fits in a single byte bitmask. Ghost pools for all stages fit comfortably within the 32 KB limit.
 
@@ -37,7 +37,7 @@ Agency returns   → Interior signal        → Back to origin
 
 **Forward journey:** The seeking stages vary in number, length, and challenge. The signal develops. The space grows stranger. New sensing modalities are introduced gradually. The threshold crossing is a gradual realization — the player notices the drift, then notices they can't stop it, then understands they've been inside the gravity well for a while. The transition to rails is physics, not a mechanic. The Colossus is not pulling you. It is simply massive.
 
-**The hinge:** Arrival at the Colossus. The hold. The still center. See `stages/stage_4_arrival.md`.
+**The hinge:** Arrival at the Colossus. The hold. The still center. See `stages/stage_arrival.md`.
 
 **Return journey:** The player travels back through all stages in reverse. The seeking loop is mechanically identical but the signal inverts — from external cosmic signal to interior memories. Control authority climbs back toward 1.0 as the player moves away from the Colossus. Ghost ships become witnesses rather than resources. The journey ends in the void of Stage 1, visually identical to the opening, the player carrying everything the journey gave them. See `return_journey.md`.
 
@@ -78,40 +78,49 @@ Stage numbers are not fixed. The table shows order and character, not final coun
 ### Stage Notes
 
 **Stage 1 — The Search**  
-The void. A signal with no explanation. The first ghost at the signal source. Audio seeking introduced. See `stages/stage_1.md`.
+The void. A signal with no explanation. The first ghost at the signal source. Audio seeking introduced. See `stages/stage_01_void.md`.
 
 **Stage 2 — Young Star Field**  
-The space the Colossus passed through. New stars forming in its wake. Noise interference: stellar EM vs. the organic Colossus signal. Still free-roaming, full thrust authority. See `stages/stage_2.md`.
+The space the Colossus passed through. New stars forming in its wake. Noise interference: stellar EM vs. the organic Colossus signal. Still free-roaming, full thrust authority. See `stages/stage_02_young_star_field.md`.
 
 **Stage 3 — Ice Moon**  
-Environmental rails through ice crevasses and caverns. Thermal seeking for geothermal vents replaces audio as primary tool. Hull temperature is the threat. Ghost_reacher encased in ancient ice. See `stages/stage_3.md`.
+Environmental rails through ice crevasses and caverns. Thermal seeking for geothermal vents replaces audio as primary tool. Hull temperature is the threat. Ghost_reacher encased in ancient ice. See `stages/stage_03_ice_moon.md`.
 
 **Stage 4 — Volcanic Moon**  
-The ice moon's inversion. Tidal heating taken to its extreme: constant eruption, sulfur plains, lava flows. Thermal mechanic reverses — seek cool margins, not warmth. Ghost_reacher preserved in sulfur deposit. See `stages/stage_volcanic_moon.md`.
+The ice moon's inversion. Tidal heating taken to its extreme: constant eruption, sulfur plains, lava flows. Thermal mechanic reverses — seek cool margins, not warmth. Ghost_reacher preserved in sulfur deposit. See `stages/stage_04_volcanic_moon.md`.
 
 **Stage 5 — Geyser Moon**  
-Cryovolcanism. The player enters a geyser plume and is briefly carried upward — away from the Colossus. The stage's ghost_reacher faces outward rather than toward the Colossus. See `stages/stage_geyser_moon.md`.
+Cryovolcanism. The player enters a geyser plume and is briefly carried upward — away from the Colossus. The stage's ghost_reacher faces outward rather than toward the Colossus. See `stages/stage_05_geyser_moon.md`.
 
 **Stage 6 — Methane World**  
-Titan-like moon. Alien landscape that looks almost familiar — methane lakes, methane rain, orange haze. Navigation through methane fog in brief windows of clarity. Ghost_reacher submerged in methane lake. See `stages/stage_methane_world.md`.
+Titan-like moon. Alien landscape that looks almost familiar — methane lakes, methane rain, orange haze. Navigation through methane fog in brief windows of clarity. Ghost_reacher submerged in methane lake. See `stages/stage_06_methane_world.md`.
 
 **Stage 7 — Ocean Interior**  
-A waterworld. Convection current descends the player toward a seafloor of high-pressure Ice VII. Pressure is the threat; ghosts provide hull tolerance to go deeper. Ghost_reacher faces upward toward the arriving player — the one encounter where they come from the direction it faces. See `stages/stage_ocean_interior.md`.
+A waterworld. Convection current descends the player toward a seafloor of high-pressure Ice VII. Pressure is the threat; ghosts provide hull tolerance to go deeper. Ghost_reacher faces upward toward the arriving player — the one encounter where they come from the direction it faces. See `stages/stage_07_ocean_interior.md`.
 
 **Stage 8 — Storm World**  
-A planet of permanent violent storm. Environmental rails through discharge corridors to a calm vortex eye where the ghost_reacher waits. Timing mechanic: read the lightning rhythm, move in the gaps. See `stages/stage_storm_world.md`.
+A planet of permanent violent storm. Environmental rails through discharge corridors to a calm vortex eye where the ghost_reacher waits. Timing mechanic: read the lightning rhythm, move in the gaps. See `stages/stage_08_storm_world.md`.
 
 **Stage 9 — The Rogue**  
-A rogue planet with no star. Total darkness, ship lights to twenty meters, a ghost_reacher that has been preserved in vacuum for billions of years and looks new. The oldest ghost_reacher. The quietest stage. See `stages/stage_rogue_planet.md`.
+A rogue planet with no star. Total darkness, ship lights to twenty meters, a ghost_reacher that has been preserved in vacuum for billions of years and looks new. The oldest ghost_reacher. The quietest stage. See `stages/stage_09_rogue_planet.md`.
 
-**Stages 10–13 — (stubs)**  
-Ringed gas giant, pulsar, supernova remnant, dark nebula. Return to open space at increasing scale. Each develops or combines the sensing modalities accumulated across the journey. Stage files not yet written.
+**Stage 10 — Ringed Gas Giant**  
+Back to open space. Visual gravitational lensing as the primary seeking tool — find where the stars bend. Navigation through ring debris. See `stages/stage_10_ringed_gas_giant.md`.
+
+**Stage 11 — Pulsar**  
+A neutron star remnant sweeping radiation on a precise interval. Rhythmic seeking — orient in the gaps between pulses. The most regular environment in the game. See `stages/stage_11_pulsar.md`.
+
+**Stage 12 — Supernova Remnant**  
+The interior of a dead star, now expanding nebula. Synthesis stage: all sensing modalities active simultaneously, none sufficient alone. See `stages/stage_12_supernova_remnant.md`.
+
+**Stage 13 — Dark Nebula**  
+Dense dust cloud — stars gone, vision gone, audio scattered. Haptic dominant: the rumble pak carries the Colossus's gravitational signature. The last stage before the gravity threshold. See `stages/stage_13_dark_nebula.md`.
 
 **Stage N — Colossus Gravity Threshold (stub)**  
 The point where the player realizes they can no longer thrust free. Not a designed event — the player notices when it's already true. Stage number not decided.
 
 **Stage N+1 — Arrival (stub)**  
-He is here. The hold. The still center. See `stages/stage_4_arrival.md` (will be renumbered when stage count is decided).
+He is here. The hold. The still center. See `stages/stage_arrival.md`.
 
 ---
 
