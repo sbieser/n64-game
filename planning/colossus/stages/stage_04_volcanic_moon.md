@@ -1,4 +1,4 @@
-# Stage — Volcanic Moon
+# Stage 4 — Volcanic Moon
 
 *The ice moon was cold and still. This one cannot stop moving.*
 
@@ -24,9 +24,19 @@ On the ice moon, cold was the threat and warmth was the resource. Here the inver
 
 **Hull temperature** rises near active lava flows and plumes. At maximum: hull failure. Ghost state.
 
-The seeking mechanic inverts: the player seeks cool margins and shadowed passages, the moments between eruptions. Not seeking a signal — seeking safety within a hostile channel.
+See `mechanics/oxygen.md` for the planetary equivalent table. See `mechanics/ghosts.md` for what ghost resources this stage provides.
 
-This is the same thermal sensing mechanic as the ice moon, reversed. The player learned to seek warmth there. Here they must unlearn it, or die. The same tool. The opposite application.
+---
+
+## Seeking
+
+The thermal seeking mechanic from Stage 3 applies here in exact inversion. The player learned to seek warmth on the ice moon. On the volcanic moon, warmth is death. The same tool. The opposite application.
+
+**Stop → Rotate → Feel → Find the coolest direction → Move toward it**
+
+The cool margins between lava flows are the navigable channels. The player reads thermal gradient away from heat rather than toward it — shadowed passages, gaps between eruption events, the brief coolness behind a rock formation. The seeking loop still applies. The patience is the same. What the patience finds has reversed.
+
+This is the stage where the player discovers the seeking mechanic is not about a specific sense. It is about orienting toward what keeps you alive, whatever that is and wherever the environment hides it.
 
 See `mechanics/seeking_mechanic.md` for the thermal variant.
 
@@ -48,9 +58,31 @@ A ghost preserved in sulfur looks different from one in lava: brighter color, th
 
 ---
 
-## Return Memory Trigger
+## Return: Memory Fragment
 
-The dangerous heat here triggers a memory of something that burned with urgency — not destructive, but intense. Something that had to be done immediately and couldn't wait. Not the burning itself. The urgency of it. The specific feeling of something that required full attention right now.
+*Trigger: heat, the urgency of a brief abundance*
+
+Summer in the garden. The specific heat of that particular hollow between the hills — different from any other summer heat, held differently by the trees and the slope. Cherries ripe and then gone before you'd had enough. Figs in August. The sense that the abundance was brief and you had to be present for it or it would pass without you.
+
+See `mechanics/memories.md` for the crystallization moment and accumulation mechanics.
+
+---
+
+## Atmosphere
+
+**Visual:**
+
+The warmest palette in the journey so far — red-orange-yellow, sulfur yellow, the deep orange of active lava. Eruption plumes are the stage's large-scale structures: colossal columns of gas and ejecta rising beyond the visible sky. The player moves between them, small.
+
+Cooling lava crust creates texture variation: the dark grey of recently solidified rock, the orange-red glow at its edges where cooling is incomplete. Ghost ships entombed in lava read as dark shapes in darker rock — found by their vent particles if they're still visible, or missed entirely.
+
+The sky above the moon is lit by the eruptions themselves. The parent planet's reflected light adds to it. Nothing here is cold blue. Everything burns.
+
+**Audio:**
+
+The hiss of lava contacting cooler rock. The low rumble of eruption events before they reach the surface — felt as vibration before heard as sound. Sulfur gas has its own character. The cosmic signal competes with volcanic EM here; not as attenuated as in the ice moon's magnetosphere, but noisy in a different way, the noise volcanic rather than electromagnetic.
+
+The quiet moments — in the cool channels between flows — have a particular quality: the stage is never silent, but it is briefly less loud.
 
 ---
 
@@ -58,5 +90,4 @@ The dangerous heat here triggers a memory of something that burned with urgency 
 
 - Eruption timing — random, rhythmic, or proximity-triggered?
 - Whether the rail path visually changes between visits as lava resurfaces areas
-- Sound design: sulfur eruptions, lava hiss, the specific sound of something very hot
 - What the end of the stage looks like before transitioning forward

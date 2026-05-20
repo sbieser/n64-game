@@ -1,4 +1,4 @@
-# Stage — Supernova Remnant
+# Stage 12 — Supernova Remnant
 
 *A star died here. Everything visible is the aftermath of that.*
 
@@ -20,9 +20,18 @@ Free-roam. The remnant is large enough that the player has genuine navigational 
 
 ---
 
+## Threat
+
+Oxygen, managed under the difficulty of multi-channel seeking. The remnant's EM environment doesn't pose a direct hull threat, but the synthesis seeking challenge (every sense active simultaneously) slows navigation — the player spends more time orienting and less time moving. Oxygen depletes against the time cost of careful synthesis.
+
+See `mechanics/oxygen.md`.
+
+---
+
 ## Seeking — Synthesis
 
 Every sensing modality developed across the journey is active simultaneously here:
+
 - **Audio:** the signal is present but scattered by the dense gas filaments
 - **Thermal:** the remnant radiates infrared — but unevenly, the filaments hotter than the gaps
 - **Haptic:** gravitational waves from the dense remnant at the center, detectable via rumble pak
@@ -48,17 +57,41 @@ Ghost ships in the remnant have thermal signatures from the surrounding hot gas.
 
 **Resource:** oxygen charges. Standard space-stage mechanic, though the environment makes ghost ships more visually dramatic than anywhere before.
 
+See `mechanics/ghosts.md`.
+
 ---
 
-## Return Memory Trigger
+## Return: Memory Fragment
 
-Aftermath. Something enormous ended here, long ago, and what remains is its expansion outward. On the return journey this space triggers a memory of aftermath — something that ended, the specific quality of the time after. Not grief. Not relief. The particular feeling of being in the after of something, when the event itself is over and what remains is just what it left behind. Small things. Specific things. What was left.
+*Trigger: aftermath, abundance left by something that passed through*
+
+A yard where more things came to live than expected. Nobody planned it. The river brought them — deer to the bank at certain hours, possums in the trees at night, squirrels in the fruit trees all day. An ecosystem that gathered itself because the conditions were right. The abundance was incidental. It was always there.
+
+See `mechanics/memories.md` for the crystallization moment and accumulation mechanics.
+
+---
+
+## Atmosphere
+
+**Visual:**
+
+The brightest, most visually complex stage in the game. Hot gas filaments in reds, oranges, electric blues — the spectrum of stellar death and what comes after. The filaments have internal structure: brighter cores, cooler edges. They move, slowly, the expansion still ongoing at geological speed.
+
+The dense remnant at the center: visible as a distinct point of brightness amid the filaments, slightly bluer, the hardest light in the stage. The player can see where they are going long before they arrive.
+
+Ghost ships read differently here: illuminated by the surrounding gas, they glow rather than reflecting cold light. They look less like wrecks and more like something that belongs here.
+
+**Audio:**
+
+Loud and complex. Scattered EM from the remnant fills the audio environment — not the organic quality of the Colossus signal, but a different kind of noise, structured by the physics of stellar death. The Colossus signal is present but the player must synthesize it from the noise with help from all the other channels.
+
+The ghost_reacher at the center broadcasts clearly into this complexity. Its signal cutting through is the first clear audio the player has had in several stages.
 
 ---
 
 ## Open
 
 - Whether the dense central remnant is visible as a distinct object or only felt through gravitational haptics and lensing
-- Visual design: hot gas filaments on N64 — translucent quads, color gradient from hot core to cooler outer shell
 - Whether the player can get too close to the core and take damage, or whether the game trusts the player to self-regulate
-- Sound design: the supernova remnant has a specific audio character — radio emissions, the signal scattered through it
+- Visual design: hot gas filaments on N64 — translucent quads, color gradient from hot core to cooler outer shell
+- Sound design: the synthesis of four channels simultaneously — how to make this readable without being overwhelming

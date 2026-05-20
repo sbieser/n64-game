@@ -1,4 +1,4 @@
-# Stage — Ringed Gas Giant
+# Stage 10 — Ringed Gas Giant
 
 *The rings are the remains of a moon that came too close.*
 
@@ -17,6 +17,14 @@ The Colossus passed through this system. Whether its gravity contributed to the 
 ## Mode
 
 Free-roam. Back in open space after the planetary cluster. Full thrust authority, oxygen mechanic active. The ring plane is dense enough to require navigation but sparse enough to move through — not a wall, a field.
+
+---
+
+## Threat
+
+Oxygen. Back in open space — same rules, same ghost charge system as the void stages. The ring environment adds navigational complexity but no new existential threat. The oxygen mechanic is the operative resource; the ring debris is an obstacle, not a weapon.
+
+See `mechanics/oxygen.md`.
 
 ---
 
@@ -42,13 +50,35 @@ Ancient. This system has been here long enough for the destroyed moon to have sp
 
 Ghost ships in the ring plane are nearly indistinguishable from ring debris at a distance — same scale, same tumbling motion, same cold coloring. The flicker lighting and vent particles are the tells. Navigating toward what might be a ghost ship and finding it is one is a specific recognition.
 
-**Resource:** oxygen charges. Standard space-stage mechanic. See `mechanics/oxygen.md`.
+**Resource:** oxygen charges. Standard space-stage mechanic.
+
+See `mechanics/oxygen.md`, `mechanics/ghosts.md`.
 
 ---
 
-## Return Memory Trigger
+## Return: Memory Fragment
 
-The rings — something beautiful made of destruction, orbiting a center in perfect arcs. On the return journey this triggers a memory of something that moved in orbit around something else — not literally, but the feeling of it. Returning to the same place. Circling. The comfort and the constraint of it.
+*Trigger: something that orbits and returns, beauty made of accumulation*
+
+Fruit trees in the yard — cherry, apple, fig. Each one placed by a specific person for a specific reason, at a specific time. A garden that took decades to become itself and looked like it had always been there. Returning to the same trees every summer. The fig in August. The cherry before it. You knew when each one was coming.
+
+See `mechanics/memories.md` for the crystallization moment and accumulation mechanics.
+
+---
+
+## Atmosphere
+
+**Visual:**
+
+The gas giant is the stage's dominant visual. It fills a significant portion of the sky from within the ring plane — bands of color visible, storm systems present at the scale of continents. It is too large to feel like an object. It simply is.
+
+The ring plane itself: particles at multiple scales. Dust visible as a translucent shimmer. Boulder-scale objects close enough to navigate around, their surfaces rough with impact cratering. The variation in particle size makes the ring feel stratified — different densities in different orbital bands.
+
+The reflected light from the gas giant illuminates the ring plane with diffuse warmth. Not the cold blue of open space — the rings glow with the giant's reflected color. This is the first stage since Stage 2's young star field where warmth comes from a visible source.
+
+**Audio:**
+
+The vacuum of space is silent, but the ring plane has its own audio presence: the signal scattered and reflected by the debris field, fragmented and bounced, giving the Colossus signal a slightly different character here — still present, slightly echoed. The visual lensing mechanic is primary, but the audio is strange in a way the player notices.
 
 ---
 
@@ -57,4 +87,4 @@ The rings — something beautiful made of destruction, orbiting a center in perf
 - Ring particle visual representation on N64 — sprite-based, geometry, or point sprites
 - Whether the ring plane is navigable in all directions or the player is constrained to the plane
 - The destroyed moon: is there a visible remnant — a large fragment, a moonlet — that anchors the stage?
-- Sound design: the ring plane is vacuum, but the signal here has a particular quality of being scattered and reflected
+- Whether the ghost_reacher's position in the debris requires the player to stop and read ring motion to track it

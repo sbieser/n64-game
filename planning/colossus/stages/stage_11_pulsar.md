@@ -1,4 +1,4 @@
-# Stage — Pulsar
+# Stage 11 — Pulsar
 
 *The most precise clock in the universe. It does not care what time it is for you.*
 
@@ -20,11 +20,19 @@ Free-roam, with a strong rhythmic constraint. The player can move freely in any 
 
 ---
 
+## Threat
+
+Oxygen, plus the pulse sweep as a complicating factor. The sweep doesn't kill directly — but it disrupts the seeking window, forcing the player to wait between pulses. Oxygen depletes while waiting. The real pressure is managing oxygen against the time cost of rhythmic seeking.
+
+See `mechanics/oxygen.md`.
+
+---
+
 ## Seeking — Rhythmic Timing
 
 The pulsar's pulse interferes with the signal — when the sweep passes through, the Colossus signal is briefly overwhelmed. The player must listen for the signal in the gaps between sweeps, orient during those windows, then commit to movement before the next pulse arrives.
 
-The mechanic: the seeking loop now has a third variable. Not just stop, rotate, listen — but stop, wait for the gap, rotate, listen, orient, move before the next pulse. The patience required is rhythmic rather than absolute. The player is not waiting indefinitely. They are waiting for the beat.
+The seeking loop now has a third variable. Not just stop, rotate, listen — but stop, wait for the gap, rotate, listen, orient, move before the next pulse. The patience required is rhythmic rather than absolute. The player is not waiting indefinitely. They are waiting for the beat.
 
 The pulse interval is constant. Once learned, it becomes a rhythm the player works within. Not frustrating — the regularity is a gift compared to the storm world's unpredictable lightning. The universe, here, is at least consistent.
 
@@ -46,11 +54,33 @@ Ghost ships in the outer pulsar environment are subject to the pulse sweep. Ghos
 
 **Resource:** oxygen charges. Standard space-stage mechanic.
 
+See `mechanics/ghosts.md`.
+
 ---
 
-## Return Memory Trigger
+## Return: Memory Fragment
 
-The regularity of the pulse — the most precise rhythm in the universe. On the return journey this triggers a memory of something that pulsed regularly in an ordinary life. A clock. A heartbeat. A sound that recurred with enough regularity that it became a kind of silence. Something steady that was always there.
+*Trigger: rhythm, something regular*
+
+Chickens in a coop. The particular sound of them in the morning, before anyone was fully awake. Reliable. The day hadn't started until they had. A sound so regular it became a kind of silence — you only noticed it when it wasn't there.
+
+See `mechanics/memories.md` for the crystallization moment and accumulation mechanics.
+
+---
+
+## Atmosphere
+
+**Visual:**
+
+The pulsar itself is not directly visible — too dense, too dangerous at close range. What the player sees is its effects: the pulse sweep moving across the environment as a brightness front, a wave of increased EM that dims and washes out stars and signals as it passes. The sweep is visible, directional, regular.
+
+The safe orbital zone around the ghost_reacher has a particular quality: the sweep is regular and survivable here, but the player can see it arriving. Between sweeps: open space. During the sweep: the visual field dims and the signal drops.
+
+**Audio:**
+
+The pulse is audio as much as visual: a brief burst of EM that overwhelms the signal, followed by silence, followed by the signal returning. The Colossus signal arrives in windows — clear for a few seconds, then washed out, then clear again. The player develops a feel for the rhythm before they consciously understand it as a rhythm.
+
+The ghost_reacher's signal pulses with the interval. It has been doing this for as long as the pulsar has been spinning.
 
 ---
 

@@ -1,4 +1,4 @@
-# Stage — Ocean Interior
+# Stage 7 — Ocean Interior
 
 *No surface visible above. No floor visible below. Just water, pressure, and something at the bottom.*
 
@@ -28,6 +28,20 @@ Ghost ships on the descent provide hull reinforcement: drawing from a ghost's pr
 
 This reverses the oxygen logic interestingly: in space, you extend range by replenishing what's running out. Here, you extend range by borrowing structural tolerance from the dead.
 
+See `mechanics/oxygen.md` for the planetary equivalent table. See `mechanics/ghosts.md` for the pressure compensation charge system.
+
+---
+
+## Seeking
+
+The cosmic signal is present but muted by water — still detectable, confirming the descent direction, but not the primary navigation tool.
+
+The seeking loop here is applied to finding ghost ships at depth. Hull pressure accumulates without warning beyond visual cues; the player must locate ghosts before the hull fails. Ghost ships sink to the lowest point of the current's path, so they appear at depth rather than at the entry point. The player seeks their signals in the deepening dark.
+
+The ghost_reacher's signal intensifies as the player descends toward it — the correct direction is simply down and toward the center of the current. The seeking challenge is not finding the heading (the current defines it) but managing pressure by finding resources in the dark.
+
+See `mechanics/seeking_mechanic.md`.
+
 ---
 
 ## The Ghost_Reacher
@@ -46,15 +60,37 @@ Ghost ships sink to the lowest point of the current's path — they appear at de
 
 ---
 
-## Return Memory Trigger
+## Return: Memory Fragment
 
-The suspension — being held in something, movement slowed, weight above. On return this triggers a memory of being in water. Not the ocean. Something smaller and more familiar: swimming in a pool, or a lake, or a bathtub. The specific muffled quiet of being submerged in something ordinary. The contrast between that ordinary water and this alien abyss is not stated. The player holds both.
+*Trigger: moving water, something always present beneath*
+
+The sound of the river in the backyard. Always there, at the back of everything. Still moving while everything else was quiet. The sound that was there before you woke up and there after you fell asleep. Not loud. Constant. The property's heartbeat.
+
+See `mechanics/memories.md` for the crystallization moment and accumulation mechanics.
+
+---
+
+## Atmosphere
+
+**Visual:**
+
+The descent is a study in light failure. Near the surface: diffuse blue-green, some ambient light. Below the photic zone: diminishing. Below that: ship lights only. The ship lights reach perhaps ten meters in every direction. Beyond that is water the ship's instruments can read but the eye cannot.
+
+The Ice VII boundary is the stage's visual payoff: crystalline exotic ice, geometrically perfect structures formed by pressure rather than cold. It emits a faint thermal glow from below — the hot ice is warm, and that warmth bleeds upward through the crystal structure as dim amber light. The ghost_reacher stands above it, arm raised, faintly lit from below.
+
+If bioluminescence exists in this ocean's life, it appears in the middle depths — brief, not navigational, the stage's only unexpected warmth before the Ice VII floor.
+
+**Audio:**
+
+The water muffles everything. The cosmic signal is quieter here than anywhere else on the journey except the dark nebula. What fills the audio space is hull stress: low structural sounds, the particular sound of pressure asserting itself on metal. The rumble pak builds in intensity with depth — not discrete events but continuous pressure.
+
+The convection current is audible as a low flow, constant, the sound of being carried.
 
 ---
 
 ## Open
 
-- Whether the Ice VII floor is visually distinct — crystalline texture, different color from the surrounding water
+- Whether the Ice VII floor is visually distinct — crystalline texture, warm glow from below
 - How to render deep-ocean darkness on N64 — graduated fog, light falloff curve
-- Whether there is any bioluminescence from the ocean life (if any exists on this world)
+- Whether there is any bioluminescence from ocean life
 - The hull pressure indicator: audio (hull stress sounds), visual (screen-edge pressure vignette), haptic (rumble pak building in intensity)

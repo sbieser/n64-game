@@ -1,4 +1,4 @@
-# Stage — Geyser Moon
+# Stage 5 — Geyser Moon
 
 *For a moment, you are going the wrong way.*
 
@@ -24,9 +24,25 @@ The plume disperses at altitude. The player emerges above the moon in thin space
 
 ## Threat
 
-No single environmental threat dominates. The geyser jet's core is dangerous if the player drifts into it (ice particle impact, structural stress). The margins are navigable.
+No single environmental threat dominates. The geyser jet's core is dangerous if the player drifts into it — ice particle impact, structural stress. The margins are navigable.
 
-The operative challenge is disorientation: holding the correct heading while the environment carries you in the wrong direction. The cosmic signal is behind rather than ahead for the duration of the plume. The player must trust it will return to its correct position when the plume releases them.
+Oxygen depletes as in the void stages. On the surface approach and after emergence, ghost charges are available. Inside the plume itself there are no ghosts — the geyser takes them.
+
+See `mechanics/oxygen.md`.
+
+---
+
+## Seeking
+
+The seeking loop here is orientation under displacement.
+
+Inside the plume, the cosmic signal is behind rather than ahead. The player cannot seek toward it — the environment is carrying them in the wrong direction. The seeking here is about holding the signal in memory: knowing where it was before the plume took you, trusting it will return to the correct position when you emerge.
+
+**After emergence:** the signal is ahead again. The player reorients — the full seeking loop applied fresh, with the correct heading newly clear after the disorientation of going wrong. The contrast teaches what the correct orientation feels like by removing it and returning it.
+
+The ghost_reacher's position is findable from above after emergence: its signal is upward at the rim of the ejection point, not along the departure path. Finding it requires dropping back toward the moon surface after the plume releases the player.
+
+See `mechanics/seeking_mechanic.md`.
 
 ---
 
@@ -44,11 +60,33 @@ Ghost ships inside the plume are carried up and ejected — they do not persist 
 
 **Resource:** oxygen charges. This is still space above the moon's thin atmosphere — normal oxygen replenishment from surface ghosts on the approach. Inside the plume there are no ghosts to find.
 
+See `mechanics/ghosts.md`.
+
 ---
 
-## Return Memory Trigger
+## Return: Memory Fragment
 
-Brief movement in the wrong direction, then re-orientation. On the return journey — already going the right direction — this stage triggers a memory of having been lost briefly, specifically, and finding the way back. Not dramatic disorientation. A small wrong turn. The specific feeling of realizing you've been going wrong and the moment of correcting. The relief that is also slightly funny because it was never actually serious.
+*Trigger: the path between two places, walked so many times*
+
+The path from the front house to the back house. Not far. Walked so many times the ground remembered it. Going meant something — not just movement, but intention. The grandparents were there. You went because you were wanted there, or because you wanted to be there, and those were the same thing.
+
+See `mechanics/memories.md` for the crystallization moment and accumulation mechanics.
+
+---
+
+## Atmosphere
+
+**Visual:**
+
+The geyser plume is the stage's defining visual: a column of ice crystals and water vapor rising from the moon's surface, catching light from the distant sun and scattering it. Inside the plume, the player is surrounded by particles moving in one direction — everything going up and outward, the player among it.
+
+Above the plume: the host planet fills a significant portion of the sky. Its ring system — partly made of material this moon has been contributing for millions of years — is visible as a band. The player emerging above the geyser and seeing the ring above is the stage's clearest spatial moment: the player understands what they were inside and what they contributed to.
+
+The geyser rim has its own visual character: fractured ice, dark vents where gas escapes before the main eruption, the ghost_reacher frozen into the surface at the point of maximum upward force.
+
+**Audio:**
+
+The roar of the plume: a physical sound, large and low, felt as much as heard. Inside the column the sound is total — particles streaming past, the deep pressure of ejected material. Above the plume: sudden silence. The contrast is the stage's most dramatic audio moment. The player emerges from noise into quiet, and the signal is clear ahead.
 
 ---
 
@@ -56,5 +94,5 @@ Brief movement in the wrong direction, then re-orientation. On the return journe
 
 - Whether the plume is a single upward traversal or the player dips in and out at different altitudes
 - How to represent the geyser column visually on N64 hardware — particle column, geometry, translucency
-- The host planet above: Saturn analogue, its ring visible, the player understanding they are contributing to it
-- Sound design: the roar of the plume, the silence above it when they emerge
+- Sound design: whether the roar-to-silence transition at emergence is abrupt or gradual
+- Whether finding the ghost_reacher is required before departure or optional

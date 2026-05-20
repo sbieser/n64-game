@@ -68,6 +68,16 @@ Ghosts here don't accumulate into fields. They appear where the cold won — in 
 
 ---
 
+## Return: Memory Fragment
+
+*Trigger: specific cold, a particular winter*
+
+The river in winter. Everything stiller. The deer still came to the bank at certain hours — they didn't stop because of the cold, they just moved differently. Cold in a specific way, the cold of that particular property and no other, the way the morning felt before the sun cleared the hill.
+
+See `mechanics/memories.md` for the crystallization moment and accumulation mechanics.
+
+---
+
 ## Atmosphere
 
 - The gas giant fills the upper sky — banded storms visible, enormous, static. It does not acknowledge you.

@@ -1,4 +1,4 @@
-# Stage — Dark Nebula
+# Stage 13 — Dark Nebula
 
 *Inside the dark nebula, the stars are gone. You are inside something that swallowed them.*
 
@@ -22,11 +22,23 @@ Free-roam. The most patient, most quiet free-roam stage. Oxygen is the resource,
 
 ---
 
+## Threat
+
+Oxygen. The dark nebula is vacuum, not atmosphere — the hull is safe from heat and pressure, but nothing provides oxygen beyond ghost ships. The haptic-dominant seeking loop is slower than audio seeking, which means the player spends more time orienting before committing to movement. Oxygen depletes during that patient rotation.
+
+See `mechanics/oxygen.md`.
+
+---
+
 ## Seeking — Haptic Dominant
 
 The rumble pak carries the Colossus's gravitational wave signature. Intensity is distance. Rhythm — the slight irregularity of the wave pattern, the same organic quality the audio signal always had — is direction. The player rotates and reads the vibration.
 
 This is navigation by feel alone. No visual reference, no audio signal strong enough to orient by, no thermal gradient. Just the rumble pak, and patience, and the Colossus somewhere ahead in the dark.
+
+**Stop → Rotate → Feel the vibration change → Find the strongest direction → Thrust**
+
+The player has been building toward this for thirteen stages. Every other sensing modality was preparation for trusting the one that remains when everything else is gone.
 
 See `mechanics/seeking_mechanic.md` for the haptic gravitational wave mechanic.
 
@@ -50,19 +62,43 @@ The dark nebula is the stage where ghost ships feel most like ghosts. Appearing 
 
 **Resource:** oxygen charges. Standard space-stage mechanic.
 
+See `mechanics/ghosts.md`.
+
 ---
 
-## Return Memory Trigger
+## Return: Memory Fragment
 
-Vast dark that swallowed the stars. On the return journey — now carrying memories accumulated across every stage — this space triggers the memory of dark that felt like a room. The specific quality of darkness that feels contained rather than infinite. Being inside something dark and that being enough. The dark before sleep. The dark of a familiar space with the lights off.
+*Trigger: total darkness, a familiar room with the lights off*
 
-The forward journey felt this darkness as the last obstacle. The return feels it as shelter. Same dark. Everything the player brings to it has changed.
+The dark of a familiar room with the lights off. Not threatening. A corner room that knew you. The specific darkness of a place you'd been in the dark so many times that the dark itself was familiar. You knew where everything was. You didn't need light. This darkness was a room.
+
+The forward journey felt this darkness as the last obstacle before the Colossus. The return feels it as shelter. Same dark. Everything the player brings to it has changed.
+
+See `mechanics/memories.md` for the crystallization moment and accumulation mechanics.
+
+---
+
+## Atmosphere
+
+**Visual:**
+
+The transition into the dark nebula is a closing: stars at the edges of the cloud, then the dust density increases, then the star field closes behind the player like a door. Inside: nothing. Ship lights illuminate a sphere of dust particles — they catch the light and scatter it back, giving the immediate vicinity a faint haze, but revealing nothing beyond.
+
+The ghost_reacher emerges from the dark as the ship lights reach it: first a shape, then details, then the reaching arm. The dust has settled on it uniformly. It looks like it belongs here, which it does.
+
+Color: the dust has a slight reddish-brown quality at the cloud's edges, where light from outside catches it. Inside, no color. Just the ship's own lighting and what it touches.
+
+**Audio:**
+
+Quieter than any stage since Stage 9. The audio signal is scattered and diffuse — present, but not localizable by ear. The rumble pak is the navigation instrument. What fills the audio space is only the ship, and the faint presence of the signal, and patience.
+
+The Colossus's signal — via haptic — is the strongest it has been. The player is close. That proximity is felt in the vibration, not heard.
 
 ---
 
 ## Open
 
 - How complete the darkness is — whether any ambient light exists inside the nebula or whether it is absolute
-- Visual representation of the dust: particle density, color (dark nebulae often appear slightly reddish-brown at edges), texture
+- Visual representation of the dust: particle density, color, texture at the cloud's edges
 - Whether the ghost_reacher emerging from the dark as you approach is a dramatic moment or a quiet one — probably quiet
 - The transition out of the dark nebula into the Colossus's presence: stars reappearing, then something else

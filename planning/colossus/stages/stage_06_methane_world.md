@@ -1,4 +1,4 @@
-# Stage — Methane World
+# Stage 6 — Methane World
 
 *It looks almost right. That is the strange part.*
 
@@ -24,7 +24,23 @@ No dangerous heat, no cold, no crushing pressure. The threat here is navigation:
 
 The mechanic: find fog-free corridors. Navigate by brief windows of clarity. Orient during the clear moments, commit to direction before the fog closes again.
 
-This is the same patient orientation discipline as the void — stop, rotate, listen, orient, move — but instead of empty space, the player is inside an alien atmosphere they cannot see through. The fog forces the same stillness the void asked for.
+This is the same patient orientation discipline as the void — stop, rotate, listen, orient, move — but instead of empty space, the player is inside an alien atmosphere they cannot see through.
+
+See `mechanics/oxygen.md` — oxygen is the operative resource here; this stage uses no separate planetary threat mechanic.
+
+---
+
+## Seeking
+
+The fog forces the same patient discipline as Stage 1's void: the signal is present but attenuated, and the player cannot move blindly.
+
+The ghost_reacher's signal is the primary navigation tool here. Methane does not block it the way ice does — the signal from the partially submerged ghost_reacher at the stage's end carries clearly through the fog. The player uses it the way they used the Stage 1 beacon: as a heading to orient toward during windows of clarity.
+
+**Stop → Rotate → Listen → Find the ghost_reacher's signal through the fog → Move → Stop when the fog closes**
+
+The seeking loop runs slower here than in open space. The windows of clarity constrain when the player can orient, not just where they can go. Patience applied under different constraints.
+
+See `mechanics/seeking_mechanic.md`.
 
 ---
 
@@ -42,17 +58,41 @@ Ghost ships on the surface or in the methane terrain persist normally, coated in
 
 **Resource:** oxygen charges. The methane atmosphere is alien but the ship is still a ship. The oxygen mechanic continues as in the void stages — this moon has no breathable air, but the ghost's oxygen supply is unchanged.
 
+See `mechanics/ghosts.md`.
+
 ---
 
-## Return Memory Trigger
+## Return: Memory Fragment
 
-The almost-familiar wrongness. On the return, this environment triggers a memory of something that looked like something else — a place seen in the wrong light, a thing almost recognized. The specific experience of looking twice. Something familiar made strange by a small difference. The feeling of almost-recognition that doesn't quite resolve.
+*Trigger: crossing into somewhere almost-familiar*
+
+A bridge over the river into the neighbor's yard. Horses on the other side. Rabbits. Two women's long friendship making a path between their properties — crossing it meant being in someone else's world that was also somehow home. The horses knew you. The rabbits did not. You crossed it so many times that crossing it felt like a word you'd said until it lost meaning, and then found again.
+
+See `mechanics/memories.md` for the crystallization moment and accumulation mechanics.
+
+---
+
+## Atmosphere
+
+**Visual:**
+
+Orange. The haze is omnidirectional — it has no source, comes from no direction, simply exists as the quality of light here. Everything is slightly amber, slightly diffuse, slightly wrong.
+
+The methane lakes are the stage's spatial anchors: their surfaces reflect the haze-filtered sky in a way that reads as water at first glance and as something alien on the second. The shorelines are real — they are just made of the wrong things, and the liquid is the wrong liquid. The geometry of coast is deeply familiar. Nothing about the coast is familiar.
+
+Methane rain falls during parts of the traversal — a heavier sound than water, lower-pitched. Visible as darker streaks through the haze.
+
+**Audio:**
+
+The haze muffles everything. The cosmic signal is quieter here than it has been since Stage 1. The ghost_reacher's signal is the dominant navigational sound — clearer, warmer, cutting through what the atmosphere scatters.
+
+Methane rain has a distinct audio character: slower drops, heavier impact, a wetter sound than water rain somehow. The wind through the atmosphere carries a low continuous moan.
 
 ---
 
 ## Open
 
 - How to represent methane fog on N64 — distance fog, color shift, reduced draw distance
-- Whether the methane lake is visible at the stage's end or only the ghost_reacher's reaching arm
-- Sound design: methane rain sounds different from water rain — lower pitch, heavier drops
+- Whether the methane lake is visible at the stage's end or only the ghost_reacher's reaching arm above the surface
 - Whether any bioluminescence exists in the methane — speculation, but a visual possibility
+- Sound design: how different methane rain needs to be to read as wrong
