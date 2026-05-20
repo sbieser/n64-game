@@ -1,10 +1,10 @@
-# Stage 4 — The Approach / Arrival
+# Stage N+1 — The Approach / Arrival
 
 *He is here. He has always been here.*
 
 ---
 
-## Stage 4 — The Approach
+## The Approach
 
 **Mode:** Rails at full intensity, then dissolving.
 
@@ -25,6 +25,14 @@ The camera spirals in slowly, inevitably. At a certain distance, the geometry of
 A hold. Six seconds, maybe more. Nothing to do. Just be inside it.
 
 Then: the selector. No explanation. No score. No ending screen.
+
+---
+
+## The Hinge — Return Journey Begins
+
+The Colossus is the still center. After the hold, the player does not choose to return — it is simply what happens. The same way arriving was inevitable, leaving is inevitable.
+
+The return journey begins here. All stages traverse in reverse. The signal inverts: exterior cosmic → interior memories. Control authority begins climbing back toward 1.0. See `return_journey.md`.
 
 ---
 

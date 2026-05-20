@@ -13,7 +13,7 @@ The game is stage-based, not run-based. Completing a stage unlocks the next one.
 
 Ghosts accumulate permanently — they are world state, not session state. The void on a first visit is nearly empty. After many visits it is populated with the history of every attempt. The space remembers everyone who tried.
 
-**Save backend:** SRAM (32 KB cartridge SRAM). Compatible with SummerCart 64 and EverDrive flash cartridges, and all major emulators. Stage unlock state fits in a single byte bitmask. Ghost pools for all stages fit comfortably within the 32 KB limit.
+**Save backend:** SRAM (32 KB cartridge SRAM). Compatible with SummerCart 64 and EverDrive flash cartridges, and all major emulators. Stage unlock state fits in a two-byte bitmask (16 bits covers up to 16 stages). Ghost pools for all stages fit comfortably within the 32 KB limit.
 
 ---
 

@@ -68,6 +68,18 @@ Oxygen persists from Stage 1. Ghosts from Stage 1 may appear in the early part o
 
 ---
 
+## The Ghost_Reacher
+
+At the far edge of the young star field — the point where the EM noise finally dies away and the signal becomes clean again. Not near the young stars. Past them, in the quiet on the other side.
+
+This ghost_reacher made it through the noise. Every wrecked ship in the stage died turned toward the light. This one kept the signal and followed it to the boundary. It stopped here, still reaching, oriented away from the stars and toward whatever comes next.
+
+Older than Stage 1's ghost_reacher — how much older is not stated. The player reads it through what the environment has done to it, which is very little. The void at the edge of the star field is quiet. Things drift here without being disturbed. The ghost_reacher has been drifting at the boundary for a long time.
+
+The moment of finding the ghost_reacher and the moment the noise finally resolves are the same moment. The player breaks through the interference and there it is — clear signal, clear figure, still pointing forward.
+
+---
+
 ## Open Questions
 
 - Is there a specific landmark or moment that defines the stage end — a formation, a particular star, something that reframes the space the way the ghost_reacher reframes Stage 1? Or does Stage 2 end simply when the signal leads out of the young star field into clearer space?

@@ -12,9 +12,9 @@ Free-roaming. No fixed path. No explicit objective. The player has full control 
 
 ## Controls
 
-Stage 1 is the first expression of the base controls — full free-roam, no auto-forward, full player thrust authority. See `controls.md` for the complete movement and oxygen/thrust mechanics.
+Stage 1 is the first expression of the base controls — full free-roam, no auto-forward, full player thrust authority. See `mechanics/controls.md` for the complete movement and oxygen/thrust mechanics.
 
-The seeking loop — stop, rotate, listen, find direction, thrust — is introduced here and documented in `seeking_mechanic.md`.
+The seeking loop — stop, rotate, listen, find direction, thrust — is introduced here and documented in `mechanics/seeking_mechanic.md`.
 
 ---
 

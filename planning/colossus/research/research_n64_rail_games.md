@@ -82,7 +82,7 @@ Not a rail game, but the most relevant N64 game emotionally.
 ## Notes and Implications for The Colossus
 
 - Star Fox 64's ~45-minute run time for a casual player feels like the right target range for a single run
-- The "no save between runs" design of Star Fox is interesting — each run is complete in itself. Our ghost mechanic already leans this way (EEPROM accumulates across runs, but the run itself is one session)
+- The "no save between runs" design of Star Fox is interesting — each run is complete in itself. Our ghost mechanic already leans this way (SRAM accumulates ghost positions across runs, but the run itself is one session)
 - Sin and Punishment's choice to make the player a *person* rather than a ship is directly relevant — we already made this choice
 - Pokémon Snap's scoring-by-observation model is worth keeping in mind if we ever want a non-death progress metric
 - Majora's Mask proves N64 audiences can sit with an unresolved emotional question — the Colossus's ambiguity isn't a risk for this platform's audience

@@ -203,20 +203,24 @@ This is also where the Colossus becomes most present. It is saturating everythin
 
 ---
 
-### Suggested Stage Arc
+### Stage Arc
 
-| Stage | Primary sense | Scientific basis |
+| Stage | Primary sense | Notes |
 |---|---|---|
-| Stage 1 | Audio — volume + pan | EM plasma waves |
-| Stage 2 | Audio — noise interference | Stellar EM emissions |
-| Stage N | Audio — Doppler shift | Relative velocity redshift |
-| Stage N | Thermal — heat gradient | Infrared radiation |
-| Stage N | Haptic — gravitational waves | Spacetime ripples, rumble pak |
-| Stage N | Visual — gravitational lensing | Spacetime curvature |
-| Stage N | Synthesis — multiple simultaneous | All of the above |
-| Rails | All senses overwhelmed | Inside the field |
-
-Stage numbers are not fixed. These are challenge types to be distributed across the seeking stages as each space's character demands. A single stage may introduce one new sense or combine several.
+| 1 — The Void | Audio — volume + pan | Baseline. Signal in silence. |
+| 2 — Young Star Field | Audio — noise interference | Stellar EM competes with the Colossus signal |
+| 3 — Ice Moon | Thermal — heat gradient (inverted) | Seeking geothermal warmth to survive; same tool, different purpose |
+| 4 — Volcanic Moon | Thermal — heat gradient (reversed) | Seeking cool margins; thermal mechanic inverted from Stage 3 |
+| 5 — Geyser Moon | Orientation / disorientation | No dedicated new sense; challenge is holding direction while carried wrong |
+| 6 — Methane World | Audio — attenuated signal through fog | Signal still present but scattered; patience in brief clear windows |
+| 7 — Ocean Interior | No seeking — rails + pressure | Direction given by current; depth management replaces signal orientation |
+| 8 — Storm World | Audio — rhythmic timing | Signal present but seeking constrained by lightning discharge rhythm |
+| 9 — The Rogue | Thermal — gradient (diffuse) | No vent points; warmth is everywhere slightly; fine gradient navigation |
+| 10 — Ringed Gas Giant | Visual — gravitational lensing | First purely visual seeking; stars bent by Colossus mass |
+| 11 — Pulsar | Audio — Doppler shift + rhythm | Signal in windows between pulsar sweeps; Doppler on movement |
+| 12 — Supernova Remnant | Synthesis — all senses | Audio + thermal + haptic + visual required simultaneously |
+| 13 — Dark Nebula | Haptic — gravitational waves | Rumble pak primary; dust blocks all other channels |
+| Rails | All senses overwhelmed | Inside the gravity field; no seeking needed |
 
 ---
 
