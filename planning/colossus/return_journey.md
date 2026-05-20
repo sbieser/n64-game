@@ -38,7 +38,7 @@ This is the Proustian register. The grand events of a life are easy to summarize
 
 The memories in the return journey should feel like this. Small. Specific. Slightly strange. Not explained. The player encounters a fragment and recognizes it without being told what it is. The cosmic thing encountered on the forward journey, and the small personal thing recovered on the return, turn out to be the same size. Both were always there. The journey was required to see it.
 
-See `mechanics/memories.md`.
+See `mechanics/memories.md` for the full fragment list — each fragment mapped to its return stage and the environmental trigger that surfaces it.
 
 ---
 
