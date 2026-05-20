@@ -208,11 +208,52 @@ No score. No completion percentage. Just: a vague heading or a precise one.
 
 When the player reaches a fragment's source — the position in the stage where the memory signal is strongest — something quiet happens.
 
-A brief warm color wash across the screen, the palette shifting from the stage's environmental tone toward something interior and small. The fragment audio plays complete for the first time — the full version, not the partial. Two or three seconds of something specific and warm. Then the stage resumes.
-
 Not a cutscene. Not a UI notification. A breath. The same register as reaching the ghost_reacher on the forward journey — arrival, not victory. Something changed. The stage continues.
 
-On subsequent visits to that stage, the crystallized fragment's audio plays faintly in the background at that position — not the full crystallization, just a whisper. Evidence that something was here. The space remembers.
+---
+
+**The color language**
+
+Every stage has a dominant color temperature: the ice moon is cold blue-white, the storm world is charged grey-yellow, the dark nebula is near-total black. The crystallization introduces a color that belongs to none of them — a warm amber, the color of electric light in a window at night.
+
+This is distinct from the Colossus's warmth. The late forward journey also shifts toward amber and orange as the Colossus's presence saturates everything — but that warmth is vast, almost solar, the color of something burning at stellar scale. The crystallization amber is smaller. More specific. The color of a lamp in a room, not a star.
+
+The player will feel the difference without being told why. One warmth is overwhelming. The other is a room.
+
+---
+
+**The sequence**
+
+**Onset — ~1 second:**
+The stage environment dims slightly — not a fade to black, but as if the contrast dropped a few degrees. Everything still visible, just quieter. Simultaneously, a warm bloom begins at the screen's center. Not a flash, not a pulse — a bloom. It expands slowly outward, amber at its core, feathering to transparent at the edges.
+
+**Hold — 2–3 seconds:**
+The bloom fills most of the screen but not all — the outermost edges of the stage remain faintly visible, a rim of cold against the warm center. This is important: the stage is still there. The memory is not replacing the world. It is arriving inside it.
+
+The fragment audio plays complete — the full version, unobstructed, for the first and only time. The audio is the anchor. The visual holds until the audio finishes, then one beat of silence.
+
+**Release — ~1 second:**
+The bloom recedes back to center, slowly. The stage environment returns to its normal brightness and color temperature. The cold of the ice moon reasserts. The amber is gone.
+
+The return to the stage should feel like surfacing. The stage didn't change. The player did.
+
+---
+
+**The whisper — subsequent visits**
+
+On any future visit to that stage, the position where the fragment was found holds a faint residue. A very soft warm glow at that world-space position — the same amber, almost invisible, roughly the scale of a ghost ship's vent effect but warm instead of cold blue. Not a marker. Not a waypoint.
+
+Evidence that something was here. The player who found the fragment will recognize it. The player who hasn't will pass by it without understanding — or will notice something warm in a cold place and seek toward it, and find it.
+
+---
+
+**N64 implementation notes**
+
+- **Stage dimming:** temporarily lower the ambient light color/intensity, ramped over ~0.5 seconds. Already within the lighting system's existing controls.
+- **Bloom:** a full-screen color quad at center, additive or alpha blending, scaling up over ~1 second. Large enough to dominate the screen, not so opaque that the stage disappears entirely.
+- **Feathering:** achieved with vertex alpha on the quad — full alpha at center vertices, zero at edges.
+- **Color:** warm amber. Not the same value as the arrival stage's warmth. Slightly more golden, less orange. The distinction matters.
+- **Whisper glow:** a small world-space sprite at the fragment position, constant low alpha, warm color. Same system as ghost vent particles, different color and behavior.
 
 ---
 
