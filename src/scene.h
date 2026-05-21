@@ -18,6 +18,8 @@ typedef struct {
 #define SCENE_SEED       6
 #define SCENE_PHENOMENA  7
 #define SCENE_STARGATE   8
+#define SCENE_ICE_MOON   9
+#define SCENE_STAR_FIELD 10
 
 void         scene_init(void);
 void         scene_tick(void);

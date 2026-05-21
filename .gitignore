@@ -1,5 +1,6 @@
 build/
 game.z64
+assets/*.patched.glb
 .claude/
 game.eeprom
 game.pak
