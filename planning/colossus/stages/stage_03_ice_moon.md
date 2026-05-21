@@ -89,6 +89,119 @@ See `mechanics/memories.md` for the crystallization moment and accumulation mech
 
 ---
 
+## Production Layout
+
+Concrete geometry and placement spec. All measurements in world units. 1 world unit ≈ 1 meter. Player ship: ~2 units wide. Forward speed on environmental rails: ~7 units/second.
+
+**Total path length:** 5,000 units. At 7 units/second this is ~12 minutes at first traversal. No DFS streaming needed — load all geometry at stage start, use draw distance to cull.
+
+---
+
+### Zone 0 — Surface Crevasse (Z: 0 to −1,200)
+
+Open slot in the ice shelf. Narrow sky overhead, gas giant visible. The stage begins here.
+
+**Dimensions:** 60 units wide, open top, ~40 units of visible wall height per side.
+
+**Terrain chunks (wall slabs, each 200 units long, ~40 tris):**
+- Wall sections: 6 per side × 2 sides = 12 wall chunks
+- Floor sections: 6 floor chunks
+- **Zone 0 terrain total: 18 chunks**
+
+**Draw distance for terrain chunks:** 800 units (3–4 chunks visible ahead at any time).
+
+**Placed objects:**
+- Gas giant billboard: 1 large translucent quad (500 × 400 units), Y +200, always facing camera. Color: warm orange-amber (0.90, 0.55, 0.18). Draw distance: 3,000 units — visible from anywhere in zone 0.
+- Geothermal vents: 3 (cone geometry, ~20 tris each, warm amber glow). Placed at Z −200, −600, −1,000. Draw distance: 300 units.
+- Ice pillar formations: 2 (decorative vertical spires, ~30 tris each). Placed at wall edges, Z −400 and −900. Draw distance: 400 units.
+
+---
+
+### Zone 1 — Upper Cavern (Z: −1,200 to −2,400)
+
+Ceiling begins to close. The sky narrows and disappears. The gas giant is no longer visible. The space becomes intimate.
+
+**Dimensions:** 50 units wide, ceiling descends from open to 25-unit clearance over this section.
+
+**Terrain chunks:**
+- Wall sections: 6 per side = 12 wall chunks
+- Ceiling arch sections (ceiling closing): 6 chunks (each a curved panel, ~50 tris)
+- Floor sections: 6 floor chunks
+- **Zone 1 terrain total: 24 chunks**
+
+**Placed objects:**
+- Geothermal vents: 2 (Z −1,500 and −2,100). Draw distance: 300 units.
+- Ice crystal cluster: 2 formations (groups of ~5 faceted spires, ~40 tris total each). Z −1,700 and −2,300. Draw distance: 350 units.
+
+---
+
+### Zone 2 — Deep Ice (Z: −2,400 to −4,000)
+
+Enclosed tube. Near-total darkness past ship lighting (10 meters = 10 units). The longest stretch. Cold wins here if vents are missed.
+
+**Dimensions:** 40 units wide, fully enclosed, 20-unit ceiling clearance.
+
+**Terrain chunks:**
+- Wall sections: 8 per side = 16 wall chunks
+- Ceiling sections: 8 chunks
+- Floor sections: 8 floor chunks
+- **Zone 2 terrain total: 32 chunks**
+
+**Placed objects:**
+- Geothermal vents: 2 (Z −2,900 and −3,600). Spaced farther apart than earlier zones — this is where hull temperature pressure peaks. Draw distance: 300 units.
+- Ice crystal cluster: 1 small cluster (Z −3,200). Provides visual landmark in the dark.
+
+---
+
+### Zone 3 — The Ghost_Reacher Approach (Z: −4,000 to −5,000)
+
+The tube opens slightly. The ancient figure is ahead — the warmest thing in the stage, its reactor still producing faint heat after geological time.
+
+**Dimensions:** 50 units wide, ceiling rises slightly to 30-unit clearance.
+
+**Terrain chunks:**
+- Wall sections: 5 per side = 10 wall chunks
+- Ceiling sections: 5 chunks (ceiling rising — wider arch geometry)
+- Floor sections: 5 floor chunks
+- **Zone 3 terrain total: 20 chunks**
+
+**Placed objects:**
+- Ghost_reacher: 1. Positioned at Z −4,700, embedded in the right-hand wall (X +22). Still reaching forward. Draw distance: 300 units. Warm thermal signature — acts as a vent charge source, the best one on the stage.
+- Stage exit geometry: 1 archway or natural opening (Z −4,950). 
+
+---
+
+### Full Object Count
+
+| Category | Count | Tris (approx) |
+|----------|-------|--------------|
+| Terrain chunks (walls, floor, ceiling) | 94 | ~3,760 total; ~12 visible at once = ~480 tris |
+| Gas giant billboard | 1 | 2 |
+| Geothermal vents | 7 | ~140 |
+| Ice pillar formations | 2 | ~60 |
+| Ice crystal clusters | 3 | ~120 |
+| Ghost_reacher | 1 | — |
+| **Total placed objects** | **108** | — |
+| **Max tris on screen at once** | — | **~750** |
+
+750 simultaneous tris is 37–75% of the conservative N64 frame budget (1,000–2,000 tris at 30fps). Room for player ship, ghost ships, and effect geometry.
+
+---
+
+### Draw Distance Summary
+
+| Object type | Draw distance |
+|-------------|--------------|
+| Gas giant billboard | 3,000 units |
+| Terrain chunks (wall, floor, ceiling) | 800 units |
+| Ice crystal clusters | 350 units |
+| Ice pillar formations | 400 units |
+| Geothermal vents | 300 units |
+| Ghost_reacher | 300 units |
+| Ghost ships | 200 units |
+
+---
+
 ## Open
 
 - Exact thermal depletion rate and vent frequency — needs playtesting against felt tension

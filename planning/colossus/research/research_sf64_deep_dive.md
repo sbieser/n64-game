@@ -127,6 +127,127 @@ Calibration options: scale the player figure up, or shrink the play area, or mov
 
 ---
 
+## Stage Complexity — Decomp Analysis
+
+Source: `sonicdcer/sf64` repository, cloned locally at `C:\dev\sf64`. Browsed the master branch via local file system. Key files: `include/sf64object.h`, `include/sf64event.h`, `src/engine/fox_edata_info.c`, `src/engine/fox_enmy.c`, `src/overlays/ovl_i5/fox_ma.c`, `assets/yaml/us/rev1/ast_macbeth.yaml`.
+
+---
+
+### How Planet Stage Objects Work
+
+SF64 planet stages populate their world via an **ObjectInit array** stored as binary ROM data, one array per stage. Each entry is a 20-byte struct:
+
+```c
+typedef struct {
+    f32 zPos1;   // primary Z position
+    s16 zPos2;   // secondary Z (used for path/switch positioning)
+    s16 xPos;
+    s16 yPos;
+    Vec3s rot;
+    s16 id;      // OBJ_SCENERY_*, OBJ_ACTOR_*, OBJ_ITEM_*
+} ObjectInit; // 0x14 bytes
+```
+
+All objects for a stage — terrain panels, walls, enemies, items, the boss — live in a single flat array. A sentinel entry (`id == OBJ_INVALID`) marks the end. The engine loads every object in the array at stage start and activates them as the player approaches (via per-object draw distances). There is no dynamic DFS streaming of scenery objects. The total binary data fits in the stage's ROM segment.
+
+Terrain in ground stages (Corneria, Macbeth, Titania) is handled separately: `fox_ground.c` generates a grid of `Vtx` tile geometry that scrolls past the camera. This tile geometry is procedurally updated each frame and is distinct from the placed scenery ObjectInit entries. The two systems coexist: scrolling tile floor + individually placed wall/structure objects.
+
+---
+
+### Object Counts by Stage
+
+Calculated from ROM segment offsets in the YAML asset manifests. Each ObjectInit entry is 20 bytes.
+
+| Stage | Placed objects | Notes |
+|-------|---------------|-------|
+| Solar (fire planet) | **353** | Fire/lava rails stage, Vulkain boss |
+| Aquas (underwater) | **604** | Full submersible 3D corridor, slowest pace |
+| Corneria On-Rails | **804** | Tutorial planet, city/carrier setting |
+| Corneria All-Range | **530** | Separate array for the mid-stage mode switch |
+| Macbeth (train) | **902** | Most complex planet stage |
+
+Macbeth also has three additional smaller arrays:
+- `aMaCsLongTrainObjects`: 17 entries (train car formation for the opening cutscene)
+- `aMaLongTrainObjects`: 17 entries (alternate long train formation)
+- `aMaShortTrainObjects`: unknown size (short train formation)
+
+The 902-entry main array includes: 13 train track segment variants, 8 railroad switch types, buildings, walls, towers, weapons factory, distance markers, terrain bumps, floor panels, and all enemy types.
+
+---
+
+### Stage Length — Macbeth
+
+The train track geometry entries in `fox_ma.c` span world-space Z positions from **+5,174 to −507,035** — the entire pre-placed track. This is the absolute world coordinate range of physical track objects.
+
+The player's traveled path is shorter. The boss fight (Mechbeth) triggers when `gPathProgress = 115,930` and `player->pos.z = −111,130`. These sum to approximately 4,800 units of starting offset, confirming the player travels **~115,930 world units** of path before the boss encounter.
+
+After the boss, the player continues to the stage exit. Total path including boss sequence: probably 130,000–140,000 units.
+
+At SF64's standard on-rails forward speed the stage takes 4–6 minutes to traverse. The pre-placed track extends much further than the player's path because the train locomotive runs ahead of the player — the track must exist at the train's position before the player reaches it.
+
+---
+
+### Draw Distances
+
+Each entry in `gObjectInfo[]` (fox_edata_info.c) includes a `drawDist` field in world units. Objects outside this radius from the player are skipped by the renderer.
+
+Selected Macbeth values:
+```
+MA_BUILDING_1         300.0f
+MA_BUILDING_2         400.0f
+MA_TOWER              200.0f
+MA_WALL_1            1500.0f
+MA_WALL_2            2500.0f
+MA_WALL_3/4          2000–2500.0f
+MA_FLOOR_1/2/3/4     1100–1900.0f
+MA_FLOOR_6           3000.0f
+MA_TRAIN_TRACK_3     15000.0f  ← visible from far ahead (the running track)
+MA_TRAIN_TRACK_4     15000.0f
+MA_TRAIN_STOP_BLOCK  15000.0f
+MA_LOCOMOTIVE        20000.0f  ← always visible once spawned
+MA_TENDER_CAR        20000.0f
+```
+
+The long-draw-distance tracks (15,000–20,000 units) are what keep the approaching train visible across the full final stretch of the stage. Close-detail objects (buildings, small walls) use tight distances (200–400 units) to concentrate polygon budget.
+
+---
+
+### Environment Struct
+
+Each stage defines an `Environment` struct (from `sf64level.h`):
+
+```c
+typedef struct Environment {
+    s32 type;          // LEVELTYPE_PLANET or LEVELTYPE_SPACE
+    s32 unk04;
+    u16 bgColor;       // background sky color (packed RGBA)
+    u16 seqId;         // music sequence
+    s32 fogR, fogG, fogB;
+    s32 fogN, fogF;    // fog near/far distances
+    Vec3f lightDir;
+    s32 lightR, lightG, lightB;
+    s32 ambR, ambG, ambB;
+} Environment;
+```
+
+This is exactly what we configure per-stage in our game: fog color and range, directional light direction and RGB, ambient RGB, background color. One struct per stage defines the entire look.
+
+---
+
+### Implications for Our Game
+
+**Object scale:** Our planet stages are free-roam descent corridors, not long on-rails paths. We don't need 353–902 objects. A realistic target is **60–120 objects** total per planet stage (terrain chunks + placed scenery + vents + landmarks). This is well within N64 RAM — a 100-entry ObjectInit array is 2,000 bytes.
+
+**Terrain strategy:** For our planet stages, the terrain IS the placed scenery — we don't have a separately scrolling ground tile system, because our stages descend rather than fly forward. Each crevasse wall section, cavern ceiling panel, and floor slab is a separate `.t3dm` model placed from an ObjectInit-equivalent array. Draw distance culling handles what's visible.
+
+**Stage length:** We target 5,000–8,000 world units of path per planet stage at our contemplative pace (~7 units/second on environmental rails). That's 12–19 minutes of traversal. At this scale, loading all terrain geometry at stage start (no DFS streaming) is practical — 100 terrain chunks × 40 triangles × ~720 bytes of vertex data = ~72 KB, trivial.
+
+**Draw distances for our stages:** Planet terrain panels: 600–1,000 units. Vents: 300 units. Billboards: match the zone's full visible extent (e.g., gas giant: 3,000 units from anywhere in the surface zone). Ghost_reacher: 300 units (close approach required). Ghost ships: 200 units.
+
+**Space stages:** No terrain geometry at all. Stage geometry is purely: background starfield (2D, not world objects), a few 3D landmark objects (proto-stars, nebula quads, foreground star geometry), and the ghost_reacher. Total triangle count for a space stage is under 100 tris. All complexity is signal, oxygen, and navigation — not geometry.
+
+---
+
 ## All-Range Mode
 
 Several stages break from rails entirely. Identified stages with full all-range: Fichina, Katina, Bolse, Sector Z, hard-path Venom approach. Corneria easy-path mid-stage switch.

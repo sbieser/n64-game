@@ -98,6 +98,106 @@ The player learns to use the noise as spatial information — loud here means ne
 
 ---
 
+## Production Layout
+
+Concrete geometry and placement spec. All measurements in world units. Player ship: ~2 units wide. Free-roam flight speed: ~20–25 units/second.
+
+Space stages carry no terrain geometry. The stage is a volume of navigable space populated by a small number of 3D landmark objects, a background starfield (2D, not world geometry), and the ghost_reacher somewhere in the far region. Total triangle count for placed geometry is under 150 tris — the stage's visual richness comes from the starfield, color, and signal behavior, not from polygon density.
+
+**Navigable volume:** 3,200 units deep (Z: 0 to −3,200), 3,000 units wide (X: −1,500 to +1,500), 2,000 units tall (Y: −1,000 to +1,000). These bounds are soft — nothing stops the player from flying past them, but there is nothing of interest beyond them.
+
+**Ghost_reacher position:** Z −2,850, X +380, Y −120. Past all five young stars, at the quiet edge of the field where the EM noise drops away.
+
+---
+
+### Starfield Layers (2D, zero polygon cost)
+
+*Layer 1 — Background carpet:* Screen-space stars, orientation-responsive, never closer regardless of player position. 200–300 point sprites, color-varied (cold white, blue-white, occasional warm point). This is the dominant visual — dense, overwhelming.
+
+*Layer 2 — Nebula color washes:* 5 large translucent quads at extreme distances (1,500–2,500 units), not collidable. Each is a single rectangle (2 tris). These give the stage its warm quality — yellow-orange dust catching the light of forming stars. Total: 10 tris.
+
+| Quad | Color | Position | Scale |
+|------|-------|----------|-------|
+| Nebula A | Warm amber (0.85, 0.60, 0.20) | Z −2,000, X −800, Y +400 | 600 × 400 |
+| Nebula B | Deep orange (0.80, 0.45, 0.15) | Z −1,500, X +1,000, Y −200 | 500 × 350 |
+| Nebula C | Cool yellow (0.90, 0.75, 0.30) | Z −2,500, X 0, Y +600 | 800 × 500 |
+| Nebula D | Faint gold (0.70, 0.60, 0.25) | Z −800, X −1,200, Y 0 | 400 × 300 |
+| Nebula E | Rust-orange (0.75, 0.40, 0.20) | Z −3,000, X +500, Y −400 | 700 × 600 |
+
+---
+
+### Young Star Objects (3D landmarks)
+
+Five proto-stars scattered through the volume. Each is a core geometry object plus a billboard halo quad. The halo faces the camera always. The core is a small bright sphere (~8 tris). Together: ~12 tris per star.
+
+Stars have a **noise radius** — within this distance the Colossus audio signal degrades. The player must navigate around them rather than through them.
+
+| Star | Position | Color | Noise radius | Notes |
+|------|----------|-------|-------------|-------|
+| Star 1 | Z −480, X −780, Y +120 | Blue-white (0.80, 0.90, 1.00) | 350 units | Smallest, most energetic |
+| Star 2 | Z −850, X +1,100, Y −80 | Yellow-white (1.00, 0.95, 0.75) | 400 units | Solar analog |
+| Star 3 | Z −1,300, X −60, Y +200 | Bright white (1.00, 1.00, 0.90) | 500 units | Largest, most obstructive — directly in path |
+| Star 4 | Z −1,850, X −620, Y −150 | Orange (1.00, 0.70, 0.35) | 400 units | Most luminous, red-shifted |
+| Star 5 | Z −2,300, X +820, Y +60 | Warm gold (1.00, 0.82, 0.40) | 300 units | Nearest to ghost_reacher; warmest palette |
+
+The ghost_reacher is ~700 units past Star 5, in the quiet region where the star's noise has faded. Star 5's warm gold is the visual cue — the ghost_reacher is on the other side of the warmest light.
+
+**Total young star geometry:** 5 × 12 tris = 60 tris.
+
+---
+
+### Foreground 3D Stars (parallax landmarks)
+
+Five individual bright stars as actual 3D geometry — close enough that they show real parallax as the player moves. Not proto-stars, just bright individual points in near space. Each is a small cross or point geometry, ~2 tris.
+
+| Star | Position | Color |
+|------|----------|-------|
+| Foreground A | Z −280, X +520, Y +340 | Blue-white |
+| Foreground B | Z −180, X −660, Y −210 | Cool white |
+| Foreground C | Z −440, X +880, Y −90 | Warm yellow |
+| Foreground D | Z −350, X −380, Y +450 | Pure white |
+| Foreground E | Z −500, X +200, Y −380 | Blue-white |
+
+These are the most immediate 3D objects in the stage. Their parallax drift as the player moves is what separates this from a painted backdrop — the sense of actually occupying space.
+
+**Total foreground star geometry:** 5 × 2 tris = 10 tris.
+
+---
+
+### Ghost_Reacher
+
+Position: Z −2,850, X +380, Y −120. Drifting slowly (no velocity). In the quiet past Star 5. Draw distance: 400 units.
+
+The approach: the player breaks through Star 5's noise zone. The signal clarifies. Seconds later the ghost_reacher resolves out of the starfield — it's been there, it was just another point of light until they were close enough to see it.
+
+Older than Stage 1's ghost_reacher, but the void has been kind — nothing to corrode it, nothing to disturb it. It has drifted slightly from wherever it stopped originally, pushed by the residual stellar wind off Star 5. The direction it faces is still correct.
+
+---
+
+### Ghost Ship Positioning
+
+Ghost ships accumulate near young stars — this is where players die, chasing warmth and light instead of signal. A well-visited stage will show a visible cluster of wrecks near Star 3 (the obstructive central star) and smaller clusters near Stars 1 and 2 (early distractions).
+
+The ghost_reacher's approach corridor (past Star 5) will be sparse. Few players have made it this far without running out of oxygen first.
+
+Draw distance: 250 units (longer than in planet stages — open space, no occlusion, ghosts should be findable by sight more easily).
+
+---
+
+### Full Object Count
+
+| Category | Count | Tris |
+|----------|-------|------|
+| Nebula quads | 5 | 10 |
+| Young star objects (core + halo) | 5 | 60 |
+| Foreground parallax stars | 5 | 10 |
+| Ghost_reacher | 1 | — |
+| **Total placed geometry** | **16** | **~80 tris** |
+
+Fewer than 100 tris of stage geometry for the entire space. The visual complexity is entirely the 2D starfield and signal behavior. This is the right approach — open space should feel empty, not dense.
+
+---
+
 ## Open
 
 - Is there a specific landmark or moment that defines the stage end — a formation, a particular star, something that reframes the space the way the ghost_reacher reframes Stage 1? Or does Stage 2 end simply when the signal leads out of the young star field into clearer space?
