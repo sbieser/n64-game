@@ -6,7 +6,9 @@
 
 ## Structure
 
-The game is stage-based, not run-based. Completing a stage unlocks the next one. Stages can be revisited freely. The player progresses over as many sessions as they need.
+The game is stage-based, not run-based. Completing a stage unlocks the next one. Stages can be revisited freely at any time. The player progresses over as many sessions as they need.
+
+**Stage select:** A map screen showing only unlocked stages — SF64-style, but linear rather than branching. The player chooses which stage to enter from this map. Completed stages are always accessible; locked stages are not shown. This is the game's only menu beyond start.
 
 **What persists:** Stage unlock state. Ghost positions and charge counts in every stage.  
 **What does not persist:** The player's position within a stage. Each visit starts fresh from the beginning.
@@ -30,16 +32,15 @@ Exterior signal    → Physics takes over → Carried     → The still center
                      (the hinge point)
 
 RETURN JOURNEY
-Reverse rails    → Reverse seeking stages → The void
-Agency returns   → Interior signal        → Back to origin
-                   (memories)
+Any unlocked stage, any order — memory fragments now present
+Interior signal (memories) → Stage 1 culminates → Heading found
 ```
 
 **Forward journey:** The seeking stages vary in number, length, and challenge. The signal develops. The space grows stranger. New sensing modalities are introduced gradually. The threshold crossing is a gradual realization — the player notices the drift, then notices they can't stop it, then understands they've been inside the gravity well for a while. The transition to rails is physics, not a mechanic. The Colossus is not pulling you. It is simply massive.
 
 **The hinge:** Arrival at the Colossus. The hold. The still center. See `stages/stage_arrival.md`.
 
-**Return journey:** The player travels back through all stages in reverse. The seeking loop is mechanically identical but the signal inverts — from external cosmic signal to interior memories. Control authority climbs back toward 1.0 as the player moves away from the Colossus. Ghost ships become witnesses rather than resources. The journey ends in the void of Stage 1, visually identical to the opening, the player carrying everything the journey gave them. See `return_journey.md`.
+**Return journey:** Stages are always revisitable once unlocked. After reaching the Colossus, memory fragments appear within every previously completed stage. The player revisits stages in any order, using the same seeking loop — but the signal has inverted from exterior cosmic to interior personal. Ghost ships become witnesses rather than resources. Stage 1 is the culmination: revisiting the void with enough fragments assembled resolves into a heading. See `return_journey.md`.
 
 ---
 

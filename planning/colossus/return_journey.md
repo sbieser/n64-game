@@ -10,11 +10,11 @@ The Colossus is the hinge point of the game. The forward journey ends there. The
 
 ---
 
-## Revisiting Stages
+## Memory Fragments Appear
 
-Completing the forward journey changes what the stages are. What were destinations on the way out become places that can be returned to — in any order, at any time. The player can revisit any stage and seek the memory fragments scattered within it.
+Stages are always revisitable once unlocked. The player can return to any completed stage at any time — before or after reaching the Colossus. What completing the forward journey changes is not access. It is what is there.
 
-The stages are the same stages, the same spaces, the same threats. What has changed is the signal the player is following, and what the player is carrying from having been to the Colossus.
+After the Colossus, memory fragments appear within every previously completed stage. The seeking loop runs identically, but the signal is now interior rather than exterior — personal, small, specific. The player returns to the same spaces and finds something new in them.
 
 ---
 
