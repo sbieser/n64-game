@@ -157,6 +157,38 @@ t3d_light_set_count(1);                           // how many non-ambient lights
 // directional lights must be re-set after each t3d_viewport_attach (they depend on view matrix)
 ```
 
+## GLB Export Pipeline (Blender → .t3dm)
+
+Stage geometry requires a two-step export. Do NOT skip either step — the failures are silent.
+
+**Step 1 — Export from Blender with `export_materials='NONE'`:**
+```python
+win = bpy.context.window_manager.windows[0]
+with bpy.context.temp_override(window=win, active_object=mesh_objects[0]):
+    bpy.ops.export_scene.gltf(
+        filepath=out_path,
+        export_format='GLB',
+        use_selection=True,
+        export_apply=True,
+        export_normals=True,
+        export_attributes=True,   # exports COLOR_0 vertex colors (Blender 5.1 name)
+        export_yup=False,
+        export_materials='NONE',  # MUST be NONE — see below
+    )
+```
+
+**Step 2 — Patch material index, then convert:**
+```bash
+python patch_glb_material.py input.glb patched.glb
+gltf_to_t3d patched.glb output.t3dm --base-scale=1
+```
+
+**Why `NONE` + patch:** `gltf_to_t3d` requires `"material"` on every primitive or it silently skips all geometry (output is a valid but empty 65-byte `.t3dm` — no error). `export_materials='NONE'` removes that field but is required to preserve vertex colors: `'PLACEHOLDER'` and `'EXPORT'` suppress `COLOR_0` export unless the Blender material node tree explicitly references vertex color, which stage materials don't.
+
+**Why `--base-scale=1`:** The default scale of 64 overflows int16 for any coordinate > ~512 units. Stage geometry is large — always use `--base-scale=1` for stage files.
+
+**Diagnosing a broken export:** Run `python inspect_glb.py file.glb` — if any primitive shows `material=None`, the patch step was skipped or failed.
+
 ## Reference Repos (local)
 
 | Repo | Path |
