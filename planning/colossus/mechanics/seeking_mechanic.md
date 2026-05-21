@@ -99,7 +99,7 @@ On the return journey the seeking loop is mechanically identical — stop, rotat
 
 The same volume, pan, and pitch mechanics apply. The same oxygen cost of thrusting without listening first. The same patience required. The tool is unchanged. The meaning has transformed.
 
-All challenge types documented here — noise interference, dead zones, Doppler shift, thermal, gravitational — may reappear on the return journey as the player moves back through the same spaces. Losing the memory signal in stellar noise carries different weight than losing the Colossus signal, but the mechanic is identical.
+All challenge types documented here — noise interference, dead zones, Doppler shift, thermal, gravitational — may reappear on the return journey as the player revisits those spaces. Losing the memory signal in stellar noise carries different weight than losing the Colossus signal, but the mechanic is identical.
 
 See `mechanics/memories.md` for the memory signal specifically.
 

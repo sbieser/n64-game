@@ -40,11 +40,11 @@ See `mechanics/seeking_mechanic.md` for Doppler shift and rhythmic challenge typ
 
 ---
 
-## The Ghost_Reacher
+## The Pioneer
 
-Very ancient. The star this pulsar came from burned before the solar system formed. Whatever seeker reached this ghost_reacher did so an immense time ago, in a universe that looked different from this one. The ghost_reacher sits in a stable orbital position relative to the pulsar — the one place where the pulse sweeps are regular and survivable. It found the safe harbor and stopped there.
+Very ancient. The star this pulsar came from burned before the solar system formed. Whatever seeker reached this Pioneer did so an immense time ago, in a universe that looked different from this one. The Pioneer sits in a stable orbital position relative to the pulsar — the one place where the pulse sweeps are regular and survivable. It found the safe harbor and stopped there.
 
-The signal from this ghost_reacher has the pulsar's rhythm in it — the pulse sweeps affect even the ghost_reacher's transmission. The signal comes in pulses. The player must separate the ghost_reacher's signal from the pulsar's interference to read its direction accurately.
+The signal from this Pioneer has the pulsar's rhythm in it — the pulse sweeps affect even the Pioneer's transmission. The signal comes in pulses. The player must separate the Pioneer's signal from the pulsar's interference to read its direction accurately.
 
 ---
 
@@ -74,13 +74,13 @@ See `mechanics/memories.md` for the crystallization moment and accumulation mech
 
 The pulsar itself is not directly visible — too dense, too dangerous at close range. What the player sees is its effects: the pulse sweep moving across the environment as a brightness front, a wave of increased EM that dims and washes out stars and signals as it passes. The sweep is visible, directional, regular.
 
-The safe orbital zone around the ghost_reacher has a particular quality: the sweep is regular and survivable here, but the player can see it arriving. Between sweeps: open space. During the sweep: the visual field dims and the signal drops.
+The safe orbital zone around the Pioneer has a particular quality: the sweep is regular and survivable here, but the player can see it arriving. Between sweeps: open space. During the sweep: the visual field dims and the signal drops.
 
 **Audio:**
 
 The pulse is audio as much as visual: a brief burst of EM that overwhelms the signal, followed by silence, followed by the signal returning. The Colossus signal arrives in windows — clear for a few seconds, then washed out, then clear again. The player develops a feel for the rhythm before they consciously understand it as a rhythm.
 
-The ghost_reacher's signal pulses with the interval. It has been doing this for as long as the pulsar has been spinning.
+The Pioneer's signal pulses with the interval. It has been doing this for as long as the pulsar has been spinning.
 
 ---
 
@@ -89,4 +89,4 @@ The ghost_reacher's signal pulses with the interval. It has been doing this for 
 - Pulse interval: what feels right as a rhythm — long enough to complete seeking within a gap, short enough to create real timing pressure
 - Visual representation of the pulse sweep on N64 — brightness pulse, chromatic shift, particle front
 - Whether the pulsar itself is visible at all, or only its effects
-- Whether the safe orbital zone around the ghost_reacher is clearly demarcated or must be found through experience
+- Whether the safe orbital zone around the Pioneer is clearly demarcated or must be found through experience

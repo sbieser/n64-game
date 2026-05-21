@@ -34,9 +34,9 @@ See `mechanics/oxygen.md` for the planetary equivalent table. See `mechanics/gho
 
 ## Seeking
 
-The storm is the seeking challenge. The cosmic signal competes with storm EM — audible, but harder to localize cleanly. The primary seeking work here is not toward the Colossus but toward the vortex where the ghost_reacher is.
+The storm is the seeking challenge. The cosmic signal competes with storm EM — audible, but harder to localize cleanly. The primary seeking work here is not toward the Colossus but toward the vortex where the Pioneer is.
 
-The eye of a persistent vortex — a stable structure in the storm's geometry — is the destination. The ghost_reacher's signal carries from within it: calmer, less EM noise, the organic quality of the Colossus signal present in the one place where the storm's interference is minimal. The player seeks that clarity. Moving toward calmer signal means moving toward the vortex.
+The eye of a persistent vortex — a stable structure in the storm's geometry — is the destination. The Pioneer's signal carries from within it: calmer, less EM noise, the organic quality of the Colossus signal present in the one place where the storm's interference is minimal. The player seeks that clarity. Moving toward calmer signal means moving toward the vortex.
 
 **Watch → Wait for gap → Move → Stop in the calm behind it**
 
@@ -46,11 +46,11 @@ See `mechanics/seeking_mechanic.md`.
 
 ---
 
-## The Ghost_Reacher
+## The Pioneer
 
-In the calm of a persistent vortex — a stable structure in the storm's geometry, an eye that has been rotating long enough to be considered permanent on a geological timescale. Ancient, as everything in this part of the journey is ancient. The ghost_reacher is in the only calm place in the stage, and has been there long enough that the storm has grown around it like a cathedral.
+In the calm of a persistent vortex — a stable structure in the storm's geometry, an eye that has been rotating long enough to be considered permanent on a geological timescale. Ancient, as everything in this part of the journey is ancient. The Pioneer is in the only calm place in the stage, and has been there long enough that the storm has grown around it like a cathedral.
 
-The player must navigate through the discharge zones to reach the vortex. Once inside the eye, the contrast is complete: violent storm on all sides, absolute calm at center. The ghost_reacher sits in the calm.
+The player must navigate through the discharge zones to reach the vortex. Once inside the eye, the contrast is complete: violent storm on all sides, absolute calm at center. The Pioneer sits in the calm.
 
 ---
 
@@ -80,7 +80,7 @@ See `mechanics/memories.md` for the crystallization moment and accumulation mech
 
 Cloud structures at multiple scales: the large-scale banding of the storm system, the local turbulence of active cells, the gap between them where calmer air exists. Lightning illuminates the cloud structures from within — the clouds flash, the interior of each storm cell briefly visible as a silhouette before the light fails.
 
-The eye of the vortex is the visual contrast: outside, chaos; inside, a column of still air with the ghost_reacher at its center. The cloud walls of the vortex curve upward and outward. Looking up from the eye: open sky, briefly. Stars visible for the first time since entering the atmosphere.
+The eye of the vortex is the visual contrast: outside, chaos; inside, a column of still air with the Pioneer at its center. The cloud walls of the vortex curve upward and outward. Looking up from the eye: open sky, briefly. Stars visible for the first time since entering the atmosphere.
 
 The discharge zones have a charged quality — a blue-white quality to the air that precedes a lightning strike. The player learns to read this as warning.
 
@@ -88,7 +88,7 @@ The discharge zones have a charged quality — a blue-white quality to the air t
 
 The storm is the loudest stage in the game. Wind, EM interference, lightning strikes, the continuous electromagnetic noise of weather. The cosmic signal is barely present in the thick of it — audible in the calmer lanes, overwhelmed in the discharge zones.
 
-The eye: silence. Or near-silence — the signal, clear. The ghost_reacher's signal from within the vortex is the cleanest audio the player has heard since Stage 1's open void. The contrast with the surrounding storm is the stage's emotional center.
+The eye: silence. Or near-silence — the signal, clear. The Pioneer's signal from within the vortex is the cleanest audio the player has heard since Stage 1's open void. The contrast with the surrounding storm is the stage's emotional center.
 
 ---
 

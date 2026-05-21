@@ -52,9 +52,9 @@ The player will also realize, eventually, that they are leaving traces too. Flyi
 
 ---
 
-## The Ghost_Reacher
+## The Pioneer
 
-At the signal source — the frozen humanoid figure, still reaching forward. Stage 1's ghost_reacher is recent enough that its form is clear, the reaching gesture readable, the intention unmistakable. Someone got here. They stopped here. They are still facing what they were trying to reach.
+At the signal source — the frozen humanoid figure, still reaching forward. Stage 1's Pioneer is recent enough that its form is clear, the reaching gesture readable, the intention unmistakable. Someone got here. They stopped here. They are still facing what they were trying to reach.
 
 The beacon ghost is the only placed ghost — not the result of a player death. Everyone else in this stage stopped short. The beacon ghost got here.
 
@@ -64,7 +64,7 @@ Finding it resolves a question and opens a larger one. What was it trying to rea
 
 ## Ghost Behavior
 
-Player-death ghosts render as wrecked ships — not humanoid figures. The ghost_reacher model is reserved for the beacon ghost. That distinction is the first thing the player learns about what ghost form means, without being told.
+Player-death ghosts render as wrecked ships — not humanoid figures. The Pioneer model is reserved for the beacon ghost. That distinction is the first thing the player learns about what ghost form means, without being told.
 
 See `mechanics/ghosts.md` for the full ghost system and `mechanics/oxygen.md` for the charge system.
 
@@ -96,7 +96,7 @@ Not spectacle — presence.
 
 *Layer 4 — Cosmic dust particles:* Twenty to thirty slow-drifting points streaming past the camera during flight, settling when stopped. Pure velocity feedback — the player feels movement through featureless space.
 
-*Layer 5 — The beacon:* A very slow expanding ring pulse, nearly invisible, centered on the ghost_reacher. Dim, irregular timing — not a clean game-mechanic pulse but something stranger. The moment of noticing — *what is that* — is the discovery. It should not read as "follow me." It should read as "something is there."
+*Layer 5 — The beacon:* A very slow expanding ring pulse, nearly invisible, centered on the Pioneer. Dim, irregular timing — not a clean game-mechanic pulse but something stranger. The moment of noticing — *what is that* — is the discovery. It should not read as "follow me." It should read as "something is there."
 
 **Audio:**
 
@@ -114,4 +114,4 @@ This is not a flaw. The players who stay are the ones who seek. The game is find
 
 ## Open
 
-- What triggers the stage transition — proximity to the ghost_reacher, interacting with it, or something else? The transition should feel like a consequence of arrival, not a menu.
+- What triggers the stage transition — proximity to the Pioneer, interacting with it, or something else? The transition should feel like a consequence of arrival, not a menu.

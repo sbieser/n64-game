@@ -48,13 +48,13 @@ This is not a new mechanic. It is the same mechanic applied through a different 
 
 ---
 
-## The Ghost_Reacher
+## The Pioneer
 
-At the stage's end, past a long descent through the ice, the ghost_reacher is frozen into a cavern wall. Not near the surface — deep, where the ice is ancient and layered. The figure still faces forward, still reaching. But it is encased. The ice grew around it across an immense span of time.
+At the stage's end, past a long descent through the ice, the Pioneer is frozen into a cavern wall. Not near the surface — deep, where the ice is ancient and layered. The figure still faces forward, still reaching. But it is encased. The ice grew around it across an immense span of time.
 
-This ghost_reacher is vastly older than Stage 2's. The ice grew around it. That takes geological time. The player understands something about scale here — not spatial scale, but temporal. Someone was here before any living human's reckoning.
+This Pioneer is vastly older than Stage 2's. The ice grew around it. That takes geological time. The player understands something about scale here — not spatial scale, but temporal. Someone was here before any living human's reckoning.
 
-The signal from this ghost_reacher is muffled by ice. The player must move close to read it clearly. When they do: the signal is warm. The ghost_reacher's reactor is still producing a faint thermal signature after all this time. The warmest thing on this moon. Preserved by the same cold that would kill anyone who came unprepared.
+The signal from this Pioneer is muffled by ice. The player must move close to read it clearly. When they do: the signal is warm. The Pioneer's reactor is still producing a faint thermal signature after all this time. The warmest thing on this moon. Preserved by the same cold that would kill anyone who came unprepared.
 
 ---
 
@@ -153,7 +153,7 @@ Enclosed tube. Near-total darkness past ship lighting (10 meters = 10 units). Th
 
 ---
 
-### Zone 3 — The Ghost_Reacher Approach (Z: −4,000 to −5,000)
+### Zone 3 — The Pioneer Approach (Z: −4,000 to −5,000)
 
 The tube opens slightly. The ancient figure is ahead — the warmest thing in the stage, its reactor still producing faint heat after geological time.
 
@@ -166,7 +166,7 @@ The tube opens slightly. The ancient figure is ahead — the warmest thing in th
 - **Zone 3 terrain total: 20 chunks**
 
 **Placed objects:**
-- Ghost_reacher: 1. Positioned at Z −4,700, embedded in the right-hand wall (X +22). Still reaching forward. Draw distance: 300 units. Warm thermal signature — acts as a vent charge source, the best one on the stage.
+- Pioneer: 1. Positioned at Z −4,700, embedded in the right-hand wall (X +22). Still reaching forward. Draw distance: 300 units. Warm thermal signature — acts as a vent charge source, the best one on the stage.
 - Stage exit geometry: 1 archway or natural opening (Z −4,950). 
 
 ---
@@ -180,7 +180,7 @@ The tube opens slightly. The ancient figure is ahead — the warmest thing in th
 | Geothermal vents | 7 | ~140 |
 | Ice pillar formations | 2 | ~60 |
 | Ice crystal clusters | 3 | ~120 |
-| Ghost_reacher | 1 | — |
+| Pioneer | 1 | — |
 | **Total placed objects** | **108** | — |
 | **Max tris on screen at once** | — | **~750** |
 
@@ -197,7 +197,7 @@ The tube opens slightly. The ancient figure is ahead — the warmest thing in th
 | Ice crystal clusters | 350 units |
 | Ice pillar formations | 400 units |
 | Geothermal vents | 300 units |
-| Ghost_reacher | 300 units |
+| Pioneer | 300 units |
 | Ghost ships | 200 units |
 
 ---

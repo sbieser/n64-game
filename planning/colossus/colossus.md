@@ -105,7 +105,7 @@ Works that inform the emotional register and specific design decisions:
 - Kant's *Critique of Judgment*, Part I — the mathematical sublime (scale overwhelming reason) and the dynamic sublime (power overwhelming survival instinct); these are the two registers the game works in
 
 **Film**
-- *A Ghost Story* (Lowery, 2017) — a ghost tethered to a place, watching time pass at scales that dwarf human grief; unable to leave until something unresolved is done; the film ends on a note hidden in a wall that is never shown to the audience. Directly informs the ghost_reacher design (frozen, witnessing, waiting) and the return journey's memory register. Lowery wrote it about leaving his own childhood home — the same Proustian source as the game's memory fragments.
+- *A Ghost Story* (Lowery, 2017) — a ghost tethered to a place, watching time pass at scales that dwarf human grief; unable to leave until something unresolved is done; the film ends on a note hidden in a wall that is never shown to the audience. Directly informs the Pioneer design (frozen, witnessing, waiting) and the return journey's memory register. Lowery wrote it about leaving his own childhood home — the same Proustian source as the game's memory fragments.
 - *2001: A Space Odyssey* (Kubrick/Clarke) — each act a different visual language; HAL's gradual takeover maps to `control_authority`; scale revealed through effect, not appearance
 - *Alien* (Scott) — signal ambiguity; the Space Jockey as evidence of something built for a larger scale; the derelict as aftermath rather than threat
 - *The Tree of Life* (Malick) — the universe as simply IS; the cosmic and the intimate as the same story at different scales; creation as prayer

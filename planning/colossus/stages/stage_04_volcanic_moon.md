@@ -8,7 +8,7 @@
 
 A moon in the Colossus's wake, tidally stressed by a massive nearby planet — the same tidal heating principle as the ice moon, taken to its violent extreme. On the ice moon, geothermal warmth was buried beneath a cold shell. Here there is no shell. The heat is everywhere, and it is not safe.
 
-The surface is sulfur plains, lava lakes, eruption plumes hundreds of kilometers high. Nothing is stable. The surface is being continuously destroyed and remade. The Colossus passed through this system long ago and its gravitational influence may have torqued the moon's orbit — pulling it closer to its parent planet, increasing tidal stress, contributing to what the moon has become. Or the moon was always this way. The Colossus creates unknowingly. It also inherits.
+The surface is sulfur plains, lava lakes, eruption plumes hundreds of kilometers high. Nothing is stable. The surface is being continuously destroyed and remade. The Colossus passed through this system long ago. The tidal stress that makes this moon volcanic is not the Colossus's doing — it is the mechanics of a massive planet and a close moon, indifferent physics operating at its own scale. The Colossus creates, where its mass disturbs dust and gas into new form. What burns here was already burning.
 
 ---
 
@@ -42,9 +42,9 @@ See `mechanics/seeking_mechanic.md` for the thermal variant.
 
 ---
 
-## The Ghost_Reacher
+## The Pioneer
 
-Preserved in a sulfur deposit at the end of the stage. Sulfur entombs things — this is how ancient organisms appear in amber, how bodies appear in volcanic ash. The ghost_reacher is not encased in ice but in yellow-orange mineral crust, still reaching through it. The sulfur preserved the shape but changed the color entirely. Someone was here long enough ago that a mineral deposit grew around them. The player understands something about geological time.
+Preserved in a sulfur deposit at the end of the stage. Sulfur entombs things — this is how ancient organisms appear in amber, how bodies appear in volcanic ash. The Pioneer is not encased in ice but in yellow-orange mineral crust, still reaching through it. The sulfur preserved the shape but changed the color entirely. Someone was here long enough ago that a mineral deposit grew around them. The player understands something about geological time.
 
 ---
 

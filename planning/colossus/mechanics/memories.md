@@ -30,11 +30,11 @@ The memory signal is small, specific, warm. Also not intended — memories don't
 
 ## Accumulation
 
-Memories do not arrive complete. They accumulate across the return stages — fragments recovered as the player moves back through each space.
+Memories do not arrive complete. They accumulate as the player revisits stages — fragments recovered in the spaces explored on the way back.
 
-Early return stages: a few fragments. Strange in isolation. Not yet legible as a picture of something.
+Early revisits: a few fragments. Strange in isolation. Not yet legible as a picture of something.
 
-Later return stages: more fragments. Patterns emerging. Something recognizable taking shape.
+Later revisits: more fragments. Patterns emerging. Something recognizable taking shape.
 
 Final stage (the void): enough to understand. Not everything — the game does not give everything. Enough.
 
@@ -61,7 +61,7 @@ What follows is the source material for the return journey's memory fragments �
 
 The property these come from: two houses on a single lot. A smaller front house and a back house where the grandparents lived. A river behind the property. A garden the grandmother planted over decades. The specific place is Castro Valley, California. It no longer exists in the form remembered.
 
-Fragments accumulate from Stage 13 back to Stage 1. Early fragments (13–10) arrive incomplete, strange in isolation. Later fragments (5–1) are warmer and more legible. By the void, the player carries enough to understand where the heading points.
+Fragments associated with the more distant stages (11–13) tend to arrive incomplete, strange in isolation. Fragments from the earlier stages (1–5) are warmer and more legible. By the time the player revisits Stage 1, they carry enough to understand where the heading points.
 
 ---
 
@@ -180,7 +180,7 @@ Fragment collection state is saved to SRAM, like ghost charges. Fragments alread
 
 ### Fragments Arrive Incomplete
 
-Early fragments — those found in the deepest return stages (13–10) — arrive partial. The audio is brief, strange, out of context. A sound without what it belongs to. The dark of a familiar room, but only the dark — not yet the room. The sound of chickens, but not yet the morning or the property.
+Early fragments — typically those found in the more distant stages (11–13) — arrive partial. The audio is brief, strange, out of context. A sound without what it belongs to. The dark of a familiar room, but only the dark — not yet the room. The sound of chickens, but not yet the morning or the property.
 
 As more fragments accumulate across more stages, earlier fragments fill in. The incomplete ones become legible once the player has enough of the picture. Something heard in Stage 13 that meant nothing becomes recognizable in Stage 7, when the river fragment arrives and suddenly you understand what the dark was the dark of.
 
@@ -208,7 +208,7 @@ No score. No completion percentage. Just: a vague heading or a precise one.
 
 When the player reaches a fragment's source — the position in the stage where the memory signal is strongest — something quiet happens.
 
-Not a cutscene. Not a UI notification. A breath. The same register as reaching the ghost_reacher on the forward journey — arrival, not victory. Something changed. The stage continues.
+Not a cutscene. Not a UI notification. A breath. The same register as reaching the Pioneer on the forward journey — arrival, not victory. Something changed. The stage continues.
 
 ---
 

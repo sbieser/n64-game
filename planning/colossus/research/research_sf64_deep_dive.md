@@ -242,9 +242,9 @@ This is exactly what we configure per-stage in our game: fog color and range, di
 
 **Stage length:** We target 5,000–8,000 world units of path per planet stage at our contemplative pace (~7 units/second on environmental rails). That's 12–19 minutes of traversal. At this scale, loading all terrain geometry at stage start (no DFS streaming) is practical — 100 terrain chunks × 40 triangles × ~720 bytes of vertex data = ~72 KB, trivial.
 
-**Draw distances for our stages:** Planet terrain panels: 600–1,000 units. Vents: 300 units. Billboards: match the zone's full visible extent (e.g., gas giant: 3,000 units from anywhere in the surface zone). Ghost_reacher: 300 units (close approach required). Ghost ships: 200 units.
+**Draw distances for our stages:** Planet terrain panels: 600–1,000 units. Vents: 300 units. Billboards: match the zone's full visible extent (e.g., gas giant: 3,000 units from anywhere in the surface zone). Pioneer: 300 units (close approach required). Ghost ships: 200 units.
 
-**Space stages:** No terrain geometry at all. Stage geometry is purely: background starfield (2D, not world objects), a few 3D landmark objects (proto-stars, nebula quads, foreground star geometry), and the ghost_reacher. Total triangle count for a space stage is under 100 tris. All complexity is signal, oxygen, and navigation — not geometry.
+**Space stages:** No terrain geometry at all. Stage geometry is purely: background starfield (2D, not world objects), a few 3D landmark objects (proto-stars, nebula quads, foreground star geometry), and the Pioneer. Total triangle count for a space stage is under 100 tris. All complexity is signal, oxygen, and navigation — not geometry.
 
 ---
 

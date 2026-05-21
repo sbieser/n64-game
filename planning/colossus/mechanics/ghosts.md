@@ -18,7 +18,7 @@ Not all ghosts look the same. The form communicates what kind of ghost it is.
 
 **Wrecked ship** — player-death ghosts. The ship the player was flying, now dark, tumbling, debris scattered nearby. This is what most ghosts are. Cold coloring, no attitude control, slowly rotating.
 
-**ghost_reacher** (humanoid figure, still reaching forward) — reserved for specific narrative ghosts placed by the game. Not player deaths. The beacon ghost in Stage 1 is a ghost_reacher. These are exceptional — someone who got somewhere, stopped, and is still oriented toward what they were seeking.
+**Pioneer** (humanoid figure, still reaching forward) — reserved for specific narrative ghosts placed by the game. Not player deaths. The beacon ghost in Stage 1 is a Pioneer. These are exceptional — someone who got somewhere, stopped, and is still oriented toward what they were seeking.
 
 The distinction teaches the player something about what they're looking at without explanation.
 
@@ -54,20 +54,20 @@ The world remembers everyone who tried.
 
 ---
 
-## The Ghost_Reacher Chain
+## The Pioneer Chain
 
-Every stage has exactly one ghost_reacher. These were not placed by the game — they were placed by the journey itself, long before any player arrived. They are an ancient relay chain of seekers, each one having followed the signal from the previous stage to the next, stopped, and stayed.
+Every stage has exactly one Pioneer. These were not placed by the game — they were placed by the journey itself, long before any player arrived. They are an ancient relay chain of seekers, each one having followed the signal from the previous stage to the next, stopped, and stayed.
 
 **The chain mechanic:**
-- The ghost_reacher in each stage *is* the signal source for that stage. The player follows the signal to the ghost_reacher.
-- The ghost_reacher's heading — still reaching forward, still oriented toward what it was seeking — points to the next stage.
-- The player leaves that stage in the direction the ghost_reacher faces.
+- The Pioneer in each stage *is* the signal source for that stage. The player follows the signal to the Pioneer.
+- The Pioneer's heading — still reaching forward, still oriented toward what it was seeking — points to the next stage.
+- The player leaves that stage in the direction the Pioneer faces.
 
-The ghost_reachers did not intend to form a relay. They simply followed the signal as far as they could and stopped. That they happen to be spaced one per stage, that their headings happen to point onward, is the accumulated structure of a very long chain of individual seekers, each one getting as far as the one before and one stage further.
+The Pioneers did not intend to form a relay. They simply followed the signal as far as they could and stopped. That they happen to be spaced one per stage, that their headings happen to point onward, is the accumulated structure of a very long chain of individual seekers, each one getting as far as the one before and one stage further.
 
-**Age across the chain:** Each ghost_reacher is older than the one before it. Stage 1's ghost_reacher is recent enough to still have clear form. Stage 2's is older. By Stage 9 (The Rogue) the ghost_reacher has been there for billions of years and looks new because vacuum preserves everything. By Stages 12–13 the ghost_reachers predate human civilization entirely. The age is not stated by the game — the player reads it through what the environment has done to each one.
+**Age across the chain:** Each Pioneer is older than the one before it. Stage 1's Pioneer is recent enough to still have clear form. Stage 2's is older. By Stage 9 (The Rogue) the Pioneer has been there for billions of years and looks new because vacuum preserves everything. By Stages 12–13 the Pioneers predate human civilization entirely. The age is not stated by the game — the player reads it through what the environment has done to each one.
 
-**Players do not become ghost_reachers.** Player death ghosts are wrecked ships. Ghost_reachers are something else — seekers who completed a stage and stopped at the threshold of the next. Whether they chose to stop, or ran out of something, or simply arrived and stayed, is not answered.
+**Players do not become Pioneers.** Player death ghosts are wrecked ships. Pioneers are something else — seekers who completed a stage and stopped at the threshold of the next. Whether they chose to stop, or ran out of something, or simply arrived and stayed, is not answered.
 
 ---
 
@@ -87,7 +87,7 @@ The player is always reading evidence. Ghosts are part of the evidence.
 
 On the forward journey, ghost ships are resources and navigation tools — oxygen, orientation, the accumulated testimony of previous seekers.
 
-On the return journey they are witnesses. The player passes them again with different eyes. These were people who got this far and no further. The player has been where they were trying to go. What does it mean to pass them now, heading back?
+On the return journey they are witnesses. The player passes them again with different eyes. These were people who got this far and no further. The player has been where they were trying to go. What does it mean to pass them now, having been where they were trying to go?
 
 No interaction changes. The ghost ships are the same ghost ships. Oxygen charges still function if available. What changes is what the player brings to the encounter.
 
@@ -126,7 +126,7 @@ In space, ghosts accumulate across every visit. The void preserves them forever.
 
 Planets don't. The ocean sweeps wrecks along its current and pins them somewhere anonymous. Ice buries what the cold kills. Storms scatter debris until it's indistinguishable from rock.
 
-On planetary stages there is no accumulated field of testimony. No field of seekers pointing the direction. Only the single ancient ghost_reacher at the stage's end, and — somewhere along the rail — the wreck of your own last attempt if you've died here before.
+On planetary stages there is no accumulated field of testimony. No field of seekers pointing the direction. Only the single ancient Pioneer at the stage's end, and — somewhere along the rail — the wreck of your own last attempt if you've died here before.
 
 Your death ghost still appears on planetary stages. That consistency is important: the world always remembers you. What changes is that only your ghosts accumulate here, shaped by what the planet did to them. Not a field of predecessors. Just your own history made visible — showing where the planet won last time.
 

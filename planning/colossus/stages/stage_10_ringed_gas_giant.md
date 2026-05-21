@@ -10,7 +10,7 @@ A gas giant with a ring system spanning hundreds of thousands of kilometers. The
 
 The scale here is the largest of any stage so far. The gas giant is incomprehensibly large. The rings stretch far beyond it in both directions. The player is inside the ring plane — navigating between ring particles that range from dust to boulders to chunks the size of buildings.
 
-The Colossus passed through this system. Whether its gravity contributed to the moon's destruction is unanswerable. The Colossus creates unknowingly. It also destroys unknowingly. The physics is the same either way.
+The Colossus passed through this system. The moon's fate was settled by the Roche limit — the distance at which the planet's tidal forces exceed a moon's own gravity. Physics asserting what physics asserts near something massive enough. The planet tore the moon apart. The Colossus was already elsewhere. The Colossus creates, where its mass disturbs dust and gas into new form. What breaks, breaks for its own reasons.
 
 ---
 
@@ -38,11 +38,11 @@ See `mechanics/seeking_mechanic.md` for the visual lensing mechanic.
 
 ---
 
-## The Ghost_Reacher
+## The Pioneer
 
-Somewhere in the rings — caught in orbital resonance, tumbling with the ring material. The ghost_reacher drifts with the debris, distinguishable from it only by shape and by the signal it emits. Finding it requires both the visual lensing mechanic (finding the Colossus's direction) and ghost orientation reading (finding where the ghost_reacher is within that field).
+Somewhere in the rings — caught in orbital resonance, tumbling with the ring material. The Pioneer drifts with the debris, distinguishable from it only by shape and by the signal it emits. Finding it requires both the visual lensing mechanic (finding the Colossus's direction) and ghost orientation reading (finding where the Pioneer is within that field).
 
-Ancient. This system has been here long enough for the destroyed moon to have spread into a full ring. The ghost_reacher has been here through some portion of that time.
+Ancient. This system has been here long enough for the destroyed moon to have spread into a full ring. The Pioneer has been here through some portion of that time.
 
 ---
 
@@ -87,4 +87,4 @@ The vacuum of space is silent, but the ring plane has its own audio presence: th
 - Ring particle visual representation on N64 — sprite-based, geometry, or point sprites
 - Whether the ring plane is navigable in all directions or the player is constrained to the plane
 - The destroyed moon: is there a visible remnant — a large fragment, a moonlet — that anchors the stage?
-- Whether the ghost_reacher's position in the debris requires the player to stop and read ring motion to track it
+- Whether the Pioneer's position in the debris requires the player to stop and read ring motion to track it

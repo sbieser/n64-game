@@ -34,9 +34,9 @@ See `mechanics/oxygen.md` — oxygen is the operative resource here; this stage 
 
 The fog forces the same patient discipline as Stage 1's void: the signal is present but attenuated, and the player cannot move blindly.
 
-The ghost_reacher's signal is the primary navigation tool here. Methane does not block it the way ice does — the signal from the partially submerged ghost_reacher at the stage's end carries clearly through the fog. The player uses it the way they used the Stage 1 beacon: as a heading to orient toward during windows of clarity.
+The Pioneer's signal is the primary navigation tool here. Methane does not block it the way ice does — the signal from the partially submerged Pioneer at the stage's end carries clearly through the fog. The player uses it the way they used the Stage 1 beacon: as a heading to orient toward during windows of clarity.
 
-**Stop → Rotate → Listen → Find the ghost_reacher's signal through the fog → Move → Stop when the fog closes**
+**Stop → Rotate → Listen → Find the Pioneer's signal through the fog → Move → Stop when the fog closes**
 
 The seeking loop runs slower here than in open space. The windows of clarity constrain when the player can orient, not just where they can go. Patience applied under different constraints.
 
@@ -44,11 +44,11 @@ See `mechanics/seeking_mechanic.md`.
 
 ---
 
-## The Ghost_Reacher
+## The Pioneer
 
 Partially submerged in a methane lake at the stage's end — sitting in it, arm above the surface, reaching. The methane has coated it in orange residue over an immense span of time. It is almost beautiful. It will be there until something changes this moon at a geological scale.
 
-The signal from this ghost_reacher carries clearly — methane doesn't block it the way ice does. The player can detect the ghost_reacher from further away than usual, which makes navigation through the fog possible: the signal grows stronger as the fog thins, giving direction even when vision gives nothing.
+The signal from this Pioneer carries clearly — methane doesn't block it the way ice does. The player can detect the Pioneer from further away than usual, which makes navigation through the fog possible: the signal grows stronger as the fog thins, giving direction even when vision gives nothing.
 
 ---
 
@@ -84,7 +84,7 @@ Methane rain falls during parts of the traversal — a heavier sound than water,
 
 **Audio:**
 
-The haze muffles everything. The cosmic signal is quieter here than it has been since Stage 1. The ghost_reacher's signal is the dominant navigational sound — clearer, warmer, cutting through what the atmosphere scatters.
+The haze muffles everything. The cosmic signal is quieter here than it has been since Stage 1. The Pioneer's signal is the dominant navigational sound — clearer, warmer, cutting through what the atmosphere scatters.
 
 Methane rain has a distinct audio character: slower drops, heavier impact, a wetter sound than water rain somehow. The wind through the atmosphere carries a low continuous moan.
 
@@ -93,6 +93,6 @@ Methane rain has a distinct audio character: slower drops, heavier impact, a wet
 ## Open
 
 - How to represent methane fog on N64 — distance fog, color shift, reduced draw distance
-- Whether the methane lake is visible at the stage's end or only the ghost_reacher's reaching arm above the surface
+- Whether the methane lake is visible at the stage's end or only the Pioneer's reaching arm above the surface
 - Whether any bioluminescence exists in the methane — speculation, but a visual possibility
 - Sound design: how different methane rain needs to be to read as wrong

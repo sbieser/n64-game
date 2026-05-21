@@ -46,11 +46,11 @@ See `mechanics/seeking_mechanic.md`.
 
 ---
 
-## The Ghost_Reacher
+## The Pioneer
 
-This ghost_reacher is the oldest. No medium preserved it — not ice, not sulfur, not methane. On a rogue planet with no atmosphere and no active geology, nothing changes. Nothing weathers. Nothing buries. The ghost_reacher has been sitting on this surface in vacuum for billions of years and is exactly as it was when it stopped: no decay, no erosion, no burial.
+This Pioneer is the oldest. No medium preserved it — not ice, not sulfur, not methane. On a rogue planet with no atmosphere and no active geology, nothing changes. Nothing weathers. Nothing buries. The Pioneer has been sitting on this surface in vacuum for billions of years and is exactly as it was when it stopped: no decay, no erosion, no burial.
 
-It looks new. It has been here since before humanity existed — since before complex life on Earth — and it looks like it arrived recently. The player understands something about vacuum preservation, and then understands what the ghost_reacher's age actually implies, and both recognitions arrive in sequence.
+It looks new. It has been here since before humanity existed — since before complex life on Earth — and it looks like it arrived recently. The player understands something about vacuum preservation, and then understands what the Pioneer's age actually implies, and both recognitions arrive in sequence.
 
 Time is different here. This is the stage that makes that most literal.
 
@@ -100,5 +100,5 @@ The thermal sensing is subtle: a very low hum that shifts slightly in character 
 
 - Whether there is any ambient light at all — very faint starlight, just enough to see the horizon as a line
 - How to render total darkness on N64 given hardware constraints — what the ship lights actually illuminate, falloff curve
-- The ghost_reacher's age: whether there is any in-game way to communicate billions of years without stating it
+- The Pioneer's age: whether there is any in-game way to communicate billions of years without stating it
 - Whether this is the most visually minimalist stage in the game — the simplest, emptiest, most patient

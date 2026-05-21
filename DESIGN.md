@@ -25,7 +25,7 @@ The song that inspired this game asks: *"Do I dare to disturb the universe? Lest
 - Fast, almost frantic rails movement through deep space
 - Player feels small and purposeful
 - Environment: debris fields, dying stars, strange geometry
-- Hints of the Colossus: his silhouette against a nebula, gravitational distortions, dead worlds in his wake
+- Hints of the Colossus: his silhouette against a nebula, gravitational distortions, new stars forming in his wake
 - Music: original, urgent, searching
 
 ### Act 2 — His Gravity
@@ -100,7 +100,7 @@ Implementation note: obstacles are generated from the run seed, so each phenomen
 ---
 
 ### Debris Field *(planned — Act 1)*
-Dense clusters of rotating geometry shapes — the dead worlds the Colossus has already passed through. The current obstacle system is already a proto-debris field. Authentic version: clusters of obstacles concentrated in a short Z range, forcing the player to weave. Density derived from the run seed's star-density values (reuse the same draw).
+Dense clusters of rotating geometry shapes — rock and ice, the scattered remnants of worlds the Colossus has passed through. The Colossus didn't break them. Things break for their own reasons. The current obstacle system is already a proto-debris field. Authentic version: clusters of obstacles concentrated in a short Z range, forcing the player to weave. Density derived from the run seed's star-density values (reuse the same draw).
 
 **N64 implementation:** existing shape system, just cluster Z positions more tightly per-segment.
 

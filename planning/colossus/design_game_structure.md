@@ -55,7 +55,7 @@ Two kinds of rail stages exist and they are different things:
 
 Scale progresses from intimate (the void) to cosmic (the dark nebula). Planet stages cluster in the middle — a passage through the Colossus's wake made material. The space stages that follow grow to scales where the journey's origin and destination are both incomprehensible.
 
-| Stage | Location | Mode | Primary Mechanic | Ghost_Reacher | Return: Memory Triggered |
+| Stage | Location | Mode | Primary Mechanic | Pioneer | Return: Memory Triggered |
 |---|---|---|---|---|---|
 | 1 | The Void | Free-roam | Audio seeking (volume + pan) | Recent | Silence → the specific quality of solitude |
 | 2 | Young Star Field | Free-roam | Noise interference | Older | Warm lights in cold dark → windows at night |
@@ -84,25 +84,25 @@ The void. A signal with no explanation. The first ghost at the signal source. Au
 The space the Colossus passed through. New stars forming in its wake. Noise interference: stellar EM vs. the organic Colossus signal. Still free-roaming, full thrust authority. See `stages/stage_02_young_star_field.md`.
 
 **Stage 3 — Ice Moon**  
-Environmental rails through ice crevasses and caverns. Thermal seeking for geothermal vents replaces audio as primary tool. Hull temperature is the threat. Ghost_reacher encased in ancient ice. See `stages/stage_03_ice_moon.md`.
+Environmental rails through ice crevasses and caverns. Thermal seeking for geothermal vents replaces audio as primary tool. Hull temperature is the threat. Pioneer encased in ancient ice. See `stages/stage_03_ice_moon.md`.
 
 **Stage 4 — Volcanic Moon**  
-The ice moon's inversion. Tidal heating taken to its extreme: constant eruption, sulfur plains, lava flows. Thermal mechanic reverses — seek cool margins, not warmth. Ghost_reacher preserved in sulfur deposit. See `stages/stage_04_volcanic_moon.md`.
+The ice moon's inversion. Tidal heating taken to its extreme: constant eruption, sulfur plains, lava flows. Thermal mechanic reverses — seek cool margins, not warmth. Pioneer preserved in sulfur deposit. See `stages/stage_04_volcanic_moon.md`.
 
 **Stage 5 — Geyser Moon**  
-Cryovolcanism. The player enters a geyser plume and is briefly carried upward — away from the Colossus. The stage's ghost_reacher faces outward rather than toward the Colossus. See `stages/stage_05_geyser_moon.md`.
+Cryovolcanism. The player enters a geyser plume and is briefly carried upward — away from the Colossus. The stage's Pioneer faces outward rather than toward the Colossus. See `stages/stage_05_geyser_moon.md`.
 
 **Stage 6 — Methane World**  
-Titan-like moon. Alien landscape that looks almost familiar — methane lakes, methane rain, orange haze. Navigation through methane fog in brief windows of clarity. Ghost_reacher submerged in methane lake. See `stages/stage_06_methane_world.md`.
+Titan-like moon. Alien landscape that looks almost familiar — methane lakes, methane rain, orange haze. Navigation through methane fog in brief windows of clarity. Pioneer submerged in methane lake. See `stages/stage_06_methane_world.md`.
 
 **Stage 7 — Ocean Interior**  
-A waterworld. Convection current descends the player toward a seafloor of high-pressure Ice VII. Pressure is the threat; ghosts provide hull tolerance to go deeper. Ghost_reacher faces upward toward the arriving player — the one encounter where they come from the direction it faces. See `stages/stage_07_ocean_interior.md`.
+A waterworld. Convection current descends the player toward a seafloor of high-pressure Ice VII. Pressure is the threat; ghosts provide hull tolerance to go deeper. Pioneer faces upward toward the arriving player — the one encounter where they come from the direction it faces. See `stages/stage_07_ocean_interior.md`.
 
 **Stage 8 — Storm World**  
-A planet of permanent violent storm. Environmental rails through discharge corridors to a calm vortex eye where the ghost_reacher waits. Timing mechanic: read the lightning rhythm, move in the gaps. See `stages/stage_08_storm_world.md`.
+A planet of permanent violent storm. Environmental rails through discharge corridors to a calm vortex eye where the Pioneer waits. Timing mechanic: read the lightning rhythm, move in the gaps. See `stages/stage_08_storm_world.md`.
 
 **Stage 9 — The Rogue**  
-A rogue planet with no star. Total darkness, ship lights to twenty meters, a ghost_reacher that has been preserved in vacuum for billions of years and looks new. The oldest ghost_reacher. The quietest stage. See `stages/stage_09_rogue_planet.md`.
+A rogue planet with no star. Total darkness, ship lights to twenty meters, a Pioneer that has been preserved in vacuum for billions of years and looks new. The oldest Pioneer. The quietest stage. See `stages/stage_09_rogue_planet.md`.
 
 **Stage 10 — Ringed Gas Giant**  
 Back to open space. Visual gravitational lensing as the primary seeking tool — find where the stars bend. Navigation through ring debris. See `stages/stage_10_ringed_gas_giant.md`.

@@ -44,19 +44,19 @@ See `mechanics/seeking_mechanic.md` for the haptic gravitational wave mechanic.
 
 ---
 
-## The Ghost_Reacher
+## The Pioneer
 
-Somewhere deep inside the dark nebula, invisible until the player is within ship-light range. It cannot be seen from a distance — the dust blocks everything. The player navigates by haptic signal, draws close, and the ghost_reacher materializes from the dark as the ship lights reach it.
+Somewhere deep inside the dark nebula, invisible until the player is within ship-light range. It cannot be seen from a distance — the dust blocks everything. The player navigates by haptic signal, draws close, and the Pioneer materializes from the dark as the ship lights reach it.
 
 Pre-human by millions of years. It has been inside the dark nebula longer than hominids have existed. The dust has settled on it — a fine coating, barely visible, suggesting the length of the wait.
 
-The ghost_reacher here is the last one before the Colossus. After this, there is no more signal to follow toward another seeker. There is only the Colossus itself.
+The Pioneer here is the last one before the Colossus. After this, there is no more signal to follow toward another seeker. There is only the Colossus itself.
 
 ---
 
 ## Ghost Behavior
 
-Ghost ships are invisible at a distance — same as the ghost_reacher, the dust blocks all visual information. The vent particles are visible only when the player is within ship-light range. Navigation to ghosts requires following the haptic sense toward them, not seeing them first.
+Ghost ships are invisible at a distance — same as the Pioneer, the dust blocks all visual information. The vent particles are visible only when the player is within ship-light range. Navigation to ghosts requires following the haptic sense toward them, not seeing them first.
 
 The dark nebula is the stage where ghost ships feel most like ghosts. Appearing out of the dark as you approach. Silent. Close.
 
@@ -84,7 +84,7 @@ See `mechanics/memories.md` for the crystallization moment and accumulation mech
 
 The transition into the dark nebula is a closing: stars at the edges of the cloud, then the dust density increases, then the star field closes behind the player like a door. Inside: nothing. Ship lights illuminate a sphere of dust particles — they catch the light and scatter it back, giving the immediate vicinity a faint haze, but revealing nothing beyond.
 
-The ghost_reacher emerges from the dark as the ship lights reach it: first a shape, then details, then the reaching arm. The dust has settled on it uniformly. It looks like it belongs here, which it does.
+The Pioneer emerges from the dark as the ship lights reach it: first a shape, then details, then the reaching arm. The dust has settled on it uniformly. It looks like it belongs here, which it does.
 
 Color: the dust has a slight reddish-brown quality at the cloud's edges, where light from outside catches it. Inside, no color. Just the ship's own lighting and what it touches.
 
@@ -100,5 +100,5 @@ The Colossus's signal — via haptic — is the strongest it has been. The playe
 
 - How complete the darkness is — whether any ambient light exists inside the nebula or whether it is absolute
 - Visual representation of the dust: particle density, color, texture at the cloud's edges
-- Whether the ghost_reacher emerging from the dark as you approach is a dramatic moment or a quiet one — probably quiet
+- Whether the Pioneer emerging from the dark as you approach is a dramatic moment or a quiet one — probably quiet
 - The transition out of the dark nebula into the Colossus's presence: stars reappearing, then something else

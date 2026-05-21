@@ -42,15 +42,15 @@ See `mechanics/seeking_mechanic.md` — **Noise Interference**.
 
 ---
 
-## The Ghost_Reacher
+## The Pioneer
 
 At the far edge of the young star field — the point where the EM noise finally dies away and the signal becomes clean again. Not near the young stars. Past them, in the quiet on the other side.
 
-This ghost_reacher made it through the noise. Every wrecked ship in the stage died turned toward the light. This one kept the signal and followed it to the boundary. It stopped here, still reaching, oriented away from the stars and toward whatever comes next.
+This Pioneer made it through the noise. Every wrecked ship in the stage died turned toward the light. This one kept the signal and followed it to the boundary. It stopped here, still reaching, oriented away from the stars and toward whatever comes next.
 
-Older than Stage 1's ghost_reacher — how much older is not stated. The player reads it through what the environment has done to it, which is very little. The void at the edge of the star field is quiet. Things drift here without being disturbed. The ghost_reacher has been drifting at the boundary for a long time.
+Older than Stage 1's Pioneer — how much older is not stated. The player reads it through what the environment has done to it, which is very little. The void at the edge of the star field is quiet. Things drift here without being disturbed. The Pioneer has been drifting at the boundary for a long time.
 
-The moment of finding the ghost_reacher and the moment the noise finally resolves are the same moment. The player breaks through the interference and there it is — clear signal, clear figure, still pointing forward.
+The moment of finding the Pioneer and the moment the noise finally resolves are the same moment. The player breaks through the interference and there it is — clear signal, clear figure, still pointing forward.
 
 ---
 
@@ -102,11 +102,11 @@ The player learns to use the noise as spatial information — loud here means ne
 
 Concrete geometry and placement spec. All measurements in world units. Player ship: ~2 units wide. Free-roam flight speed: ~20–25 units/second.
 
-Space stages carry no terrain geometry. The stage is a volume of navigable space populated by a small number of 3D landmark objects, a background starfield (2D, not world geometry), and the ghost_reacher somewhere in the far region. Total triangle count for placed geometry is under 150 tris — the stage's visual richness comes from the starfield, color, and signal behavior, not from polygon density.
+Space stages carry no terrain geometry. The stage is a volume of navigable space populated by a small number of 3D landmark objects, a background starfield (2D, not world geometry), and the Pioneer somewhere in the far region. Total triangle count for placed geometry is under 150 tris — the stage's visual richness comes from the starfield, color, and signal behavior, not from polygon density.
 
 **Navigable volume:** 3,200 units deep (Z: 0 to −3,200), 3,000 units wide (X: −1,500 to +1,500), 2,000 units tall (Y: −1,000 to +1,000). These bounds are soft — nothing stops the player from flying past them, but there is nothing of interest beyond them.
 
-**Ghost_reacher position:** Z −2,850, X +380, Y −120. Past all five young stars, at the quiet edge of the field where the EM noise drops away.
+**Pioneer position:** Z −2,850, X +380, Y −120. Past all five young stars, at the quiet edge of the field where the EM noise drops away.
 
 ---
 
@@ -138,9 +138,9 @@ Stars have a **noise radius** — within this distance the Colossus audio signal
 | Star 2 | Z −850, X +1,100, Y −80 | Yellow-white (1.00, 0.95, 0.75) | 400 units | Solar analog |
 | Star 3 | Z −1,300, X −60, Y +200 | Bright white (1.00, 1.00, 0.90) | 500 units | Largest, most obstructive — directly in path |
 | Star 4 | Z −1,850, X −620, Y −150 | Orange (1.00, 0.70, 0.35) | 400 units | Most luminous, red-shifted |
-| Star 5 | Z −2,300, X +820, Y +60 | Warm gold (1.00, 0.82, 0.40) | 300 units | Nearest to ghost_reacher; warmest palette |
+| Star 5 | Z −2,300, X +820, Y +60 | Warm gold (1.00, 0.82, 0.40) | 300 units | Nearest to Pioneer; warmest palette |
 
-The ghost_reacher is ~700 units past Star 5, in the quiet region where the star's noise has faded. Star 5's warm gold is the visual cue — the ghost_reacher is on the other side of the warmest light.
+The Pioneer is ~700 units past Star 5, in the quiet region where the star's noise has faded. Star 5's warm gold is the visual cue — the Pioneer is on the other side of the warmest light.
 
 **Total young star geometry:** 5 × 12 tris = 60 tris.
 
@@ -164,13 +164,13 @@ These are the most immediate 3D objects in the stage. Their parallax drift as th
 
 ---
 
-### Ghost_Reacher
+### Pioneer
 
 Position: Z −2,850, X +380, Y −120. Drifting slowly (no velocity). In the quiet past Star 5. Draw distance: 400 units.
 
-The approach: the player breaks through Star 5's noise zone. The signal clarifies. Seconds later the ghost_reacher resolves out of the starfield — it's been there, it was just another point of light until they were close enough to see it.
+The approach: the player breaks through Star 5's noise zone. The signal clarifies. Seconds later the Pioneer resolves out of the starfield — it's been there, it was just another point of light until they were close enough to see it.
 
-Older than Stage 1's ghost_reacher, but the void has been kind — nothing to corrode it, nothing to disturb it. It has drifted slightly from wherever it stopped originally, pushed by the residual stellar wind off Star 5. The direction it faces is still correct.
+Older than Stage 1's Pioneer, but the void has been kind — nothing to corrode it, nothing to disturb it. It has drifted slightly from wherever it stopped originally, pushed by the residual stellar wind off Star 5. The direction it faces is still correct.
 
 ---
 
@@ -178,7 +178,7 @@ Older than Stage 1's ghost_reacher, but the void has been kind — nothing to co
 
 Ghost ships accumulate near young stars — this is where players die, chasing warmth and light instead of signal. A well-visited stage will show a visible cluster of wrecks near Star 3 (the obstructive central star) and smaller clusters near Stars 1 and 2 (early distractions).
 
-The ghost_reacher's approach corridor (past Star 5) will be sparse. Few players have made it this far without running out of oxygen first.
+The Pioneer's approach corridor (past Star 5) will be sparse. Few players have made it this far without running out of oxygen first.
 
 Draw distance: 250 units (longer than in planet stages — open space, no occlusion, ghosts should be findable by sight more easily).
 
@@ -191,7 +191,7 @@ Draw distance: 250 units (longer than in planet stages — open space, no occlus
 | Nebula quads | 5 | 10 |
 | Young star objects (core + halo) | 5 | 60 |
 | Foreground parallax stars | 5 | 10 |
-| Ghost_reacher | 1 | — |
+| Pioneer | 1 | — |
 | **Total placed geometry** | **16** | **~80 tris** |
 
 Fewer than 100 tris of stage geometry for the entire space. The visual complexity is entirely the 2D starfield and signal behavior. This is the right approach — open space should feel empty, not dense.
@@ -200,6 +200,6 @@ Fewer than 100 tris of stage geometry for the entire space. The visual complexit
 
 ## Open
 
-- Is there a specific landmark or moment that defines the stage end — a formation, a particular star, something that reframes the space the way the ghost_reacher reframes Stage 1? Or does Stage 2 end simply when the signal leads out of the young star field into clearer space?
+- Is there a specific landmark or moment that defines the stage end — a formation, a particular star, something that reframes the space the way the Pioneer reframes Stage 1? Or does Stage 2 end simply when the signal leads out of the young star field into clearer space?
 - How dense is the star field? A few bright points widely spaced (sparse, navigable) or a crowded nursery (dense, disorienting)?
 - Do the dust clouds create spatial dead zones — areas where the signal drops completely — or only noise interference?

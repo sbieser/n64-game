@@ -10,11 +10,11 @@ The Colossus is the hinge point of the game. The forward journey ends there. The
 
 ---
 
-## Structure
+## Revisiting Stages
 
-The return journey traverses all stages in reverse. Every space the player crossed on the way forward, crossed again on the way back. Visually the same spaces. Mechanically the same controls. But everything has changed.
+Completing the forward journey changes what the stages are. What were destinations on the way out become places that can be returned to — in any order, at any time. The player can revisit any stage and seek the memory fragments scattered within it.
 
-The stages are not numbered differently on the return. They are the same stages. What changes is the direction of travel, the nature of the signal, and what the player is carrying.
+The stages are the same stages, the same spaces, the same threats. What has changed is the signal the player is following, and what the player is carrying from having been to the Colossus.
 
 ---
 
@@ -50,21 +50,11 @@ The accumulation is the return journey's emotional arc. The forward journey was 
 
 ---
 
-## Control Authority Returns
-
-The `control_authority` float that slid from 1.0 toward 0.0 as the Colossus's gravity took hold now climbs back toward 1.0 as the player moves away. Agency returns gradually. The rail stages of the return are the first stages — the player emerges from the Colossus still partly carried, then slowly recovers thrust authority.
-
-The moment thrust starts mattering again should feel significant. Not dramatic — quiet. Like remembering how to walk.
-
-See `mechanics/controls.md`.
-
----
-
 ## The Ghost Ships
 
 On the forward journey, ghost ships were resources and navigation tools — oxygen, orientation, the accumulated testimony of previous seekers.
 
-On the return journey they are witnesses. The player passes them again with different eyes. These were people who got this far and no further. The player has been where they were trying to go. What does it mean to pass them now, heading back?
+On the return journey they are witnesses. The player passes them again with different eyes. These were people who got this far and no further. The player has been where they were trying to go. What does it mean to pass them now, having been where they were trying to go?
 
 No interaction changes. The ghosts are the same ghosts. What changes is what the player brings to them.
 

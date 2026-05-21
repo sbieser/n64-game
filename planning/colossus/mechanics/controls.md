@@ -1,6 +1,6 @@
 # Controls
 
-*Global mechanics. These apply across all stages. What changes between seeking stages and rail stages is not the controls themselves — it is whether the player's thrust is the primary mover, or whether the Colossus's gravity has taken over.*
+*Global mechanics. These apply across all stages. Stages are either free-roam, where the player thrusts, or rails, where the environment carries them forward.*
 
 ---
 
@@ -16,7 +16,7 @@
 
 Rotation is free. Thrust is the consequential act.
 
-The ship does not move forward unless the player chooses to thrust (in seeking stages). Commitment to direction comes before commitment to movement.
+The ship does not move forward unless the player chooses to thrust (in free-roam stages). Commitment to direction comes before commitment to movement.
 
 - **A button:** thrust forward in the facing direction
 - **A button held:** boost — faster forward thrust
@@ -25,23 +25,11 @@ The player can yaw and pitch indefinitely. They can stand still and listen. See 
 
 ---
 
-## The Transition to Rails
+## Rail Stages
 
-In seeking stages, the player chooses to thrust. Forward motion is a decision.
+Some stages are rails. In these stages the player does not thrust — the environment carries them forward. The geometry of terrain (ice crevasses, volcanic corridors, ocean currents) or the arc of a descent defines the forward motion. The player steers within what the stage provides.
 
-As the Colossus's gravity takes over in later stages, a pull begins. At first barely perceptible — a drift the player can't account for. Then stronger. Then the player's thrust is minor against it. At full rails, the player no longer thrusts. They are being carried by physics. They can only steer within what the gravity does.
-
-This is not a game mechanic imposed from outside — it is the universe asserting what gravity asserts near something massive enough. The player crossed the threshold during the seeking stages. They find out when their thrust stops mattering.
-
-**In code:** a `control_authority` float governs this. 1.0 = full player thrust control, 0.0 = full gravity pull. Player input and gravity fill complementary portions of forward motion. This float slides from 1.0 toward 0.0 as the player moves through the later stages.
-
----
-
-## Control Authority on the Return Journey
-
-The `control_authority` float that slid from 1.0 toward 0.0 as the Colossus's gravity took hold climbs back toward 1.0 on the return journey. The player emerges from the Colossus still partly carried — the early return stages are still rail-like. Agency returns gradually as the player moves further away.
-
-The moment thrust starts mattering again should feel significant. Not dramatic — quiet. Like remembering how to walk.
+A stage is either free-roam or rails. There is no gradual transition — the mode is the character of the stage, not a mechanic applied from outside. The analog stick still controls yaw and pitch on rail stages, but the player is already moving forward. The consequential act becomes lateral steering, not thrust.
 
 ---
 
@@ -49,4 +37,4 @@ The moment thrust starts mattering again should feel significant. Not dramatic �
 
 - **Roll.** The world-up vector is always locked.
 - **Reverse thrust.** The player can reorient and thrust the other direction, but there is no dedicated backward button.
-- **Stop.** In the rail stages, the player cannot halt. Gravity has them.
+- **Stop.** In rail stages, the player cannot halt — the environment is moving them forward.

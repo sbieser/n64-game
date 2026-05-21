@@ -10,7 +10,7 @@ The expanding shell of gas and debris from a stellar explosion — filaments of 
 
 Everything visible was inside a star. Every particle of gas in this nebula was forged in stellar fusion and expelled in the moment of death. The player is moving through the interior of something that used to be a sun.
 
-The Colossus may have passed through this region after the explosion, or before — when the star was still alive. Whether the Colossus's gravity contributed to the stellar death is unanswerable. Stars die at their own scale and on their own schedule. The Colossus moves through everything on its own scale and schedule. That they overlapped here may mean nothing. It may mean everything.
+The Colossus may have passed through this region after the explosion, or before — when the star was still alive. Stars die at their own scale and on their own schedule. The Colossus moves through everything on its own scale and schedule. That they overlapped here is coincidence at cosmic scale — two things of immense age and mass, each operating entirely on its own terms.
 
 ---
 
@@ -43,11 +43,11 @@ See `mechanics/seeking_mechanic.md` for the synthesis stage documentation.
 
 ---
 
-## The Ghost_Reacher
+## The Pioneer
 
-At the center — near the dense remnant itself, at the closest survivable approach. Ancient beyond reckoning: the star this remnant came from died long before any human civilization. The ghost_reacher has been here in the hot center of the aftermath since the expansion began to cool enough to approach.
+At the center — near the dense remnant itself, at the closest survivable approach. Ancient beyond reckoning: the star this remnant came from died long before any human civilization. The Pioneer has been here in the hot center of the aftermath since the expansion began to cool enough to approach.
 
-The signal from this ghost_reacher is strong — the remnant's density amplifies rather than attenuates it. It is the clearest ghost_reacher signal since Stage 1. After stages of muffled, scattered, attenuated signal, something broadcasts clearly. The player has been getting closer to the Colossus for a long time. Everything here confirms it.
+The signal from this Pioneer is strong — the remnant's density amplifies rather than attenuates it. It is the clearest Pioneer signal since Stage 1. After stages of muffled, scattered, attenuated signal, something broadcasts clearly. The player has been getting closer to the Colossus for a long time. Everything here confirms it.
 
 ---
 
@@ -85,7 +85,7 @@ Ghost ships read differently here: illuminated by the surrounding gas, they glow
 
 Loud and complex. Scattered EM from the remnant fills the audio environment — not the organic quality of the Colossus signal, but a different kind of noise, structured by the physics of stellar death. The Colossus signal is present but the player must synthesize it from the noise with help from all the other channels.
 
-The ghost_reacher at the center broadcasts clearly into this complexity. Its signal cutting through is the first clear audio the player has had in several stages.
+The Pioneer at the center broadcasts clearly into this complexity. Its signal cutting through is the first clear audio the player has had in several stages.
 
 ---
 

@@ -40,17 +40,17 @@ Inside the plume, the cosmic signal is behind rather than ahead. The player cann
 
 **After emergence:** the signal is ahead again. The player reorients — the full seeking loop applied fresh, with the correct heading newly clear after the disorientation of going wrong. The contrast teaches what the correct orientation feels like by removing it and returning it.
 
-The ghost_reacher's position is findable from above after emergence: its signal is upward at the rim of the ejection point, not along the departure path. Finding it requires dropping back toward the moon surface after the plume releases the player.
+The Pioneer's position is findable from above after emergence: its signal is upward at the rim of the ejection point, not along the departure path. Finding it requires dropping back toward the moon surface after the plume releases the player.
 
 See `mechanics/seeking_mechanic.md`.
 
 ---
 
-## The Ghost_Reacher
+## The Pioneer
 
 At the geyser rim — frozen into the ice at the ejection point, at the base of the plume where it begins. Still reaching, arm extended upward, facing the direction the geyser goes: not toward the Colossus, but up and outward into space.
 
-This ghost_reacher breaks the pattern. Every other ghost_reacher faces toward the Colossus. This one faces away — up, following the geyser, which is going in the wrong direction. What does it mean? The player is not told. The ghost_reacher found the source of something and pointed toward it. That source went away from the Colossus. What it was seeking is held open.
+This Pioneer breaks the pattern. Every other Pioneer faces toward the Colossus. This one faces away — up, following the geyser, which is going in the wrong direction. What does it mean? The player is not told. The Pioneer found the source of something and pointed toward it. That source went away from the Colossus. What it was seeking is held open.
 
 ---
 
@@ -82,7 +82,7 @@ The geyser plume is the stage's defining visual: a column of ice crystals and wa
 
 Above the plume: the host planet fills a significant portion of the sky. Its ring system — partly made of material this moon has been contributing for millions of years — is visible as a band. The player emerging above the geyser and seeing the ring above is the stage's clearest spatial moment: the player understands what they were inside and what they contributed to.
 
-The geyser rim has its own visual character: fractured ice, dark vents where gas escapes before the main eruption, the ghost_reacher frozen into the surface at the point of maximum upward force.
+The geyser rim has its own visual character: fractured ice, dark vents where gas escapes before the main eruption, the Pioneer frozen into the surface at the point of maximum upward force.
 
 **Audio:**
 
@@ -95,4 +95,4 @@ The roar of the plume: a physical sound, large and low, felt as much as heard. I
 - Whether the plume is a single upward traversal or the player dips in and out at different altitudes
 - How to represent the geyser column visually on N64 hardware — particle column, geometry, translucency
 - Sound design: whether the roar-to-silence transition at emergence is abrupt or gradual
-- Whether finding the ghost_reacher is required before departure or optional
+- Whether finding the Pioneer is required before departure or optional
