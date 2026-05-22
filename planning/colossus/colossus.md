@@ -106,7 +106,7 @@ Works that inform the emotional register and specific design decisions:
 
 **Film**
 - *A Ghost Story* (Lowery, 2017) — a ghost tethered to a place, watching time pass at scales that dwarf human grief; unable to leave until something unresolved is done; the film ends on a note hidden in a wall that is never shown to the audience. Directly informs the Pioneer design (frozen, witnessing, waiting) and the return journey's memory register. Lowery wrote it about leaving his own childhood home — the same Proustian source as the game's memory fragments.
-- *2001: A Space Odyssey* (Kubrick/Clarke) — each act a different visual language; HAL's gradual takeover maps to `control_authority`; scale revealed through effect, not appearance
+- *2001: A Space Odyssey* (Kubrick/Clarke) — each act a different visual language; the way rail stages assert themselves without announcement echoes HAL's takeover — the crew notices when it's already true; scale revealed through effect, not appearance
 - *Alien* (Scott) — signal ambiguity; the Space Jockey as evidence of something built for a larger scale; the derelict as aftermath rather than threat
 - *The Tree of Life* (Malick) — the universe as simply IS; the cosmic and the intimate as the same story at different scales; creation as prayer
 - *Solaris* (Tarkovsky) — an entity that interacts with humans by creating things from their memories, without understanding what it's doing

@@ -32,7 +32,7 @@ Then: the selector. No explanation. No score. No ending screen.
 
 The Colossus is the still center. After the hold, the player does not choose to return — it is simply what happens. The same way arriving was inevitable, leaving is inevitable.
 
-The return journey begins here. All stages traverse in reverse. The signal inverts: exterior cosmic → interior memories. Control authority begins climbing back toward 1.0. See `return_journey.md`.
+The return journey begins here. The signal inverts: exterior cosmic → interior memories. Previously completed stages now hold memory fragments. See `return_journey.md`.
 
 ---
 
