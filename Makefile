@@ -15,28 +15,6 @@ include $(N64_INST)/include/t3d.mk
 ASSET_GLBS  = $(wildcard assets/*.glb)
 ASSET_T3DMS = $(ASSET_GLBS:assets/%.glb=filesystem/%.t3dm)
 
-# Stage geometry spans thousands of world units. Default --base-scale=64 would
-# multiply coordinates by 64 before int16 conversion, causing overflow
-# (5000 * 64 = 320,000 > 32767). These specific rules override the wildcard below.
-#
-# Blender's glTF exporter omits the "material" field from primitives when
-# export_materials='NONE'. gltf_to_t3d skips any primitive with no material
-# index, so we run patch_glb_material.py to inject a dummy material=0 on
-# every primitive before conversion. The patch is done on a copy so the
-# source .glb is unchanged.
-PYTHON = '/c/Users/Scott Bieser/AppData/Local/Microsoft/WindowsApps/python.exe'
-
-filesystem/ice_moon.t3dm: assets/ice_moon.glb
-	$(PYTHON) patch_glb_material.py $< assets/ice_moon.patched.glb
-	$(T3D_GLTF_TO_3D) assets/ice_moon.patched.glb $@ --base-scale=1 --ignore-materials
-
-filesystem/young_star_field.t3dm: assets/young_star_field.glb
-	$(PYTHON) patch_glb_material.py $< assets/young_star_field.patched.glb
-	$(T3D_GLTF_TO_3D) assets/young_star_field.patched.glb $@ --base-scale=1 --ignore-materials
-
-filesystem/%.t3dm: assets/%.glb
-	$(T3D_GLTF_TO_3D) $< $@ --base-scale=64 --ignore-materials
-
 SRCS = $(wildcard $(SOURCE_DIR)/*.c)
 OBJS = $(SRCS:$(SOURCE_DIR)/%.c=$(BUILD_DIR)/%.o)
 
@@ -64,3 +42,25 @@ clean:
 	rm -rf $(BUILD_DIR) $(ROM_NAME).z64
 
 .PHONY: all clean run
+
+# Stage geometry spans thousands of world units. Default --base-scale=64 would
+# multiply coordinates by 64 before int16 conversion, causing overflow
+# (5000 * 64 = 320,000 > 32767). These specific rules override the wildcard below.
+#
+# Blender's glTF exporter omits the "material" field from primitives when
+# export_materials='NONE'. gltf_to_t3d skips any primitive with no material
+# index, so we run patch_glb_material.py to inject a dummy material=0 on
+# every primitive before conversion. The patch is done on a copy so the
+# source .glb is unchanged.
+PYTHON = '/c/Users/Scott Bieser/AppData/Local/Microsoft/WindowsApps/python.exe'
+
+filesystem/ice_moon.t3dm: assets/ice_moon.glb
+	$(PYTHON) patch_glb_material.py $< assets/ice_moon.patched.glb
+	$(T3D_GLTF_TO_3D) assets/ice_moon.patched.glb $@ --base-scale=1 --ignore-materials
+
+filesystem/young_star_field.t3dm: assets/young_star_field.glb
+	$(PYTHON) patch_glb_material.py $< assets/young_star_field.patched.glb
+	$(T3D_GLTF_TO_3D) assets/young_star_field.patched.glb $@ --base-scale=1 --ignore-materials
+
+filesystem/%.t3dm: assets/%.glb
+	$(T3D_GLTF_TO_3D) $< $@ --base-scale=64 --ignore-materials

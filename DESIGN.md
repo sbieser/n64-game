@@ -52,7 +52,7 @@ The ending must not answer whether becoming the Colossus is death or transcenden
 
 **Genre:** Rails traversal / obstacle survival (Star Fox 64 locomotion, not Star Fox 64 combat)
 
-**Player character:** A person — a human figure traveling through space. Not a pilot in a cockpit, not a ship. Small, exposed, vulnerable. This creates identification not distance. In Acts 1 and 2 they travel within some kind of vessel; in Act 3 the vessel falls away and they continue alone.
+**Player character:** A person — a seeker traveling through deep space. The game is played from inside the cockpit: the player looks out through a wide horizontal windshield at the void, with a dark instrument dashboard below. The cockpit is a 2D rdpq overlay drawn after the 3D scene each frame — essentially free to render. At arrival, the cockpit fades away: instruments go dark, the frame dissolves, the hand is gone. The player becomes a bare point of view looking at something incomprehensible. The intimacy of the cockpit makes its removal the game's most significant visual moment. See `planning/colossus/visual/cockpit.md` for the full visual language.
 
 **The loop:**
 - Player moves forward automatically on a fixed rail through 3D space
@@ -79,7 +79,7 @@ The ending must not answer whether becoming the Colossus is death or transcenden
 
 ## Ghost Mechanic
 
-When the player dies, their position along the rail, their lateral/vertical offset, and their run index are written to **EEPROM** on cartridge (4 Kbit cartridge EEPROM, accessed via libdragon's `eeprom_read/write_bytes` API).
+When the player dies, their position and run index are written to **SRAM** on cartridge (32 KB cartridge SRAM). Stage unlock state fits in a two-byte bitmask. Ghost pools for all stages fit comfortably within the 32 KB limit. Compatible with SummerCart 64, EverDrive, and all major emulators.
 
 On subsequent runs, those positions are loaded and rendered as frozen figures — people, drifting in the exact spot and posture they died, still reaching forward. They become part of the environment of Act 2, growing denser closer to The Colossus.
 

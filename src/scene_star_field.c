@@ -50,6 +50,7 @@
 #include <t3d/t3dmath.h>
 #include <t3d/t3dmodel.h>
 #include "scene.h"
+#include "cockpit.h"
 
 #define BOUND_X      1500.0f
 #define BOUND_Y      1000.0f
@@ -88,7 +89,7 @@ void scene_star_field_init(void) {
          * at 2850 units from anywhere in the stage. Open space has no overdraw
          * problem with a long far clip, but Z precision degrades. Near clip 2
          * keeps good precision for close star geometry. */
-        t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(70.0f), 2.0f, 3500.0f);
+        t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(65.0f), 2.0f, 3500.0f);
 
         initialized = true;
     }
@@ -164,6 +165,8 @@ void scene_star_field_draw(void) {
     t3d_matrix_push(&modelMat[frameIdx]);
     t3d_model_draw(model);
     t3d_matrix_pop(1);
+
+    cockpit_draw(1.0f);   /* TODO: wire oxygen_level from game state */
 
     rdpq_detach_show();
     frameIdx = (frameIdx + 1) % 3;

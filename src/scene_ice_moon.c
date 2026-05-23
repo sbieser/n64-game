@@ -52,6 +52,7 @@
 #include <t3d/t3dmath.h>
 #include <t3d/t3dmodel.h>
 #include "scene.h"
+#include "cockpit.h"
 
 #define RAIL_START       0.0f
 #define RAIL_END      -5000.0f
@@ -85,7 +86,7 @@ void scene_ice_moon_init(void) {
         /* Far clip 1000: terrain chunks draw to 800 units, gas giant to 3000
          * but the gas giant billboard is only visible in zone 0 (first 1200 units).
          * 1000 captures all active geometry without wasting fill rate on sky. */
-        t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(70.0f), 5.0f, 1000.0f);
+        t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(65.0f), 5.0f, 1000.0f);
 
         initialized = true;
     }
@@ -141,6 +142,8 @@ void scene_ice_moon_draw(void) {
     t3d_matrix_push(&modelMat[frameIdx]);
     t3d_model_draw(model);
     t3d_matrix_pop(1);
+
+    cockpit_draw(1.0f);   /* TODO: wire hull_temp_level from game state */
 
     rdpq_detach_show();
     frameIdx = (frameIdx + 1) % 3;
