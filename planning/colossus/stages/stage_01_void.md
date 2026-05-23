@@ -10,7 +10,7 @@ The void. Stars in every direction, no landmarks, no context. The player is alon
 
 Something is out there. The game does not say what, or where, or how far. There is a sound — irregular, not mechanical, almost organic — that shifts in panning and volume as the player moves. Louder means closer. More centered means facing it. The player must decide to trust their ears.
 
-At the end of the signal: a frozen figure. Another seeker who came before, stopped here, still reaching forward. The signal was coming from them.
+At the end of the signal: a frozen figure, seen through the windshield as you close in. Another seeker who came before, stopped here, still reaching forward. The signal was coming from them.
 
 ---
 
@@ -54,7 +54,7 @@ The player will also realize, eventually, that they are leaving traces too. Flyi
 
 ## The Pioneer
 
-At the signal source — the frozen humanoid figure, still reaching forward. Stage 1's Pioneer is recent enough that its form is clear, the reaching gesture readable, the intention unmistakable. Someone got here. They stopped here. They are still facing what they were trying to reach.
+At the signal source — the frozen humanoid figure, seen through the windshield as the player draws close. Stage 1's Pioneer is recent enough that its form is clear, the reaching gesture readable, the intention unmistakable. Someone got here. They stopped here. They are still facing what they were trying to reach. The player sees this from inside their own ship: instrument lights below, the Pioneer filling the void ahead.
 
 The beacon ghost is the only placed ghost — not the result of a player death. Everyone else in this stage stopped short. The beacon ghost got here.
 
@@ -84,7 +84,7 @@ The credits roll on orientation, not arrival. See `mechanics/memories.md`.
 
 **Visual:**
 
-The player appears in the void. Stars in every direction. Two faint color regions shape the darkness without explaining themselves. A few bright stars sit in true 3D space. Cosmic dust drifts. There is no UI, no arrow, no prompt. Then they hear it.
+The void through the windshield. Instruments below — all eight oxygen squares lit cyan, full tank. The signal screen hunting, no strong direction yet. No arrow, no prompt. Then they hear it.
 
 Not spectacle — presence.
 

@@ -78,7 +78,7 @@ See `mechanics/memories.md` for the crystallization moment and accumulation mech
 
 **Visual:**
 
-The geyser plume is the stage's defining visual: a column of ice crystals and water vapor rising from the moon's surface, catching light from the distant sun and scattering it. Inside the plume, the player is surrounded by particles moving in one direction — everything going up and outward, the player among it.
+The geyser plume is the stage's defining visual: a column of ice crystals and water vapor rising from the moon's surface, catching light from the distant sun and scattering it. Inside the plume, the player is surrounded by particles moving in one direction — everything going up and outward, the player among it. From inside the cockpit this is disorienting: the normal visual reference of horizon and stars is gone, replaced by streaming ice filling the windshield in every direction. Up and down lose meaning. The instruments are the only stable reference.
 
 Above the plume: the host planet fills a significant portion of the sky. Its ring system — partly made of material this moon has been contributing for millions of years — is visible as a band. The player emerging above the geyser and seeing the ring above is the stage's clearest spatial moment: the player understands what they were inside and what they contributed to.
 

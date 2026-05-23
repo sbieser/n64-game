@@ -72,7 +72,9 @@ See `mechanics/memories.md` for the crystallization moment and accumulation mech
 
 **Visual:**
 
-The warmest palette in the journey so far — red-orange-yellow, sulfur yellow, the deep orange of active lava. Eruption plumes are the stage's large-scale structures: colossal columns of gas and ejecta rising beyond the visible sky. The player moves between them, small.
+The warmest palette in the journey so far — red-orange-yellow, sulfur yellow, the deep orange of active lava filling the windshield. Eruption plumes are the stage's large-scale structures: colossal columns of gas and ejecta rising past the top of the windshield frame. The player moves between them, small. The cockpit interior — dark instruments, near-black dashboard — is the only enclosed thing against all that fire. The contrast makes the cockpit feel like the shelter it is.
+
+Hull temperature cluster replaces oxygen: squares shift toward red as the hull heats. Where Stage 3 depleted from right to left as cold accumulated, here the squares warm from right to left as heat builds. The same instrument. The opposite danger.
 
 Cooling lava crust creates texture variation: the dark grey of recently solidified rock, the orange-red glow at its edges where cooling is incomplete. Ghost ships entombed in lava read as dark shapes in darker rock — found by their vent particles if they're still visible, or missed entirely.
 

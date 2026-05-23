@@ -168,7 +168,7 @@ These are the most immediate 3D objects in the stage. Their parallax drift as th
 
 Position: Z −2,850, X +380, Y −120. Drifting slowly (no velocity). In the quiet past Star 5. Draw distance: 400 units.
 
-The approach: the player breaks through Star 5's noise zone. The signal clarifies. Seconds later the Pioneer resolves out of the starfield — it's been there, it was just another point of light until they were close enough to see it.
+The approach: the player breaks through Star 5's noise zone. The signal clarifies. Seconds later the Pioneer resolves out of the starfield through the windshield — it's been there, it was just another point of light until they were close enough to see it.
 
 Older than Stage 1's Pioneer, but the void has been kind — nothing to corrode it, nothing to disturb it. It has drifted slightly from wherever it stopped originally, pushed by the residual stellar wind off Star 5. The direction it faces is still correct.
 

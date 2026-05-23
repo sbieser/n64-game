@@ -80,12 +80,14 @@ See `mechanics/memories.md` for the crystallization moment and accumulation mech
 
 ## Atmosphere
 
-- The gas giant fills the upper sky — banded storms visible, enormous, static. It does not acknowledge you.
-- Geothermal vents: faint heat shimmer over dark ice. Not dramatic. The kind of detail you miss if you're not looking for it.
-- Ice cavern interiors: near-total darkness. Ship lighting reaches ten meters. The cavern continues past that.
+- The gas giant fills the upper portion of the windshield — banded storms visible through the glass, enormous, static. It does not acknowledge you.
+- Geothermal vents: faint heat shimmer over dark ice visible ahead through the windshield. Not dramatic. The kind of detail you miss if you're not looking for it.
+- Ice cavern interiors: near-total darkness. Ship lighting reaches ten meters through the windshield — the ice walls rushing toward you from the dark. The cavern continues past that.
 - The cosmic signal: present but muffled, lower in the mix than it has been. Not gone — just changed, filtered by ice and magnetosphere.
 - Sound: the creak of ice settling. Something geological, very far below.
 - Color: cold blue-white ice against the warm amber-orange of the gas giant above. The only warmth in the sky is the planet that's killing you slowly with its tidal forces.
+- Cockpit: the oxygen indicator cluster is replaced by hull temperature. Eight squares — all lit cyan at stage start. As temperature drops, the squares darken and shift toward deep blue from right to left. At critical cold, the remaining squares pulse red. The player glances at it the way a driver glances at a temperature gauge.
+- The Pioneer is embedded in the right-hand wall of the cavern. It appears on the right side of the windshield as the player approaches — frozen into the rock, arm still reaching forward, framed by the cockpit pillar.
 
 ---
 

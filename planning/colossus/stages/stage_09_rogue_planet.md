@@ -82,7 +82,7 @@ See `mechanics/memories.md` for the crystallization moment and accumulation mech
 
 **Visual:**
 
-The ship lights are the only light source in the universe here. They illuminate twenty meters of rock surface and nothing else. The horizon is a line — barely, in the faint starlight — but nothing is visible beyond it. The Milky Way is a smear above, beautiful and useless as navigation.
+The ship lights are the only light source in the universe here. Through the windshield: twenty meters of lit rock surface, then nothing. The cone of light is all there is. The horizon is a line — barely, in the faint starlight — but nothing is visible beyond the ship's reach. The Milky Way is a smear above, beautiful and useless as navigation. This is the most enclosed the cockpit has felt outside of Stage 13 — not by walls, but by the absolute limit of what the lights can show.
 
 Every ghost ship looks new. Accumulated across visits: a field of wrecked ships, none of them damaged by time, each one sitting exactly where it stopped. The planet holds them perfectly. They should look ancient but cannot. The disconnect between their apparent freshness and the player's accumulating understanding of how long they have been there is the stage's defining strangeness.
 

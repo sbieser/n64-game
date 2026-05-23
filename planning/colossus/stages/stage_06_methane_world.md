@@ -76,7 +76,7 @@ See `mechanics/memories.md` for the crystallization moment and accumulation mech
 
 **Visual:**
 
-Orange. The haze is omnidirectional — it has no source, comes from no direction, simply exists as the quality of light here. Everything is slightly amber, slightly diffuse, slightly wrong.
+Orange. The haze is omnidirectional — it has no source, comes from no direction, simply exists as the quality of light here. Everything visible through the windshield is slightly amber, slightly diffuse, slightly wrong. This is the first stage where the void outside the cockpit is warm-colored rather than cold blue. It does not feel like warmth. It feels like the wrong light.
 
 The methane lakes are the stage's spatial anchors: their surfaces reflect the haze-filtered sky in a way that reads as water at first glance and as something alien on the second. The shorelines are real — they are just made of the wrong things, and the liquid is the wrong liquid. The geometry of coast is deeply familiar. Nothing about the coast is familiar.
 

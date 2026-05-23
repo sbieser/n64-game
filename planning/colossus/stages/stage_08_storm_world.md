@@ -78,11 +78,11 @@ See `mechanics/memories.md` for the crystallization moment and accumulation mech
 
 **Visual:**
 
-Cloud structures at multiple scales: the large-scale banding of the storm system, the local turbulence of active cells, the gap between them where calmer air exists. Lightning illuminates the cloud structures from within — the clouds flash, the interior of each storm cell briefly visible as a silhouette before the light fails.
+Cloud structures at multiple scales: the large-scale banding of the storm system, the local turbulence of active cells, the gap between them where calmer air exists. Lightning illuminates the cloud structures from within — the clouds flash through the windshield, the interior of each storm cell briefly visible as a bright silhouette before the light fails. Each discharge briefly whites out the windshield.
 
-The eye of the vortex is the visual contrast: outside, chaos; inside, a column of still air with the Pioneer at its center. The cloud walls of the vortex curve upward and outward. Looking up from the eye: open sky, briefly. Stars visible for the first time since entering the atmosphere.
+The eye of the vortex is the visual contrast: outside, chaos; inside the eye, the cockpit looks up through the windshield at a column of still air and open sky. Stars appear briefly through the gap — the first visible since entering the atmosphere. The Pioneer is centered in that column of calm.
 
-The discharge zones have a charged quality — a blue-white quality to the air that precedes a lightning strike. The player learns to read this as warning.
+The discharge zones have a charged quality — a blue-white atmospheric glow that precedes a lightning strike. Hull integrity cluster replaces the standard oxygen squares; each strike depletes it. The player learns to read the glow as warning.
 
 **Audio:**
 

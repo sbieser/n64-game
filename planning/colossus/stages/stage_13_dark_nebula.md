@@ -82,7 +82,9 @@ See `mechanics/memories.md` for the crystallization moment and accumulation mech
 
 **Visual:**
 
-The transition into the dark nebula is a closing: stars at the edges of the cloud, then the dust density increases, then the star field closes behind the player like a door. Inside: nothing. Ship lights illuminate a sphere of dust particles — they catch the light and scatter it back, giving the immediate vicinity a faint haze, but revealing nothing beyond.
+The transition into the dark nebula is a closing: stars at the edges of the cloud, then the dust density increases, then the star field closes behind the player like a door. Inside: nothing through the windshield. Pure black. The dust scatters the ship lights back as a faint haze — enough to see the immediate vicinity, nothing more.
+
+This is the only stage where the windshield shows nothing. The dashboard instruments — the indicator cluster, the signal screen — are the only light in the cockpit. The cockpit stops feeling like a window and becomes a sealed box. The instruments glow. The rumble pak vibrates. Nothing else.
 
 The Pioneer emerges from the dark as the ship lights reach it: first a shape, then details, then the reaching arm. The dust has settled on it uniformly. It looks like it belongs here, which it does.
 

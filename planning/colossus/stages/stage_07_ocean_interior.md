@@ -48,7 +48,7 @@ See `mechanics/seeking_mechanic.md`.
 
 On the seafloor, just above the Ice VII boundary. The high-pressure ice has partially grown up around its lower half — exotic crystalline material, warm but solid, slowly encasing what stopped here. Still reaching upward.
 
-The geometry of the encounter is different from every other Pioneer: the player descends toward it from above, and the Pioneer faces up — toward them. For once, the seeker arrives from the direction the ghost faces. The arm is extended toward the player as they approach. It reaches toward you the way you have been reaching toward every other Pioneer in the journey. The inversion is not explained.
+The geometry of the encounter is different from every other Pioneer: the player descends toward it from above, and the Pioneer faces up — toward them. For once, the seeker arrives from the direction the ghost faces. From inside the cockpit, descending toward it, the arm fills the center of the windshield — reaching upward toward the player the way the player has been reaching toward every other Pioneer. The inversion is not explained.
 
 ---
 
@@ -74,7 +74,9 @@ See `mechanics/memories.md` for the crystallization moment and accumulation mech
 
 **Visual:**
 
-The descent is a study in light failure. Near the surface: diffuse blue-green, some ambient light. Below the photic zone: diminishing. Below that: ship lights only. The ship lights reach perhaps ten meters in every direction. Beyond that is water the ship's instruments can read but the eye cannot.
+The descent is a study in light failure visible through the windshield — blue-green diffusing to deep blue to nothing. Below the photic zone, the ship lights are the only illumination: ten meters of visible water ahead, then the dark. The water outside the cockpit presses in from every direction. No surface visible above. No floor visible below. The cockpit has never felt smaller.
+
+Hull pressure cluster replaces oxygen: squares deplete as depth increases — not a resource that replenishes between visits but a running measure of structural tolerance. Drawing from a ghost's pressure compensator temporarily restores squares. The player watches it the way they watch the oxygen cluster in space, but the depletion here is continuous and tied to position rather than time.
 
 The Ice VII boundary is the stage's visual payoff: crystalline exotic ice, geometrically perfect structures formed by pressure rather than cold. It emits a faint thermal glow from below — the hot ice is warm, and that warmth bleeds upward through the crystal structure as dim amber light. The Pioneer stands above it, arm raised, faintly lit from below.
 
