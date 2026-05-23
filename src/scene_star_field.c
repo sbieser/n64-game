@@ -2,21 +2,42 @@
  * scene_star_field.c — Stage 2: The Wake (young star field), free-roam
  *
  * The player moves through a volume of space 3,000 wide × 2,000 tall ×
- * 3,200 deep (Z: 0 to −3,200). Motion is free — the player controls X, Y,
- * and Z with the stick and buttons. No automatic forward pull. The ghost_reacher
- * sits at Z −2,850, past the five proto-stars.
+ * 3,200 deep (Z: 0 to −3,200). Motion is free with flight-sim controls:
+ * the stick steers heading (yaw/pitch) and the Z/R buttons thrust along
+ * the look direction. Velocity persists with drag so the player coasts to
+ * a stop after releasing thrust — enabling the "stop and rotate to seek"
+ * loop that is the core mechanic. The ghost_reacher sits at Z −2,850.
  *
  * CONTROLS
  * ────────
- * Stick X/Y: lateral and vertical steering (add velocity to position)
- * Z button: thrust forward (−Z)
- * R button: brake / thrust backward (+Z)
- * B: return to scene select
+ * Stick X:  yaw left/right
+ * Stick Y:  pitch up/down
+ * Z button: thrust forward (along look direction)
+ * R button: brake / thrust backward
+ * B:        return to scene select
  *
- * Velocity decays each frame (drag) so the player coasts to a stop after
- * releasing the stick. This matters for the "stop and rotate to seek" loop
- * that will eventually be the core mechanic — the player must be able to
- * hold still.
+ * LOOK DIRECTION
+ * ──────────────
+ * Derived from yaw and pitch each frame:
+ *   lookX =  sin(yaw) * cos(pitch)
+ *   lookY =  sin(pitch)
+ *   lookZ = -cos(yaw) * cos(pitch)
+ * At yaw=0, pitch=0 this gives (0,0,−1) — looking into the scene.
+ * Pitch is clamped to ±80° to prevent gimbal flip at the poles.
+ *
+ * CAMERA
+ * ──────
+ * First-person: camera sits at the player position looking along lookDir.
+ * The cockpit overlay frames the view. World up (0,1,0) is the up vector;
+ * no roll is implemented, keeping the horizon stable.
+ *
+ * VELOCITY
+ * ─────────
+ * Thrust adds to a world-space velocity vector along the current look
+ * direction. Drag decays all three components each frame. Speed is clamped
+ * by vector magnitude (not per-axis) so the terminal speed is consistent
+ * regardless of heading. Turning while moving causes a realistic drift —
+ * the ship slides through space until drag kills the old velocity.
  *
  * BACKFACE CULLING
  * ─────────────────
@@ -24,55 +45,42 @@
  * approach angle, the camera may be on either side of a quad's normal.
  * T3D_FLAG_CULL_BACK would hide quads viewed from behind, leaving invisible
  * holes in the nebula field. The star field draws WITHOUT CULL_BACK so all
- * geometry is visible from any direction. Proto-star cores (spheres) have
- * outward normals so they're fine either way.
- *
- * FAR CLIP AND DEPTH
- * ──────────────────
- * The stage volume is 3,200 units deep. Nebula quads sit at 1,500–3,000 units.
- * Far clip of 3,500 ensures everything is visible from the spawn point at Z=0
- * without clipping the deepest nebula. The ghost_reacher at Z −2,850 also
- * stays inside the far clip. Open space has no geometry to occlude, so a long
- * far clip costs nothing in overdraw — but it does affect Z-buffer precision.
- * Near clip of 2 is tighter than the corridor scene because the space is open
- * and the player may fly up to stars without hard walls stopping them.
+ * geometry is visible from any direction.
  *
  * SOFT BOUNDS
  * ────────────
- * The stage has no physical walls. Soft bounds clamp the player back when they
- * drift past the stage volume edges — the position snaps to the boundary and the
- * velocity on that axis is zeroed. This prevents flying off to infinity with no
- * way back.
+ * The stage has no physical walls. Soft bounds clamp the player back when
+ * they drift past the stage volume edges — position snaps to the boundary
+ * and velocity on that axis is zeroed.
  */
 
 #include <libdragon.h>
+#include <math.h>
 #include <t3d/t3d.h>
 #include <t3d/t3dmath.h>
 #include <t3d/t3dmodel.h>
 #include "scene.h"
 #include "cockpit.h"
 
-#define BOUND_X      1500.0f
-#define BOUND_Y      1000.0f
-#define BOUND_Z_FAR -3200.0f
-#define BOUND_Z_NEAR  200.0f   /* don't let player fly behind spawn */
-#define THRUST        0.18f    /* units added to velocity per frame of input */
-#define DRAG          0.92f    /* velocity multiplied each frame — coasts to stop */
-#define MAX_SPEED     8.0f     /* terminal velocity per axis */
-#define CAM_BACK      30.0f    /* camera trails behind the player */
-#define CAM_RISE       5.0f
+#define BOUND_X       1500.0f
+#define BOUND_Y       1000.0f
+#define BOUND_Z_FAR  -3200.0f
+#define BOUND_Z_NEAR   200.0f
+#define THRUST          0.18f   /* velocity added per frame of thrust input */
+#define DRAG            0.92f   /* velocity multiplied each frame */
+#define MAX_SPEED        8.0f   /* terminal speed (vector magnitude) */
+#define YAW_RATE        0.030f  /* radians per frame at full stick deflection */
+#define PITCH_RATE      0.025f  /* radians per frame at full stick deflection */
+#define PITCH_MAX       1.396f  /* 80° in radians — avoids gimbal flip */
 
 static T3DViewport  viewport;
 static T3DModel    *model;
 static T3DMat4FP   *modelMat;   /* [3] triple-buffered */
 static float        posX, posY, posZ;
 static float        velX, velY, velZ;
+static float        yaw, pitch;
 static int          frameIdx    = 0;
 static bool         initialized = false;
-
-static inline float clampf(float v, float lo, float hi) {
-    return v < lo ? lo : v > hi ? hi : v;
-}
 
 void scene_star_field_init(void) {
     if (!initialized) {
@@ -85,10 +93,6 @@ void scene_star_field_init(void) {
             t3d_mat4fp_from_srt_euler(&modelMat[i], one, zero, zero);
 
         viewport = t3d_viewport_create();
-        /* Far clip 3500: captures nebula quads at 3000 units and the ghost_reacher
-         * at 2850 units from anywhere in the stage. Open space has no overdraw
-         * problem with a long far clip, but Z precision degrades. Near clip 2
-         * keeps good precision for close star geometry. */
         t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(65.0f), 2.0f, 3500.0f);
 
         initialized = true;
@@ -96,6 +100,7 @@ void scene_star_field_init(void) {
 
     posX = 0.0f; posY = 0.0f; posZ = 0.0f;
     velX = 0.0f; velY = 0.0f; velZ = 0.0f;
+    yaw  = 0.0f; pitch = 0.0f;
     frameIdx = 0;
 }
 
@@ -104,46 +109,51 @@ void scene_star_field_update(void) {
     joypad_buttons_t btn = joypad_get_buttons_pressed(JOYPAD_PORT_1);
     if (btn.b) { scene_switch(SCENE_SELECT); return; }
 
-    joypad_inputs_t pad = joypad_get_inputs(JOYPAD_PORT_1);
-
-    /* Stick X → lateral thrust; stick Y → vertical thrust.
-     * Normalizing by 85 maps the stick's ~85-unit max to [-1, +1]. */
-    velX += (pad.stick_x / 85.0f) * THRUST;
-    velY += (pad.stick_y / 85.0f) * THRUST;
-
-    /* Z button = thrust into the stage (−Z direction).
-     * R button = thrust back toward start (+Z direction). */
+    joypad_inputs_t pad  = joypad_get_inputs(JOYPAD_PORT_1);
     joypad_buttons_t held = joypad_get_buttons_held(JOYPAD_PORT_1);
-    if (held.z) velZ -= THRUST;
-    if (held.r) velZ += THRUST;
 
-    /* Drag — velocity decays toward zero each frame so the ship coasts to a stop.
-     * Without drag, tiny stick inputs would accumulate forever. */
+    /* Stick steers heading. Normalizing by 85 maps stick range to [−1, +1]. */
+    yaw   += (pad.stick_x / 85.0f) * YAW_RATE;
+    pitch += (pad.stick_y / 85.0f) * PITCH_RATE;
+    if (pitch >  PITCH_MAX) pitch =  PITCH_MAX;
+    if (pitch < -PITCH_MAX) pitch = -PITCH_MAX;
+
+    /* Look direction vector from yaw and pitch. */
+    float lookX =  sinf(yaw) * cosf(pitch);
+    float lookY =  sinf(pitch);
+    float lookZ = -cosf(yaw) * cosf(pitch);
+
+    /* Thrust adds velocity along the current look direction. */
+    if (held.z) { velX += lookX * THRUST; velY += lookY * THRUST; velZ += lookZ * THRUST; }
+    if (held.r) { velX -= lookX * THRUST; velY -= lookY * THRUST; velZ -= lookZ * THRUST; }
+
+    /* Drag decays velocity toward zero each frame. */
     velX *= DRAG;
     velY *= DRAG;
     velZ *= DRAG;
-    velX = clampf(velX, -MAX_SPEED, MAX_SPEED);
-    velY = clampf(velY, -MAX_SPEED, MAX_SPEED);
-    velZ = clampf(velZ, -MAX_SPEED, MAX_SPEED);
+
+    /* Clamp by vector magnitude so terminal speed is consistent in all directions. */
+    float speed2 = velX*velX + velY*velY + velZ*velZ;
+    if (speed2 > MAX_SPEED * MAX_SPEED) {
+        float inv = MAX_SPEED / sqrtf(speed2);
+        velX *= inv; velY *= inv; velZ *= inv;
+    }
 
     posX += velX;
     posY += velY;
     posZ += velZ;
 
-    /* Soft bounds: clamp position and zero the corresponding velocity so the
-     * player doesn't fight a spring force to stay in-bounds. */
-    if (posX >  BOUND_X)    { posX =  BOUND_X;    velX = 0.0f; }
-    if (posX < -BOUND_X)    { posX = -BOUND_X;    velX = 0.0f; }
-    if (posY >  BOUND_Y)    { posY =  BOUND_Y;    velY = 0.0f; }
-    if (posY < -BOUND_Y)    { posY = -BOUND_Y;    velY = 0.0f; }
-    if (posZ >  BOUND_Z_NEAR) { posZ =  BOUND_Z_NEAR; velZ = 0.0f; }
-    if (posZ <  BOUND_Z_FAR)  { posZ =  BOUND_Z_FAR;  velZ = 0.0f; }
+    /* Soft bounds: snap to edge and kill velocity on that axis. */
+    if (posX >  BOUND_X)     { posX =  BOUND_X;     velX = 0.0f; }
+    if (posX < -BOUND_X)     { posX = -BOUND_X;     velX = 0.0f; }
+    if (posY >  BOUND_Y)     { posY =  BOUND_Y;     velY = 0.0f; }
+    if (posY < -BOUND_Y)     { posY = -BOUND_Y;     velY = 0.0f; }
+    if (posZ >  BOUND_Z_NEAR){ posZ =  BOUND_Z_NEAR; velZ = 0.0f; }
+    if (posZ <  BOUND_Z_FAR) { posZ =  BOUND_Z_FAR;  velZ = 0.0f; }
 
-    /* Camera trails behind the player and looks toward where they're heading.
-     * The velocity lean (velX * 2, velY * 2) tilts the look-at target slightly
-     * in the direction of motion — subtle banking without actual ship tilt. */
-    T3DVec3 camPos    = {{posX, posY + CAM_RISE, posZ + CAM_BACK}};
-    T3DVec3 camTarget = {{posX + velX * 2.0f, posY + velY * 2.0f, posZ - 50.0f}};
+    /* First-person camera: sit at player position, look along heading. */
+    T3DVec3 camPos    = {{posX, posY, posZ}};
+    T3DVec3 camTarget = {{posX + lookX, posY + lookY, posZ + lookZ}};
     t3d_viewport_look_at(&viewport, &camPos, &camTarget, &(T3DVec3){{0, 1, 0}});
 }
 
@@ -152,14 +162,10 @@ void scene_star_field_draw(void) {
     t3d_frame_start();
     t3d_viewport_attach(&viewport);
 
-    /* Near-black void: very faint blue tint so pure black stars read against it.
-     * The nebula quads and proto-stars provide all the light. */
     t3d_screen_clear_color(RGBA32(2, 2, 8, 0xFF));
     t3d_screen_clear_depth();
 
     rdpq_mode_combiner(RDPQ_COMBINER_SHADE);
-    /* No CULL_BACK: nebula quads are flat planes that must be visible from
-     * either side regardless of player orientation. */
     t3d_state_set_drawflags(T3D_FLAG_SHADED | T3D_FLAG_DEPTH | T3D_FLAG_NO_LIGHT);
 
     t3d_matrix_push(&modelMat[frameIdx]);
