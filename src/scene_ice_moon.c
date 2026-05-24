@@ -143,7 +143,9 @@ void scene_ice_moon_draw(void) {
     t3d_model_draw(model);
     t3d_matrix_pop(1);
 
-    cockpit_draw(1.0f);   /* TODO: wire hull_temp_level from game state */
+    /* TODO: derive actual look direction from cam/target vectors */
+    cockpit_draw_frame(lateralPos, verticalPos, railZ, 0.0f, 0.0f, -1.0f);
+    cockpit_draw_hud(1.0f);   /* TODO: wire hull_temp_level from game state */
 
     rdpq_detach_show();
     frameIdx = (frameIdx + 1) % 3;

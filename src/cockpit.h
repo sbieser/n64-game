@@ -1,41 +1,22 @@
 #pragma once
 
 /*
- * cockpit.h — 2D rdpq overlay drawn after the 3D scene each frame.
+ * cockpit.h — 3D frame model + 2D HUD overlay.
  *
- * The cockpit frame (pillars, top bar, dashboard divider) and instruments
- * (indicator cluster, signal screen, gloved hand) are fixed-position quads
- * at 320×240. The windshield area (x 18–302, y 8–150) has no geometry —
- * the 3D scene shows through.
+ * cockpit_init()      — load cockpit.t3dm, call once at startup.
+ * cockpit_draw_frame(yaw, pitch)
+ *                     — draw the 3D cockpit frame locked to the camera.
+ *                       Call inside t3d_frame_start() / rdpq_detach_show(),
+ *                       after the world scene, before the HUD.
+ * cockpit_draw_hud(oxygen_level)
+ *                     — draw 2D rdpq oxygen indicators and signal screen.
+ *                       Call after cockpit_draw_frame(), before rdpq_detach_show().
  *
- * Call cockpit_draw() after all t3d draw calls and before rdpq_detach_show().
- * The overlay switches the RDP to fill mode; it does not restore the prior mode.
- *
- * Layout (screen coords, y increases downward):
- *
- *   ┌──────────────────────────────────────┐  y=0
- *   │ [top bar 8px]                        │
- *   ├─────────────────────────────────────┤  y=8
- *   │P│                              │P│  │
- *   │I│   VOID — 3D scene shows here │I│  │
- *   │L│                              │L│  │
- *   │L│                              │L│  │
- *   ├─────────────────────────────────────┤  y=150
- *   │  [mid frame strip 6px]              │
- *   ├─────────────────────────────────────┤  y=156
- *   │  [indicator cluster]  [screen] [hand]│
- *   │           DASHBOARD                 │
- *   └──────────────────────────────────────┘  y=240
- *
- *   Pillars: x 0–18 (left), x 302–320 (right)
+ * oxygen_level: 0.0 (empty) → 1.0 (full).
+ *   8-square indicator cluster: cyan at full, red at ≤ 25%, dark at 0.
  */
 
-void cockpit_draw(float oxygen_level);
-
-/*
- * oxygen_level: 0.0 (empty) to 1.0 (full).
- * Drives the 8-square indicator cluster:
- *   - All cyan at 1.0
- *   - Squares go dark right-to-left as level drops
- *   - Remaining squares turn red at <= 0.25
- */
+void cockpit_init(void);
+void cockpit_draw_frame(float posX, float posY, float posZ,
+                        float lookX, float lookY, float lookZ);
+void cockpit_draw_hud(float oxygen_level);

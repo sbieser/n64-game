@@ -12,7 +12,9 @@ export N64_INST = /pyrite64-sdk
 include $(N64_INST)/include/n64.mk
 include $(N64_INST)/include/t3d.mk
 
-ASSET_GLBS  = $(wildcard assets/*.glb)
+# Exclude intermediate patched GLBs from the wildcard — those are build
+# artifacts produced by the explicit patch rules below, not source assets.
+ASSET_GLBS  = $(filter-out assets/%.patched.glb assets/cockpit_patched.glb, $(wildcard assets/*.glb))
 ASSET_T3DMS = $(ASSET_GLBS:assets/%.glb=filesystem/%.t3dm)
 
 SRCS = $(wildcard $(SOURCE_DIR)/*.c)
@@ -53,6 +55,10 @@ clean:
 # every primitive before conversion. The patch is done on a copy so the
 # source .glb is unchanged.
 PYTHON = '/c/Users/Scott Bieser/AppData/Local/Microsoft/WindowsApps/python.exe'
+
+filesystem/cockpit.t3dm: assets/cockpit.glb
+	$(PYTHON) patch_glb_material.py $< assets/cockpit_patched.glb
+	$(T3D_GLTF_TO_3D) assets/cockpit_patched.glb $@ --base-scale=1 --ignore-materials
 
 filesystem/ice_moon.t3dm: assets/ice_moon.glb
 	$(PYTHON) patch_glb_material.py $< assets/ice_moon.patched.glb

@@ -79,6 +79,7 @@ static T3DMat4FP   *modelMat;   /* [3] triple-buffered */
 static float        posX, posY, posZ;
 static float        velX, velY, velZ;
 static float        yaw, pitch;
+static float        lookX, lookY, lookZ;
 static int          frameIdx    = 0;
 static bool         initialized = false;
 
@@ -119,9 +120,9 @@ void scene_star_field_update(void) {
     if (pitch < -PITCH_MAX) pitch = -PITCH_MAX;
 
     /* Look direction vector from yaw and pitch. */
-    float lookX =  sinf(yaw) * cosf(pitch);
-    float lookY =  sinf(pitch);
-    float lookZ = -cosf(yaw) * cosf(pitch);
+    lookX =  sinf(yaw) * cosf(pitch);
+    lookY =  sinf(pitch);
+    lookZ = -cosf(yaw) * cosf(pitch);
 
     /* Thrust adds velocity along the current look direction. */
     if (held.z) { velX += lookX * THRUST; velY += lookY * THRUST; velZ += lookZ * THRUST; }
@@ -172,7 +173,8 @@ void scene_star_field_draw(void) {
     t3d_model_draw(model);
     t3d_matrix_pop(1);
 
-    cockpit_draw(1.0f);   /* TODO: wire oxygen_level from game state */
+    cockpit_draw_frame(posX, posY, posZ, lookX, lookY, lookZ);
+    cockpit_draw_hud(1.0f);   /* TODO: wire oxygen_level from game state */
 
     rdpq_detach_show();
     frameIdx = (frameIdx + 1) % 3;

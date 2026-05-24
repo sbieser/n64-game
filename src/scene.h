@@ -20,6 +20,7 @@ typedef struct {
 #define SCENE_STARGATE   8
 #define SCENE_ICE_MOON   9
 #define SCENE_STAR_FIELD 10
+#define SCENE_VOID       11
 
 void         scene_init(void);
 void         scene_tick(void);

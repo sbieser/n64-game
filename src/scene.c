@@ -1,5 +1,6 @@
 #include <libdragon.h>
 #include "scene.h"
+#include "cockpit.h"
 
 /* Forward declarations — each scene file provides these three functions. */
 void scene_select_init(void); void scene_select_update(void); void scene_select_draw(void);
@@ -13,6 +14,7 @@ void scene_phenomena_init(void); void scene_phenomena_update(void); void scene_p
 void scene_stargate_init(void);  void scene_stargate_update(void);  void scene_stargate_draw(void);
 void scene_ice_moon_init(void);  void scene_ice_moon_update(void);  void scene_ice_moon_draw(void);
 void scene_star_field_init(void); void scene_star_field_update(void); void scene_star_field_draw(void);
+void scene_void_init(void);       void scene_void_update(void);       void scene_void_draw(void);
 
 const Scene scenes[] = {
     { "Select", 0x111122FF, scene_select_init, scene_select_update, scene_select_draw },
@@ -26,6 +28,7 @@ const Scene scenes[] = {
     { "Stargate", 0x110033FF, scene_stargate_init,  scene_stargate_update,  scene_stargate_draw  },
     { "Ice Moon", 0x112244FF, scene_ice_moon_init,  scene_ice_moon_update,  scene_ice_moon_draw  },
     { "Stars",    0x010108FF, scene_star_field_init, scene_star_field_update, scene_star_field_draw },
+    { "Void",     0x02030CFF, scene_void_init,       scene_void_update,       scene_void_draw       },
 };
 
 static const int num_scenes = sizeof(scenes) / sizeof(scenes[0]);
@@ -34,6 +37,7 @@ static int current = SCENE_SELECT;
 void scene_init(void) {
     rdpq_font_t *font = rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO);
     rdpq_text_register_font(1, font);
+    cockpit_init();
     scenes[SCENE_SELECT].init();
 }
 
