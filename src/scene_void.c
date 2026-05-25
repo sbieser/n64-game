@@ -107,6 +107,7 @@ void scene_void_init(void) {
     posX = 0.0f; posY = 0.0f; posZ = 0.0f;
     velX = 0.0f; velY = 0.0f; velZ = 0.0f;
     yaw  = 0.0f; pitch  = 0.0f;
+    lookX = 0.0f; lookY = 0.0f; lookZ = -1.0f;
     oxygen     = 1.0f;
     deathTimer = 0;
     dead       = false;

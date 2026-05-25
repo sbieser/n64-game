@@ -4,8 +4,10 @@
  * cockpit.h — 3D frame model + 2D HUD overlay.
  *
  * cockpit_init()      — load cockpit.t3dm, call once at startup.
- * cockpit_draw_frame(yaw, pitch)
+ * cockpit_draw_frame(posX, posY, posZ, lookX, lookY, lookZ)
  *                     — draw the 3D cockpit frame locked to the camera.
+ *                       lookX/Y/Z must be a unit look vector matching the
+ *                       viewport's look direction (same as passed to look_at).
  *                       Call inside t3d_frame_start() / rdpq_detach_show(),
  *                       after the world scene, before the HUD.
  * cockpit_draw_hud(oxygen_level)

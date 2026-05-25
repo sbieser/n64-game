@@ -48,6 +48,7 @@
  */
 
 #include <libdragon.h>
+#include <math.h>
 #include <t3d/t3d.h>
 #include <t3d/t3dmath.h>
 #include <t3d/t3dmodel.h>
@@ -67,6 +68,8 @@ static T3DViewport  viewport;
 static T3DModel    *model;
 static T3DMat4FP   *modelMat;   /* [3] — triple-buffered identity matrix */
 static float        railZ, lateralPos, verticalPos;
+static float        camPosX, camPosY, camPosZ;
+static float        lookX, lookY, lookZ;
 static int          frameIdx    = 0;
 static bool         initialized = false;
 
@@ -94,6 +97,8 @@ void scene_ice_moon_init(void) {
     railZ       = RAIL_START;
     lateralPos  = 0.0f;
     verticalPos = 0.0f;
+    camPosX = 0.0f; camPosY = CAM_RISE; camPosZ = RAIL_START + CAM_BACK;
+    lookX = 0.0f; lookY = 0.0f; lookZ = -1.0f;
     frameIdx    = 0;
 }
 
@@ -116,11 +121,21 @@ void scene_ice_moon_update(void) {
     /* Camera trails behind the player and looks slightly forward. The slight
      * lean of camTarget toward the player's lateral/vertical position creates
      * a banking feel — the view tilts into the direction of movement. */
-    T3DVec3 camPos    = {{lateralPos,            verticalPos + CAM_RISE, railZ + CAM_BACK}};
+    camPosX = lateralPos;
+    camPosY = verticalPos + CAM_RISE;
+    camPosZ = railZ + CAM_BACK;
+    T3DVec3 camPos    = {{camPosX, camPosY, camPosZ}};
     T3DVec3 camTarget = {{lateralPos + lateralPos * 0.3f,
                           verticalPos + verticalPos * 0.2f,
                           railZ - CAM_LOOK_AHEAD}};
     t3d_viewport_look_at(&viewport, &camPos, &camTarget, &(T3DVec3){{0, 1, 0}});
+
+    /* Normalize look direction for cockpit (camTarget - camPos, then normalize). */
+    lookX = camTarget.v[0] - camPosX;
+    lookY = camTarget.v[1] - camPosY;
+    lookZ = camTarget.v[2] - camPosZ;
+    float invLen = 1.0f / sqrtf(lookX*lookX + lookY*lookY + lookZ*lookZ);
+    lookX *= invLen; lookY *= invLen; lookZ *= invLen;
 }
 
 void scene_ice_moon_draw(void) {
@@ -143,8 +158,7 @@ void scene_ice_moon_draw(void) {
     t3d_model_draw(model);
     t3d_matrix_pop(1);
 
-    /* TODO: derive actual look direction from cam/target vectors */
-    cockpit_draw_frame(lateralPos, verticalPos, railZ, 0.0f, 0.0f, -1.0f);
+    cockpit_draw_frame(camPosX, camPosY, camPosZ, lookX, lookY, lookZ);
     cockpit_draw_hud(1.0f);   /* TODO: wire hull_temp_level from game state */
 
     rdpq_detach_show();
