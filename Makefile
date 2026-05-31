@@ -31,7 +31,12 @@ $(BUILD_DIR)/$(ROM_NAME).elf: $(OBJS)
 $(ROM_NAME).z64: N64_ED64ROMCONFIGFLAGS = -w eeprom4k
 $(ROM_NAME).z64: $(BUILD_DIR)/$(ROM_NAME).dfs
 
-$(BUILD_DIR)/$(ROM_NAME).dfs: $(ASSET_T3DMS)
+AUDIO_ASSETS = filesystem/signal.wav64
+
+$(BUILD_DIR)/$(ROM_NAME).dfs: $(ASSET_T3DMS) $(AUDIO_ASSETS)
+
+filesystem/signal.wav64: assets/signal.wav
+	cd $(CURDIR) && $(N64_INST)/bin/audioconv64 --wav-loop true $< && mv signal.wav64 filesystem/
 
 ARES = /c/ares-v147/ares.exe
 

@@ -117,7 +117,8 @@ void cockpit_draw_frame(float posX, float posY, float posZ,
     frameIdx = (frameIdx + 1) % 3;
 }
 
-void cockpit_draw_hud(float oxygen_level) {
+void cockpit_draw_hud(float oxygen_level,
+                      float signal_h, float signal_v, float signal_strength) {
     int lit = (int)ceilf(oxygen_level * (float)IND_COUNT);
     if (lit < 0)         lit = 0;
     if (lit > IND_COUNT) lit = IND_COUNT;
@@ -129,11 +130,22 @@ void cockpit_draw_hud(float oxygen_level) {
         rdpq_fill_rectangle(x1, IND_Y1, x1 + IND_SQ, IND_Y2);
     }
 
-    /* Signal screen */
+    /* Signal screen — dot position encodes direction, size encodes strength */
     rdpq_set_mode_fill(COL_FRAME);
     rdpq_fill_rectangle(SCR_BOR_X1, SCR_BOR_Y1, SCR_BOR_X2, SCR_BOR_Y2);
     rdpq_set_mode_fill(COL_SCR_BG);
     rdpq_fill_rectangle(SCR_X1, SCR_Y1, SCR_X2, SCR_Y2);
+
+    int scr_cx = (SCR_X1 + SCR_X2) / 2;   /* 269 */
+    int scr_cy = (SCR_Y1 + SCR_Y2) / 2;   /* 198 */
+    int dot_r  = 1 + (int)(signal_strength * 3.0f);   /* radius 1..4 */
+    int dot_cx = scr_cx + (int)(signal_h *  10.0f);
+    int dot_cy = scr_cy - (int)(signal_v *   7.0f);   /* Y flipped: up = smaller Y */
+    if (dot_cx < SCR_X1 + dot_r) dot_cx = SCR_X1 + dot_r;
+    if (dot_cx > SCR_X2 - dot_r) dot_cx = SCR_X2 - dot_r;
+    if (dot_cy < SCR_Y1 + dot_r) dot_cy = SCR_Y1 + dot_r;
+    if (dot_cy > SCR_Y2 - dot_r) dot_cy = SCR_Y2 - dot_r;
     rdpq_set_mode_fill(COL_CYAN);
-    rdpq_fill_rectangle(DOT_X1, DOT_Y1, DOT_X2, DOT_Y2);
+    rdpq_fill_rectangle(dot_cx - dot_r, dot_cy - dot_r,
+                        dot_cx + dot_r, dot_cy + dot_r);
 }

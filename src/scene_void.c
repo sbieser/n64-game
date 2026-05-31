@@ -40,6 +40,7 @@
 #include "cockpit.h"
 #include "ghost.h"
 #include "shapes.h"
+#include "signal.h"
 
 /* Stage volume */
 #define BOUND_X       2000.0f
@@ -80,12 +81,14 @@ static int          deathTimer;
 static bool         dead;
 static uint32_t     frameCount;
 static int          frameIdx;
+static float        signalH, signalV, signalStrength;
 static bool         initialized = false;
 
 void scene_void_init(void) {
     if (!initialized) {
         shapes_init();
         ghost_init();
+        signal_init();
 
         pioneerMat = malloc_uncached(sizeof(T3DMat4FP) * 3);
         float scale[3] = {PIONEER_SCALE, PIONEER_SCALE, PIONEER_SCALE};
@@ -108,6 +111,8 @@ void scene_void_init(void) {
     velX = 0.0f; velY = 0.0f; velZ = 0.0f;
     yaw  = 0.0f; pitch  = 0.0f;
     lookX = 0.0f; lookY = 0.0f; lookZ = -1.0f;
+    signalH = 0.0f; signalV = 0.0f; signalStrength = 0.0f;
+    signal_play();
     oxygen     = 1.0f;
     deathTimer = 0;
     dead       = false;
@@ -118,13 +123,13 @@ void scene_void_init(void) {
 void scene_void_update(void) {
     joypad_poll();
     joypad_buttons_t btn = joypad_get_buttons_pressed(JOYPAD_PORT_1);
-    if (btn.b) { scene_switch(SCENE_SELECT); return; }
+    if (btn.b) { signal_stop(); scene_switch(SCENE_SELECT); return; }
 
     frameCount++;
 
     /* After death, count down the flash then return to select */
     if (dead) {
-        if (--deathTimer <= 0) scene_switch(SCENE_SELECT);
+        if (--deathTimer <= 0) { signal_stop(); scene_switch(SCENE_SELECT); }
         return;
     }
 
@@ -184,6 +189,7 @@ void scene_void_update(void) {
     float dz = posZ - PIONEER_Z;
     if (dx*dx + dy*dy + dz*dz < PIONEER_RADIUS * PIONEER_RADIUS) {
         /* TODO: transition to Stage 2 when wired */
+        signal_stop();
         scene_switch(SCENE_SELECT);
         return;
     }
@@ -192,6 +198,10 @@ void scene_void_update(void) {
     T3DVec3 camPos    = {{posX, posY, posZ}};
     T3DVec3 camTarget = {{posX + lookX, posY + lookY, posZ + lookZ}};
     t3d_viewport_look_at(&viewport, &camPos, &camTarget, &(T3DVec3){{0, 1, 0}});
+
+    signal_update(posX, posY, posZ, lookX, lookY, lookZ,
+                  PIONEER_X, PIONEER_Y, PIONEER_Z,
+                  &signalH, &signalV, &signalStrength);
 }
 
 void scene_void_draw(void) {
@@ -226,7 +236,7 @@ void scene_void_draw(void) {
     }
 
     cockpit_draw_frame(posX, posY, posZ, lookX, lookY, lookZ);
-    cockpit_draw_hud(oxygen);
+    cockpit_draw_hud(oxygen, signalH, signalV, signalStrength);
 
     rdpq_detach_show();
     frameIdx = (frameIdx + 1) % 3;

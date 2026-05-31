@@ -11,11 +11,14 @@ int main(void) {
     rdpq_init();
     t3d_init((T3DInitParams){});
     joypad_init();
+    audio_init(44100, 4);
+    mixer_init(4);
 
     scene_init();
 
     for (;;) {
         scene_tick();
+        mixer_try_play();
     }
 
     t3d_destroy();
