@@ -22,4 +22,4 @@ void signal_stop(void);
 void signal_update(float posX,    float posY,    float posZ,
                    float lookX,   float lookY,   float lookZ,
                    float targetX, float targetY, float targetZ,
-                   float *out_h, float *out_v, float *out_strength);
+                   float *out_h, float *out_strength);

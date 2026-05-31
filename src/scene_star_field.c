@@ -176,7 +176,7 @@ void scene_star_field_draw(void) {
                        sinf(yaw) * cosf(pitch),
                        sinf(pitch),
                       -cosf(yaw) * cosf(pitch));
-    cockpit_draw_hud(1.0f, 0.0f, 0.0f, 0.0f);   /* TODO: wire oxygen_level from game state */
+    cockpit_draw_hud(1.0f, 0.0f, 0.0f);   /* TODO: wire oxygen_level from game state */
 
     rdpq_detach_show();
     frameIdx = (frameIdx + 1) % 3;

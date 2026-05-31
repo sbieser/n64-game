@@ -81,7 +81,7 @@ static int          deathTimer;
 static bool         dead;
 static uint32_t     frameCount;
 static int          frameIdx;
-static float        signalH, signalV, signalStrength;
+static float        signalH, signalStrength;
 static bool         initialized = false;
 
 void scene_void_init(void) {
@@ -111,7 +111,7 @@ void scene_void_init(void) {
     velX = 0.0f; velY = 0.0f; velZ = 0.0f;
     yaw  = 0.0f; pitch  = 0.0f;
     lookX = 0.0f; lookY = 0.0f; lookZ = -1.0f;
-    signalH = 0.0f; signalV = 0.0f; signalStrength = 0.0f;
+    signalH = 0.0f; signalStrength = 0.0f;
     signal_play();
     oxygen     = 1.0f;
     deathTimer = 0;
@@ -201,7 +201,7 @@ void scene_void_update(void) {
 
     signal_update(posX, posY, posZ, lookX, lookY, lookZ,
                   PIONEER_X, PIONEER_Y, PIONEER_Z,
-                  &signalH, &signalV, &signalStrength);
+                  &signalH, &signalStrength);
 }
 
 void scene_void_draw(void) {
@@ -236,7 +236,7 @@ void scene_void_draw(void) {
     }
 
     cockpit_draw_frame(posX, posY, posZ, lookX, lookY, lookZ);
-    cockpit_draw_hud(oxygen, signalH, signalV, signalStrength);
+    cockpit_draw_hud(oxygen, signalH, signalStrength);
 
     rdpq_detach_show();
     frameIdx = (frameIdx + 1) % 3;

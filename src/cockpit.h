@@ -21,5 +21,4 @@
 void cockpit_init(void);
 void cockpit_draw_frame(float posX, float posY, float posZ,
                         float lookX, float lookY, float lookZ);
-void cockpit_draw_hud(float oxygen_level,
-                      float signal_h, float signal_v, float signal_strength);
+void cockpit_draw_hud(float oxygen_level, float signal_h, float signal_strength);

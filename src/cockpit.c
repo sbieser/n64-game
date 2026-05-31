@@ -25,28 +25,36 @@
 
 #define COCKPIT_DIST  100.0f   /* units in front of camera */
 
-/* Indicator cluster */
+/* Indicator cluster — sits in the physical dashboard zone below the 3D frame */
 #define IND_X0      32
 #define IND_SQ       7
 #define IND_GAP      3
 #define IND_STEP    (IND_SQ + IND_GAP)
-#define IND_Y1     196
-#define IND_Y2     203
+#define IND_Y1     216
+#define IND_Y2     223
 #define IND_COUNT    8
 
-/* Signal screen */
+/* Signal screen (waveform — strength only, no direction) */
 #define SCR_BOR_X1  250
-#define SCR_BOR_Y1  184
+#define SCR_BOR_Y1  204
 #define SCR_BOR_X2  288
-#define SCR_BOR_Y2  212
+#define SCR_BOR_Y2  238
 #define SCR_X1      252
-#define SCR_Y1      186
+#define SCR_Y1      206
 #define SCR_X2      286
-#define SCR_Y2      210
-#define DOT_X1      265
-#define DOT_Y1      194
-#define DOT_X2      273
-#define DOT_Y2      202
+#define SCR_Y2      236
+
+/* Bearing console — horizontal direction indicator, center-dashboard.
+ * Only activates above BRG_THRESHOLD signal strength; dark/off below it. */
+#define BRG_BOR_X1  134
+#define BRG_BOR_Y1  213
+#define BRG_BOR_X2  246
+#define BRG_BOR_Y2  232
+#define BRG_X1      136
+#define BRG_Y1      215
+#define BRG_X2      244
+#define BRG_Y2      230
+#define BRG_THRESHOLD  0.15f    /* signal must exceed this before bearing shows */
 
 #define COL_CYAN    RGBA32(  0, 179, 217, 255)
 #define COL_RED     RGBA32(217,  13,  13, 255)
@@ -109,7 +117,11 @@ void cockpit_draw_frame(float posX, float posY, float posZ,
     t3d_light_set_count(1);
 
     rdpq_mode_combiner(RDPQ_COMBINER_SHADE);
-    t3d_state_set_drawflags(T3D_FLAG_SHADED | T3D_FLAG_DEPTH | T3D_FLAG_CULL_BACK);
+    /* No T3D_FLAG_DEPTH — cockpit must always render on top of world geometry.
+     * Depth test would let close world objects (Pioneer, obstacles) bleed through
+     * the frame. Drawing after the scene without testing is the correct approach
+     * for any geometry that acts as a fixed HUD shell. */
+    t3d_state_set_drawflags(T3D_FLAG_SHADED | T3D_FLAG_CULL_BACK);
     t3d_matrix_push(&modelMats[frameIdx]);
     t3d_model_draw(model);
     t3d_matrix_pop(1);
@@ -117,35 +129,72 @@ void cockpit_draw_frame(float posX, float posY, float posZ,
     frameIdx = (frameIdx + 1) % 3;
 }
 
-void cockpit_draw_hud(float oxygen_level,
-                      float signal_h, float signal_v, float signal_strength) {
+static uint32_t hudFrame = 0;
+
+void cockpit_draw_hud(float oxygen_level, float signal_h, float signal_strength) {
+    hudFrame++;
+
+    /* Oxygen indicator cluster */
     int lit = (int)ceilf(oxygen_level * (float)IND_COUNT);
     if (lit < 0)         lit = 0;
     if (lit > IND_COUNT) lit = IND_COUNT;
     bool critical = (oxygen_level <= 0.25f);
-
     for (int i = 0; i < IND_COUNT; i++) {
         int x1 = IND_X0 + i * IND_STEP;
         rdpq_set_mode_fill(i < lit ? (critical ? COL_RED : COL_CYAN) : COL_IND_OFF);
         rdpq_fill_rectangle(x1, IND_Y1, x1 + IND_SQ, IND_Y2);
     }
 
-    /* Signal screen — dot position encodes direction, size encodes strength */
+    /* Signal screen — waveform amplitude only, no direction.
+     * The screen tells you "something is broadcasting" and how strongly,
+     * but not where.  Direction is left entirely to the audio pan and
+     * to the separate bearing console below. */
     rdpq_set_mode_fill(COL_FRAME);
     rdpq_fill_rectangle(SCR_BOR_X1, SCR_BOR_Y1, SCR_BOR_X2, SCR_BOR_Y2);
     rdpq_set_mode_fill(COL_SCR_BG);
     rdpq_fill_rectangle(SCR_X1, SCR_Y1, SCR_X2, SCR_Y2);
 
-    int scr_cx = (SCR_X1 + SCR_X2) / 2;   /* 269 */
-    int scr_cy = (SCR_Y1 + SCR_Y2) / 2;   /* 198 */
-    int dot_r  = 1 + (int)(signal_strength * 3.0f);   /* radius 1..4 */
-    int dot_cx = scr_cx + (int)(signal_h *  10.0f);
-    int dot_cy = scr_cy - (int)(signal_v *   7.0f);   /* Y flipped: up = smaller Y */
-    if (dot_cx < SCR_X1 + dot_r) dot_cx = SCR_X1 + dot_r;
-    if (dot_cx > SCR_X2 - dot_r) dot_cx = SCR_X2 - dot_r;
-    if (dot_cy < SCR_Y1 + dot_r) dot_cy = SCR_Y1 + dot_r;
-    if (dot_cy > SCR_Y2 - dot_r) dot_cy = SCR_Y2 - dot_r;
+    #define WAVE_PTS   10
+    #define WAVE_SPEED 0.05f
+    int   scr_cy = (SCR_Y1 + SCR_Y2) / 2;
+    float amp    = signal_strength * 5.0f;
+    float t_base = (float)hudFrame * WAVE_SPEED;
     rdpq_set_mode_fill(COL_CYAN);
-    rdpq_fill_rectangle(dot_cx - dot_r, dot_cy - dot_r,
-                        dot_cx + dot_r, dot_cy + dot_r);
+    for (int i = 0; i < WAVE_PTS; i++) {
+        float t  = (float)i / (float)(WAVE_PTS - 1);
+        int   px = SCR_X1 + 1 + (int)(t * (float)(SCR_X2 - SCR_X1 - 3));
+        float ph = t * 6.28f - t_base;
+        int   py = scr_cy + (int)(amp * sinf(ph));
+        if (py < SCR_Y1 + 1) py = SCR_Y1 + 1;
+        if (py > SCR_Y2 - 2) py = SCR_Y2 - 2;
+        rdpq_fill_rectangle(px, py, px + 3, py + 2);
+    }
+
+    /* Bearing console — horizontal direction indicator.
+     * Dark and off below threshold: you must get close enough for a signal
+     * lock before the bearing instrument activates.  Above threshold a dim
+     * track appears with a bright marker that slides left/right. */
+    rdpq_set_mode_fill(COL_FRAME);
+    rdpq_fill_rectangle(BRG_BOR_X1, BRG_BOR_Y1, BRG_BOR_X2, BRG_BOR_Y2);
+    rdpq_set_mode_fill(COL_SCR_BG);
+    rdpq_fill_rectangle(BRG_X1, BRG_Y1, BRG_X2, BRG_Y2);
+
+    if (signal_strength >= BRG_THRESHOLD) {
+        int track_w  = BRG_X2 - BRG_X1 - 2;   /* usable track pixels */
+        int track_cy = (BRG_Y1 + BRG_Y2) / 2;
+
+        /* Dim centerline and edge ticks */
+        rdpq_set_mode_fill(COL_IND_OFF);
+        rdpq_fill_rectangle(BRG_X1 + 1, track_cy, BRG_X2 - 1, track_cy + 1);
+        int mid_x = BRG_X1 + 1 + track_w / 2;
+        rdpq_fill_rectangle(mid_x - 1, BRG_Y1 + 2, mid_x + 1, BRG_Y2 - 2);
+
+        /* Sliding marker: 4px wide × 8px tall, clamped inside the track */
+        float t     = (signal_h + 1.0f) * 0.5f;   /* 0=left, 1=right */
+        int   mk_x  = BRG_X1 + 1 + (int)(t * (float)(track_w - 4));
+        if (mk_x < BRG_X1 + 1)      mk_x = BRG_X1 + 1;
+        if (mk_x > BRG_X2 - 5)      mk_x = BRG_X2 - 5;
+        rdpq_set_mode_fill(COL_CYAN);
+        rdpq_fill_rectangle(mk_x, BRG_Y1 + 2, mk_x + 4, BRG_Y2 - 2);
+    }
 }
