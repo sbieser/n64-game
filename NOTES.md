@@ -356,3 +356,39 @@ array row; the selector picks it up automatically.
 
 **What surprised us:** the refactor made the ROM *smaller* — shared code is
 compiled once instead of duplicated per scene.
+
+---
+
+## Galaxies: Two Roads (Texture vs Procedural Geometry)
+
+The Star Fox 64 "Sector X" nebula — that crisp rainbow blob — is a **texture**:
+a hand-painted image mapped onto a camera-facing billboard quad. Its defined
+internal structure comes from the painted pixels, not from geometry. Our nebula
+washes (`nebula.c`) are the opposite — **vertex-color gradients**, which can only
+ever be *soft* blends with no internal detail. Wanting "clearly defined galaxies"
+forces a choice between two roads.
+
+**Road A — texture.** Generate or paint an image → `mksprite` → `.sprite` → map
+onto a billboard.
+- Pros: crispest, most painterly detail; matches the SF64 look directly.
+- Cons: N64 texture memory (TMEM) is only **4 KB**, so the source image is small
+  (≈32×32 or 64×32) and gets scaled up huge on the billboard — soft anyway at
+  nebula size. Adds a texture pipeline we don't currently use. (The image itself
+  *can* still be generated procedurally in Python, like the signal audio was.)
+
+**Road B — procedural geometry.** Build the galaxy from hundreds of small colored
+billboard points — the same tech as dust/beacon — arranged in **logarithmic
+spiral arms with a bright warm core**, color graded by radius (warm core →
+blue-white arms → faint magenta edges).
+- Pros: fully generative and seed-varied (every galaxy unique); no texture
+  pipeline; no TMEM limit; reuses code we already have.
+- Cons: structure is a point cloud, not painterly bands; many small quads to draw.
+
+**Decision: Road B** (`galaxy.c`) — it fits the project's generative ethos, has no
+new pipeline, and we can iterate the look live. Road A is held in reserve for a
+future "hero" nebula where crisp painted detail is worth the texture plumbing.
+
+The two are complementary: the soft washes are ambient *mood/color*; galaxies are
+distinct, structured *landmarks*. Both sit far away in fixed directions, so both
+are angle-driven backdrops (never parallax with position) — the same
+infinitely-far trick as the star carpet.

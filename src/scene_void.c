@@ -30,6 +30,27 @@
  * Z          thrust forward — costs oxygen
  * R          thrust backward — costs oxygen
  * B          return to select
+ *
+ * VISUAL LAYERS (stage_01_void.md)
+ * ─────────────────────────────────
+ * The void is composed of five layers. Their key distinction is what drives
+ * them: the far layers respond to view ANGLE (never get closer), the near
+ * layers respond to POSITION/velocity (parallax). That contrast is what makes
+ * the void feel both infinite and flown-through.
+ *
+ *   1. Star carpet  — DONE (starcarpet.c). 2D, angle-driven, infinitely far.
+ *   2. Nebula washes — DONE (nebula.c). Angle-driven, infinitely far, NOT
+ *                      position-driven. Color is DIRECTIONAL — cold violet
+ *                      toward the signal/Pioneer, deep blue behind, indigo
+ *                      aside. Turning to face the Pioneer reveals violet; a
+ *                      quiet seeking cue, never an arrow. Soft gradient blobs
+ *                      that melt into the void. "A quality of the darkness."
+ *   3. Foreground 3D stars — TODO. 3–4 real geometry stars with true parallax;
+ *                      the counterpoint that sells motion (fly past them).
+ *   4. Cosmic dust   — DONE (dust.c). Near, position/velocity-driven; streams
+ *                      past on thrust, settles at rest.
+ *   5. Beacon pulse  — DONE (beacon.c). Dim, slow, irregular expanding rings
+ *                      centered on the Pioneer. "Something is there," not "follow me."
  */
 
 #include <libdragon.h>
@@ -42,6 +63,11 @@
 #include "shapes.h"
 #include "signal.h"
 #include "flight.h"
+#include "nebula.h"
+#include "galaxy.h"
+#include "starcarpet.h"
+#include "dust.h"
+#include "beacon.h"
 
 /* Stage volume */
 #define BOUND_X       2000.0f
@@ -95,6 +121,12 @@ void scene_void_init(void) {
         shapes_init();
         ghost_init();
         signal_init();
+        /* Background star carpet (Layer 1) + cosmic dust (Layer 4). Fixed seeds
+         * for now — wire the run seed here once it reaches Stage 1. */
+        galaxy_init(0x6A1A89u);
+        starcarpet_init(0x51A5F1E1u);
+        dust_init(0x0D05721Du);
+        beacon_init(0xBEAC04u, PIONEER_X, PIONEER_Y, PIONEER_Z);
 
         pioneerMat = malloc_uncached(sizeof(T3DMat4FP) * 3);
         float scale[3] = {PIONEER_SCALE, PIONEER_SCALE, PIONEER_SCALE};
@@ -147,6 +179,12 @@ void scene_void_update(void) {
         if (oxygen < 0.0f) oxygen = 0.0f;
     }
 
+    /* Cosmic dust streams past based on the camera's velocity this frame. */
+    dust_update(flight.velX, flight.velY, flight.velZ);
+
+    /* Advance the Pioneer's beacon ring timers. */
+    beacon_update();
+
     /* Death: oxygen exhausted */
     if (oxygen <= 0.0f) {
         ghost_record(flight.posX, flight.posY, flight.posZ);
@@ -192,6 +230,18 @@ void scene_void_draw(void) {
     t3d_screen_clear_depth();
 
     if (!dead) {
+        /* Far backdrop — three 2D layers locked to the same view-angle scroll
+         * (skyproj.h), composited bottom-up so they move as one sky:
+         *   carpet (stars) → nebula (additive color glow) → galaxy (points).
+         * The nebula glows over the stars without erasing them; the galaxy
+         * sits on top. All leave the RDP in fill/standard 2D modes, so restore
+         * standard mode before the 3D scene. */
+        starcarpet_draw(flight.yaw, flight.pitch);
+        nebula_draw(flight.yaw, flight.pitch);
+        galaxy_draw(flight.yaw, flight.pitch);
+        rdpq_set_mode_standard();
+        rdpq_mode_combiner(RDPQ_COMBINER_SHADE);
+
         /* Ghosts — flicker lighting, culled by Z proximity to player */
         t3d_state_set_drawflags(T3D_FLAG_SHADED | T3D_FLAG_DEPTH | T3D_FLAG_CULL_BACK);
         ghost_draw(flight.posZ, frameCount);
@@ -208,6 +258,14 @@ void scene_void_draw(void) {
         t3d_matrix_push(&pioneerMat[frameIdx]);
         draw_shape(SHAPE_OCTA);
         t3d_matrix_pop(1);
+
+        /* Layer 5 — the Pioneer's expanding beacon ring(s). */
+        beacon_draw();
+
+        /* Layer 4 — cosmic dust, the nearest 3D layer (drawn over the scene,
+         * under the cockpit). */
+        dust_draw(flight.posX, flight.posY, flight.posZ,
+                  flight.lookX, flight.lookY, flight.lookZ);
     }
 
     cockpit_draw_frame(flight.posX, flight.posY, flight.posZ,
