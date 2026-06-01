@@ -61,6 +61,7 @@
 #include <t3d/t3dmodel.h>
 #include "scene.h"
 #include "cockpit.h"
+#include "flight.h"
 
 #define BOUND_X       1500.0f
 #define BOUND_Y       1000.0f
@@ -76,11 +77,17 @@
 static T3DViewport  viewport;
 static T3DModel    *model;
 static T3DMat4FP   *modelMat;   /* [3] triple-buffered */
-static float        posX, posY, posZ;
-static float        velX, velY, velZ;
-static float        yaw, pitch;
+static Flight       flight;     /* shared first-person kinematics */
 static int          frameIdx    = 0;
 static bool         initialized = false;
+
+/* Stage volume + shared flight feel. Bounds are tighter than the Void. */
+static const FlightConfig flightCfg = {
+    .boundX = BOUND_X, .boundY = BOUND_Y,
+    .boundZNear = BOUND_Z_NEAR, .boundZFar = BOUND_Z_FAR,
+    .thrust = THRUST, .drag = DRAG, .maxSpeed = MAX_SPEED,
+    .yawRate = YAW_RATE, .pitchRate = PITCH_RATE, .pitchMax = PITCH_MAX,
+};
 
 void scene_star_field_init(void) {
     if (!initialized) {
@@ -98,9 +105,7 @@ void scene_star_field_init(void) {
         initialized = true;
     }
 
-    posX = 0.0f; posY = 0.0f; posZ = 0.0f;
-    velX = 0.0f; velY = 0.0f; velZ = 0.0f;
-    yaw  = 0.0f; pitch = 0.0f;
+    flight_reset(&flight);
     frameIdx = 0;
 }
 
@@ -112,48 +117,14 @@ void scene_star_field_update(void) {
     joypad_inputs_t pad  = joypad_get_inputs(JOYPAD_PORT_1);
     joypad_buttons_t held = joypad_get_buttons_held(JOYPAD_PORT_1);
 
-    /* Stick steers heading. Normalizing by 85 maps stick range to [−1, +1]. */
-    yaw   += (pad.stick_x / 85.0f) * YAW_RATE;
-    pitch += (pad.stick_y / 85.0f) * PITCH_RATE;
-    if (pitch >  PITCH_MAX) pitch =  PITCH_MAX;
-    if (pitch < -PITCH_MAX) pitch = -PITCH_MAX;
-
-    /* Look direction vector from yaw and pitch. */
-    float lookX =  sinf(yaw) * cosf(pitch);
-    float lookY =  sinf(pitch);
-    float lookZ = -cosf(yaw) * cosf(pitch);
-
-    /* Thrust adds velocity along the current look direction. */
-    if (held.z) { velX += lookX * THRUST; velY += lookY * THRUST; velZ += lookZ * THRUST; }
-    if (held.r) { velX -= lookX * THRUST; velY -= lookY * THRUST; velZ -= lookZ * THRUST; }
-
-    /* Drag decays velocity toward zero each frame. */
-    velX *= DRAG;
-    velY *= DRAG;
-    velZ *= DRAG;
-
-    /* Clamp by vector magnitude so terminal speed is consistent in all directions. */
-    float speed2 = velX*velX + velY*velY + velZ*velZ;
-    if (speed2 > MAX_SPEED * MAX_SPEED) {
-        float inv = MAX_SPEED / sqrtf(speed2);
-        velX *= inv; velY *= inv; velZ *= inv;
-    }
-
-    posX += velX;
-    posY += velY;
-    posZ += velZ;
-
-    /* Soft bounds: snap to edge and kill velocity on that axis. */
-    if (posX >  BOUND_X)     { posX =  BOUND_X;     velX = 0.0f; }
-    if (posX < -BOUND_X)     { posX = -BOUND_X;     velX = 0.0f; }
-    if (posY >  BOUND_Y)     { posY =  BOUND_Y;     velY = 0.0f; }
-    if (posY < -BOUND_Y)     { posY = -BOUND_Y;     velY = 0.0f; }
-    if (posZ >  BOUND_Z_NEAR){ posZ =  BOUND_Z_NEAR; velZ = 0.0f; }
-    if (posZ <  BOUND_Z_FAR) { posZ =  BOUND_Z_FAR;  velZ = 0.0f; }
+    /* Shared first-person flight kinematics (no oxygen cost in this stage). */
+    flight_update(&flight, &flightCfg, pad.stick_x, pad.stick_y, held.z, held.r);
 
     /* First-person camera: sit at player position, look along heading. */
-    T3DVec3 camPos    = {{posX, posY, posZ}};
-    T3DVec3 camTarget = {{posX + lookX, posY + lookY, posZ + lookZ}};
+    T3DVec3 camPos    = {{flight.posX, flight.posY, flight.posZ}};
+    T3DVec3 camTarget = {{flight.posX + flight.lookX,
+                          flight.posY + flight.lookY,
+                          flight.posZ + flight.lookZ}};
     t3d_viewport_look_at(&viewport, &camPos, &camTarget, &(T3DVec3){{0, 1, 0}});
 }
 
@@ -172,10 +143,8 @@ void scene_star_field_draw(void) {
     t3d_model_draw(model);
     t3d_matrix_pop(1);
 
-    cockpit_draw_frame(posX, posY, posZ,
-                       sinf(yaw) * cosf(pitch),
-                       sinf(pitch),
-                      -cosf(yaw) * cosf(pitch));
+    cockpit_draw_frame(flight.posX, flight.posY, flight.posZ,
+                       flight.lookX, flight.lookY, flight.lookZ);
     cockpit_draw_hud(1.0f, 0.0f, 0.0f);   /* TODO: wire oxygen_level from game state */
 
     rdpq_detach_show();

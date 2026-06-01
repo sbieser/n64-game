@@ -65,6 +65,35 @@ Assets added later:
 └── filesystem/       # converted assets (.t3dm, .sprite, etc.) loaded at runtime
 ```
 
+## Source Modules
+
+The code separates **shared systems** (reused by many scenes) from **scenes**
+(one screen each: a self-contained init/update/draw triple). The Makefile picks
+up every `src/*.c` via wildcard, so new files need no Makefile change.
+
+**Framework**
+| File | Role |
+|---|---|
+| `main.c` | Boot sequence + the master loop (`scene_tick` + `mixer_try_play`). |
+| `scene.c` / `scene.h` | Scene registry and dispatch. `scenes[]` is indexed by the `SCENE_*` constants (designated initializers + a `_Static_assert` keep index ↔ constant in sync). |
+
+**Shared systems** (the "extract the common thing" modules)
+| File | Role |
+|---|---|
+| `rng.{c,h}` | xorshift32 deterministic PRNG. One seed reproduces a whole run. Used by obstacles, phenomena, the seed lab. |
+| `camera.{c,h}` | Camera right/up basis vectors from a look direction. Used by the cockpit frame and the signal bearing. |
+| `flight.{c,h}` | First-person free-roam kinematics (steer / thrust / drag / bounds). Shared by the Void and Star Field stages. |
+| `cockpit.{c,h}` | 3D cockpit frame + 2D HUD (oxygen, waveform, bearing console). |
+| `signal.{c,h}` | Pioneer beacon: positional audio (pan/volume) + direction for the HUD. |
+| `shapes.{c,h}` | Five hand-built obstacle meshes + `draw_shape()`. |
+| `ghost.{c,h}` | Death-record persistence (EEPROM) + frozen-wreck rendering. |
+| `obstacles.{c,h}`, `phenomena.{c,h}`, `player.{c,h}`, `starfield.{c,h}` | Rails-stage systems (obstacle field, gravity fields, ship model, background stars). |
+
+**Scenes** — `scene_*.c`. Real game stages: `scene_void`, `scene_star_field`,
+`scene_ice_moon`. The rest (`scene_rails`, `scene_seed`, `scene_synth`,
+`scene_phenomena`, `scene_stargate`, `scene_ghost`, `scene_input`,
+`scene_colossus`) are test/demo beds reached from `scene_select`.
+
 ## N64 + tiny3d Architecture
 
 ### The Hardware Pipeline

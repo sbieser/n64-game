@@ -78,6 +78,7 @@
 
 #include <libdragon.h>
 #include "scene.h"
+#include "rng.h"
 
 #define NUM_OBSTACLES  12
 #define NUM_SEGMENTS   14
@@ -100,15 +101,6 @@ static ObSpec   obs[NUM_OBSTACLES];
 static float    star_density[NUM_SEGMENTS];
 static uint32_t sample_vals[8];
 
-static uint32_t rng_state;
-
-static uint32_t rng_next(void) {
-    rng_state ^= rng_state << 13;
-    rng_state ^= rng_state >> 17;
-    rng_state ^= rng_state << 5;
-    return rng_state;
-}
-
 /* Obstacle type colors — matches shape types in the rails scene */
 static const uint32_t TYPE_COLORS[5] = {
     0xFF4444FF,  /* cube     — red    */
@@ -119,24 +111,26 @@ static const uint32_t TYPE_COLORS[5] = {
 };
 
 static void generate(void) {
-    /* Capture first 8 raw PRNG values for the sample display */
-    rng_state = seed;
-    for (int i = 0; i < 8; i++) sample_vals[i] = rng_next();
+    Rng rng;
 
-    /* Generate obstacle layout — 4 draws per obstacle */
-    rng_state = seed;
+    /* Capture first 8 raw PRNG values for the sample display */
+    rng_seed(&rng, seed);
+    for (int i = 0; i < 8; i++) sample_vals[i] = rng_next(&rng);
+
+    /* Re-seed and generate obstacle layout — 4 draws per obstacle */
+    rng_seed(&rng, seed);
     for (int i = 0; i < NUM_OBSTACLES; i++) {
         float rail_len = RAIL_END - RAIL_START;
-        obs[i].z    = RAIL_START + (rng_next() % 10000) / 10000.0f * rail_len;
-        obs[i].x    = ((int)(rng_next() % 1000) - 500) / 500.0f * LATERAL_MAX;
+        obs[i].z    = RAIL_START + rng_unit(&rng) * rail_len;
+        obs[i].x    = ((int)(rng_next(&rng) % 1000) - 500) / 500.0f * LATERAL_MAX;
         /* y not visualised in the lateral strip but consumed from stream */
-        rng_next(); /* vertical position */
-        obs[i].type = (int)(rng_next() % 5);
+        rng_next(&rng); /* vertical position */
+        obs[i].type = (int)rng_range(&rng, 5);
     }
 
     /* Star density — continue same stream after obstacles */
     for (int i = 0; i < NUM_SEGMENTS; i++)
-        star_density[i] = (rng_next() % 1000) / 1000.0f;
+        star_density[i] = (rng_next(&rng) % 1000) / 1000.0f;
 }
 
 void scene_seed_init(void) {

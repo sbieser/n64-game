@@ -41,6 +41,7 @@
 #include "ghost.h"
 #include "shapes.h"
 #include "signal.h"
+#include "flight.h"
 
 /* Stage volume */
 #define BOUND_X       2000.0f
@@ -72,10 +73,7 @@
 
 static T3DViewport  viewport;
 static T3DMat4FP   *pioneerMat;   /* [3] triple-buffered — position never changes */
-static float        posX, posY, posZ;
-static float        velX, velY, velZ;
-static float        yaw, pitch;
-static float        lookX, lookY, lookZ;
+static Flight       flight;       /* shared first-person kinematics */
 static float        oxygen;
 static int          deathTimer;
 static bool         dead;
@@ -83,6 +81,14 @@ static uint32_t     frameCount;
 static int          frameIdx;
 static float        signalH, signalStrength;
 static bool         initialized = false;
+
+/* Stage volume + shared flight feel. Bounds are wider than the Star Field. */
+static const FlightConfig flightCfg = {
+    .boundX = BOUND_X, .boundY = BOUND_Y,
+    .boundZNear = BOUND_Z_NEAR, .boundZFar = BOUND_Z_FAR,
+    .thrust = THRUST, .drag = DRAG, .maxSpeed = MAX_SPEED,
+    .yawRate = YAW_RATE, .pitchRate = PITCH_RATE, .pitchMax = PITCH_MAX,
+};
 
 void scene_void_init(void) {
     if (!initialized) {
@@ -107,10 +113,7 @@ void scene_void_init(void) {
 
     ghost_load();
 
-    posX = 0.0f; posY = 0.0f; posZ = 0.0f;
-    velX = 0.0f; velY = 0.0f; velZ = 0.0f;
-    yaw  = 0.0f; pitch  = 0.0f;
-    lookX = 0.0f; lookY = 0.0f; lookZ = -1.0f;
+    flight_reset(&flight);
     signalH = 0.0f; signalStrength = 0.0f;
     signal_play();
     oxygen     = 1.0f;
@@ -136,57 +139,26 @@ void scene_void_update(void) {
     joypad_inputs_t  pad  = joypad_get_inputs(JOYPAD_PORT_1);
     joypad_buttons_t held = joypad_get_buttons_held(JOYPAD_PORT_1);
 
-    /* Stick steers heading */
-    yaw   += (pad.stick_x / 85.0f) * YAW_RATE;
-    pitch += (pad.stick_y / 85.0f) * PITCH_RATE;
-    if (pitch >  PITCH_MAX) pitch =  PITCH_MAX;
-    if (pitch < -PITCH_MAX) pitch = -PITCH_MAX;
-
-    /* Look direction from yaw and pitch — stored as statics for draw() */
-    lookX =  sinf(yaw) * cosf(pitch);
-    lookY =  sinf(pitch);
-    lookZ = -cosf(yaw) * cosf(pitch);
-
-    /* Thrust along look direction — costs oxygen */
-    bool thrusting = held.z || held.r;
-    if (held.z) { velX += lookX * THRUST; velY += lookY * THRUST; velZ += lookZ * THRUST; }
-    if (held.r) { velX -= lookX * THRUST; velY -= lookY * THRUST; velZ -= lookZ * THRUST; }
-
+    /* Shared flight kinematics. Oxygen drains only while thrust is applied. */
+    bool thrusting = flight_update(&flight, &flightCfg,
+                                   pad.stick_x, pad.stick_y, held.z, held.r);
     if (thrusting) {
         oxygen -= OXY_DRAIN_RATE;
         if (oxygen < 0.0f) oxygen = 0.0f;
     }
 
-    /* Drag and speed cap */
-    velX *= DRAG; velY *= DRAG; velZ *= DRAG;
-    float spd2 = velX*velX + velY*velY + velZ*velZ;
-    if (spd2 > MAX_SPEED * MAX_SPEED) {
-        float inv = MAX_SPEED / sqrtf(spd2);
-        velX *= inv; velY *= inv; velZ *= inv;
-    }
-
-    posX += velX; posY += velY; posZ += velZ;
-
-    /* Soft bounds */
-    if (posX >  BOUND_X)     { posX =  BOUND_X;     velX = 0.0f; }
-    if (posX < -BOUND_X)     { posX = -BOUND_X;     velX = 0.0f; }
-    if (posY >  BOUND_Y)     { posY =  BOUND_Y;     velY = 0.0f; }
-    if (posY < -BOUND_Y)     { posY = -BOUND_Y;     velY = 0.0f; }
-    if (posZ >  BOUND_Z_NEAR){ posZ =  BOUND_Z_NEAR; velZ = 0.0f; }
-    if (posZ <  BOUND_Z_FAR) { posZ =  BOUND_Z_FAR;  velZ = 0.0f; }
-
     /* Death: oxygen exhausted */
     if (oxygen <= 0.0f) {
-        ghost_record(posX, posY, posZ);
+        ghost_record(flight.posX, flight.posY, flight.posZ);
         deathTimer = DEATH_FRAMES;
         dead       = true;
         return;
     }
 
     /* Stage completion: reached the Pioneer */
-    float dx = posX - PIONEER_X;
-    float dy = posY - PIONEER_Y;
-    float dz = posZ - PIONEER_Z;
+    float dx = flight.posX - PIONEER_X;
+    float dy = flight.posY - PIONEER_Y;
+    float dz = flight.posZ - PIONEER_Z;
     if (dx*dx + dy*dy + dz*dz < PIONEER_RADIUS * PIONEER_RADIUS) {
         /* TODO: transition to Stage 2 when wired */
         signal_stop();
@@ -195,11 +167,14 @@ void scene_void_update(void) {
     }
 
     /* First-person camera */
-    T3DVec3 camPos    = {{posX, posY, posZ}};
-    T3DVec3 camTarget = {{posX + lookX, posY + lookY, posZ + lookZ}};
+    T3DVec3 camPos    = {{flight.posX, flight.posY, flight.posZ}};
+    T3DVec3 camTarget = {{flight.posX + flight.lookX,
+                          flight.posY + flight.lookY,
+                          flight.posZ + flight.lookZ}};
     t3d_viewport_look_at(&viewport, &camPos, &camTarget, &(T3DVec3){{0, 1, 0}});
 
-    signal_update(posX, posY, posZ, lookX, lookY, lookZ,
+    signal_update(flight.posX, flight.posY, flight.posZ,
+                  flight.lookX, flight.lookY, flight.lookZ,
                   PIONEER_X, PIONEER_Y, PIONEER_Z,
                   &signalH, &signalStrength);
 }
@@ -219,7 +194,7 @@ void scene_void_draw(void) {
     if (!dead) {
         /* Ghosts — flicker lighting, culled by Z proximity to player */
         t3d_state_set_drawflags(T3D_FLAG_SHADED | T3D_FLAG_DEPTH | T3D_FLAG_CULL_BACK);
-        ghost_draw(posZ, frameCount);
+        ghost_draw(flight.posZ, frameCount);
 
         /* Pioneer placeholder — warm amber point against cold void */
         uint8_t amb[4] = {15, 10, 30, 0xFF};   /* cold dark ambient */
@@ -235,7 +210,8 @@ void scene_void_draw(void) {
         t3d_matrix_pop(1);
     }
 
-    cockpit_draw_frame(posX, posY, posZ, lookX, lookY, lookZ);
+    cockpit_draw_frame(flight.posX, flight.posY, flight.posZ,
+                       flight.lookX, flight.lookY, flight.lookZ);
     cockpit_draw_hud(oxygen, signalH, signalStrength);
 
     rdpq_detach_show();

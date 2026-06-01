@@ -10,6 +10,7 @@
 #include <t3d/t3d.h>
 #include <t3d/t3dmath.h>
 #include "obstacles.h"
+#include "rng.h"
 
 Obstacle obstacles[NUM_OBSTACLES];
 
@@ -19,27 +20,21 @@ Obstacle obstacles[NUM_OBSTACLES];
 #define OBS_LAT_MAX       28.0f   /* slightly inside LATERAL_MAX so nothing hugs the wall */
 #define OBS_VERT_MAX      14.0f   /* slightly inside VERTICAL_MAX */
 
-static uint32_t rng_state;
-
-static uint32_t rng_next(void) {
-    rng_state ^= rng_state << 13;
-    rng_state ^= rng_state >> 17;
-    rng_state ^= rng_state << 5;
-    return rng_state;
-}
-
 void obstacles_generate(uint32_t seed) {
-    rng_state = seed;
+    /* Obstacles draw first from the bare run seed. Order matters: any other
+     * system reading this same stream must draw in the agreed sequence. */
+    Rng rng;
+    rng_seed(&rng, seed);
     float rail_len = OBS_RAIL_END - OBS_RAIL_START - 60.0f; /* leave buffer at end */
     for (int i = 0; i < NUM_OBSTACLES; i++) {
-        obstacles[i].worldZ    = OBS_RAIL_START + (rng_next() % 10000) / 10000.0f * rail_len;
-        obstacles[i].x         = ((int)(rng_next() % 1000) - 500) / 500.0f * OBS_LAT_MAX;
-        obstacles[i].y         = ((int)(rng_next() % 1000) - 500) / 500.0f * OBS_VERT_MAX;
+        obstacles[i].worldZ    = OBS_RAIL_START + rng_unit(&rng) * rail_len;
+        obstacles[i].x         = ((int)(rng_next(&rng) % 1000) - 500) / 500.0f * OBS_LAT_MAX;
+        obstacles[i].y         = ((int)(rng_next(&rng) % 1000) - 500) / 500.0f * OBS_VERT_MAX;
         obstacles[i].hitRadius = 7.0f;
-        obstacles[i].shape     = (int)(rng_next() % 5);
-        obstacles[i].rotSpeedX = 0.2f + (rng_next() % 100) / 250.0f;
-        obstacles[i].rotSpeedY = 0.2f + (rng_next() % 100) / 250.0f;
-        obstacles[i].rotPhase  = (rng_next() % 628) / 100.0f;
+        obstacles[i].shape     = (int)rng_range(&rng, 5);
+        obstacles[i].rotSpeedX = 0.2f + (rng_next(&rng) % 100) / 250.0f;
+        obstacles[i].rotSpeedY = 0.2f + (rng_next(&rng) % 100) / 250.0f;
+        obstacles[i].rotPhase  = (rng_next(&rng) % 628) / 100.0f;
     }
 }
 

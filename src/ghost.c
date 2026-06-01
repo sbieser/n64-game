@@ -1,3 +1,24 @@
+/*
+ * ghost.c — death-record persistence and frozen-wreck rendering.
+ *
+ * STORAGE FORMAT
+ * ──────────────
+ * Ghost positions live in a packed GhostSave struct written to EEPROM at a
+ * fixed byte offset.  A magic number guards the slot: on load, a mismatch means
+ * "no valid data yet" (fresh cart or different layout) and we start empty.
+ * Capacity is MAX_GHOSTS; ghost_record evicts the oldest when full (a shift-down
+ * ring).  The design targets SRAM (32 KB) eventually; EEPROM works for the 8-cap.
+ *
+ * RENDERING
+ * ─────────
+ * Ghosts are culled by Z proximity to the camera, then drawn with the SF64
+ * frame-flicker trick: the ambient color alternates every other frame, so the
+ * wrecks shimmer and feel unstable — present but not quite solid.  See the
+ * design's "Frame-Count Flicker for Ghosts" note.
+ *
+ * The public API and lifecycle are documented in ghost.h.
+ */
+
 #include <libdragon.h>
 #include <t3d/t3d.h>
 #include <t3d/t3dmath.h>

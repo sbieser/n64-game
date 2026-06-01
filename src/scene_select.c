@@ -1,3 +1,16 @@
+/*
+ * scene_select.c — the demo/stage picker grid (SCENE_SELECT, index 0).
+ *
+ * A paged grid of tiles, one per scene in the registry except Select itself.
+ * The D-pad moves the cursor, A enters the highlighted scene, L/R page through
+ * when there are more scenes than fit on one 3×2 page.
+ *
+ * It reads the scene table through scene_count() / scene_get() rather than
+ * knowing any scene directly, so adding a scene to scenes[] makes it appear
+ * here automatically.  The "+1" throughout skips index 0 (Select itself) so
+ * the menu never lists a tile that re-enters the menu.
+ */
+
 #include <libdragon.h>
 #include <string.h>
 #include "scene.h"

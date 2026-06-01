@@ -4,6 +4,7 @@
 #include <t3d/t3dmath.h>
 #include <t3d/t3dmodel.h>
 #include "cockpit.h"
+#include "camera.h"
 
 /*
  * The cockpit frame model was built in Blender at 50× game-unit scale so
@@ -75,34 +76,23 @@ void cockpit_draw_frame(float posX, float posY, float posZ,
                         float lookX, float lookY, float lookZ) {
     /*
      * Build the model matrix directly from the camera's look direction.
-     * The same cross-product construction as t3d_viewport_look_at internally:
-     *   side  = normalize(look × worldUp) = normalize((-lookZ, 0, lookX))
-     *   camUp = side × look
-     *
-     * Pitch is clamped to ±80° by all scenes so sideLen = cos(pitch) > 0.17,
-     * safe from the singularity where look is parallel to worldUp.
-     *
-     * The model's local +Z faces toward the camera (−look direction) because
-     * the cockpit was built in Blender with its opening toward the camera.
+     * camera_basis() gives the same right/up axes t3d_viewport_look_at uses,
+     * so the frame tracks the view exactly at any yaw/pitch.  The model's
+     * local +Z faces the camera (−look) because the cockpit was modelled in
+     * Blender with its opening toward the viewer.
      * T3DMat4 is column-major: m[col][row].
      */
-    float sideLen = sqrtf(lookZ * lookZ + lookX * lookX);
-    if (sideLen < 0.0001f) sideLen = 0.0001f;   /* guard against zero look vector */
-    float sx = -lookZ / sideLen, sz =  lookX / sideLen;   /* sy = 0 always */
-    /* camUp = side × look  (sy=0 simplifies the cross product) */
-    float ux = -sz * lookY;
-    float uy =  sz * lookX - sx * lookZ;   /* = sideLen */
-    float uz =  sx * lookY;
+    CameraBasis cb = camera_basis(lookX, lookY, lookZ);
 
     float cx = posX + lookX * COCKPIT_DIST;
     float cy = posY + lookY * COCKPIT_DIST;
     float cz = posZ + lookZ * COCKPIT_DIST;
 
     T3DMat4 mat;
-    mat.m[0][0] =  sx;    mat.m[0][1] = 0.0f; mat.m[0][2] =  sz;    mat.m[0][3] = 0.0f;
-    mat.m[1][0] =  ux;    mat.m[1][1] = uy;   mat.m[1][2] =  uz;    mat.m[1][3] = 0.0f;
-    mat.m[2][0] = -lookX; mat.m[2][1] = -lookY; mat.m[2][2] = -lookZ; mat.m[2][3] = 0.0f;
-    mat.m[3][0] =  cx;    mat.m[3][1] = cy;   mat.m[3][2] =  cz;    mat.m[3][3] = 1.0f;
+    mat.m[0][0] =  cb.rightX; mat.m[0][1] = cb.rightY; mat.m[0][2] =  cb.rightZ; mat.m[0][3] = 0.0f;
+    mat.m[1][0] =  cb.upX;    mat.m[1][1] = cb.upY;    mat.m[1][2] =  cb.upZ;    mat.m[1][3] = 0.0f;
+    mat.m[2][0] = -lookX;     mat.m[2][1] = -lookY;    mat.m[2][2] = -lookZ;     mat.m[2][3] = 0.0f;
+    mat.m[3][0] =  cx;        mat.m[3][1] = cy;        mat.m[3][2] =  cz;        mat.m[3][3] = 1.0f;
 
     t3d_mat4_to_fixed_3x4(&modelMats[frameIdx], &mat);
 

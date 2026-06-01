@@ -1,6 +1,7 @@
 #include <libdragon.h>
 #include <math.h>
 #include "signal.h"
+#include "camera.h"
 
 #define SIGNAL_CH  0
 
@@ -42,14 +43,10 @@ void signal_update(float posX,    float posY,    float posZ,
     float sdx = dx / dist;
     float sdz = dz / dist;
 
-    /* Camera right = normalize(-lookZ, 0, lookX) — same as cockpit_draw_frame */
-    float sideLen = sqrtf(lookZ*lookZ + lookX*lookX);
-    if (sideLen < 0.0001f) sideLen = 0.0001f;
-    float sx = -lookZ / sideLen;
-    float sz =  lookX / sideLen;
-
-    /* Horizontal bearing: -1 = hard left, +1 = hard right */
-    float horiz = sdx * sx + sdz * sz;
+    /* Project the signal direction onto the camera's right axis.
+     * Horizontal bearing: -1 = hard left, 0 = dead ahead, +1 = hard right. */
+    CameraBasis cb = camera_basis(lookX, lookY, lookZ);
+    float horiz = sdx * cb.rightX + sdz * cb.rightZ;
     *out_h = horiz;
 
     /*
