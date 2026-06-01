@@ -8,20 +8,23 @@
  *
  * HOW THE AUDIO PIPELINE WORKS
  * ─────────────────────────────
- * libdragon's audio system owns a ring of internal buffers (we allocate 4).
- * The AI (Audio Interface) hardware DMA's from those buffers into the DAC at
- * a fixed rate — 22050 stereo samples per second here. Our job is to keep
- * those buffers fed. Each frame, audio_can_write() tells us if a buffer slot
- * is free; audio_write_begin() hands us a pointer to fill; audio_write_end()
- * hands it back for DMA. If we're too slow and a buffer runs dry, the DAC
- * repeats or glitches — so we fill as many as are ready each update().
+ * This synth is a mixer "waveform": a sample generator the RSP audio mixer
+ * pulls from on demand.  The mixer is the program's single audio path (set up
+ * in main.c) — the signal beacon and this synth both feed it, so nothing
+ * fights over the AI hardware buffers.
+ *
+ * We register a waveform_t whose read callback (synth_read) the mixer invokes
+ * whenever it needs more samples: it hands us a buffer via samplebuffer_append
+ * and we fill it by running the oscillators (synth_fill).  mixer_ch_play starts
+ * it on a channel; main.c's mixer_try_play() drives the pulling each frame.
+ * We never touch the AI buffers directly.
  *
  * SAMPLES FORMAT
  * ─────────────
- * The buffer holds stereo interleaved 16-bit signed integers:
- *   [L0][R0][L1][R1][L2][R2]...
- * Full scale is ±32767. We use ±28000 to leave a small headroom cushion
- * so multiple oscillators summing together don't hard-clip.
+ * The waveform is mono 16-bit signed (the 6 oscillators sum to one stream;
+ * left = right anyway).  Full scale is ±32767; we use ±28000 to leave a small
+ * headroom cushion so the summed oscillators don't hard-clip.  The mixer plays
+ * it at 22050 Hz, the synth's native rate — no resampling.
  *
  * THE OSCILLATOR MODEL
  * ────────────────────
@@ -104,8 +107,11 @@
  */
 
 #include <libdragon.h>
+#include <samplebuffer.h>
 #include <math.h>
 #include "scene.h"
+
+#define SYNTH_CH  1   /* mixer channel for the synth (signal uses channel 0) */
 
 #define SAMPLE_RATE   22050
 #define NUM_OSC           6
@@ -326,21 +332,50 @@ static void synth_fill(short *buf, size_t nsamples) {
         if (s >  1.0f) s =  1.0f;
         if (s < -1.0f) s = -1.0f;
         short v = (short)(s * 28000.0f);
-        buf[i * 2 + 0] = v;
-        buf[i * 2 + 1] = v;
+        buf[i] = v;   /* mono — the mixer duplicates to both speakers */
         scope_buf[scope_head & (SCOPE_LEN - 1)] = v;
         scope_head++;
     }
+}
+
+/* Mixer read callback: the mixer calls this when it needs more samples.
+ * samplebuffer_append reserves space for `wlen` mono samples; we generate
+ * straight into it. wpos/seeking are ignored — this is an endless generator
+ * with no seekable position. */
+static waveform_t synthWave;
+
+static void synth_read(void *ctx, samplebuffer_t *sbuf, int wpos, int wlen, bool seeking) {
+    (void)ctx; (void)wpos; (void)seeking;
+    short *out = (short *)samplebuffer_append(sbuf, wlen);
+    synth_fill(out, (size_t)wlen);
 }
 
 void scene_synth_init(void) {
     if (!initialized) {
         for (int i = 0; i < SIN_LUT_SIZE; i++)
             sin_lut[i] = sinf(i * (2.0f * (float)M_PI) / SIN_LUT_SIZE);
-        audio_init(SAMPLE_RATE, 4);
+
+        /* Describe the synth to the mixer: an endless mono 16-bit generator
+         * at 22050 Hz. WAVEFORM_UNKNOWN_LEN means "no fixed length" — the
+         * mixer keeps pulling from synth_read for as long as the channel plays. */
+        synthWave = (waveform_t){
+            .name      = "synth",
+            .bits      = 16,
+            .channels  = 1,
+            .frequency = SAMPLE_RATE,
+            .len       = WAVEFORM_UNKNOWN_LEN,
+            .loop_len  = 0,
+            .read      = synth_read,
+            .ctx       = NULL,
+        };
         initialized = true;
     }
     preset_load(cur_preset);
+
+    /* Start (or restart) the synth on its mixer channel at full, centered volume.
+     * master_vol/pitch are applied inside synth_fill, so the channel stays at 1.0. */
+    mixer_ch_play(SYNTH_CH, &synthWave);
+    mixer_ch_set_vol(SYNTH_CH, 1.0f, 1.0f);
 }
 
 void scene_synth_update(void) {
@@ -348,7 +383,8 @@ void scene_synth_update(void) {
     joypad_inputs_t  pad = joypad_get_inputs(JOYPAD_PORT_1);
     joypad_buttons_t btn = joypad_get_buttons_pressed(JOYPAD_PORT_1);
 
-    if (btn.b)       { scene_switch(SCENE_SELECT); return; }
+    /* Stop the synth channel on exit so it doesn't keep sounding in other scenes. */
+    if (btn.b)       { mixer_ch_stop(SYNTH_CH); scene_switch(SCENE_SELECT); return; }
     if (btn.d_right) preset_load((cur_preset + 1) % NUM_PRESETS);
     if (btn.d_left)  preset_load((cur_preset + NUM_PRESETS - 1) % NUM_PRESETS);
 
@@ -360,11 +396,8 @@ void scene_synth_update(void) {
     if (pitch_mult > 2.0f) pitch_mult = 2.0f;
     if (pitch_mult < 0.5f) pitch_mult = 0.5f;
 
-    while (audio_can_write()) {
-        short *buf = audio_write_begin();
-        synth_fill(buf, audio_get_buffer_length());
-        audio_write_end();
-    }
+    /* No audio pump here — main's mixer_try_play() pulls samples from
+     * synth_read every frame. We only update the live oscillator params. */
 }
 
 void scene_synth_draw(void) {
