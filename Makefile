@@ -73,5 +73,22 @@ filesystem/young_star_field.t3dm: assets/young_star_field.glb
 	$(PYTHON) patch_glb_material.py $< assets/young_star_field.patched.glb
 	$(T3D_GLTF_TO_3D) assets/young_star_field.patched.glb $@ --base-scale=1 --ignore-materials
 
+# Debris meshes (asteroid, shard, wreck) are small objects authored in Blender
+# with export_materials='NONE' to preserve COLOR_0 vertex colors. Like the stage
+# geometry they need patch_glb_material.py to inject a material index (or
+# gltf_to_t3d silently emits an empty 65-byte file), but unlike the stage they
+# are small, so they keep the default --base-scale=64 for sub-unit precision.
+filesystem/asteroid.t3dm: assets/asteroid.glb
+	$(PYTHON) patch_glb_material.py $< assets/asteroid.patched.glb
+	$(T3D_GLTF_TO_3D) assets/asteroid.patched.glb $@ --base-scale=64 --ignore-materials
+
+filesystem/shard.t3dm: assets/shard.glb
+	$(PYTHON) patch_glb_material.py $< assets/shard.patched.glb
+	$(T3D_GLTF_TO_3D) assets/shard.patched.glb $@ --base-scale=64 --ignore-materials
+
+filesystem/wreck.t3dm: assets/wreck.glb
+	$(PYTHON) patch_glb_material.py $< assets/wreck.patched.glb
+	$(T3D_GLTF_TO_3D) assets/wreck.patched.glb $@ --base-scale=64 --ignore-materials
+
 filesystem/%.t3dm: assets/%.glb
 	$(T3D_GLTF_TO_3D) $< $@ --base-scale=64 --ignore-materials

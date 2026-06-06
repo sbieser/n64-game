@@ -45,8 +45,11 @@
  *                      aside. Turning to face the Pioneer reveals violet; a
  *                      quiet seeking cue, never an arrow. Soft gradient blobs
  *                      that melt into the void. "A quality of the darkness."
- *   3. Foreground 3D stars — TODO. 3–4 real geometry stars with true parallax;
- *                      the counterpoint that sells motion (fly past them).
+ *   3. Debris field  — DONE (debris.c). The 3D-landmark layer, realized as a
+ *                      field of rock/ice chunks instead of bare stars. True
+ *                      parallax sells motion, AND their density is a navigation
+ *                      gradient: thin scatter everywhere, thickening toward the
+ *                      Pioneer. Following the debris inward leads to the signal.
  *   4. Cosmic dust   — DONE (dust.c). Near, position/velocity-driven; streams
  *                      past on thrust, settles at rest.
  *   5. Beacon pulse  — DONE (beacon.c). Dim, slow, irregular expanding rings
@@ -68,12 +71,24 @@
 #include "starcarpet.h"
 #include "dust.h"
 #include "beacon.h"
+#include "debris.h"
 
-/* Stage volume */
-#define BOUND_X       2000.0f
-#define BOUND_Y       1000.0f
-#define BOUND_Z_FAR  -4000.0f
-#define BOUND_Z_NEAR   200.0f
+/* Stage volume.
+ *
+ * The void is deliberately ENORMOUS — "the largest possible silence"
+ * (stage_01_void.md). At the shared flight speed (~480 units/sec) the long
+ * Z axis takes ~60 seconds to cross at full thrust, and that's only if you
+ * fly straight. Wandering off-heading in search of the signal costs real
+ * minutes. The Pioneer is buried deep and off to one side (see below) so the
+ * player never spawns pointed at it.
+ *
+ * NOTE: all bounds and the Pioneer position must stay under ~32000. tiny3d's
+ * model matrices are s16.16 fixed-point, so a world coordinate above 32767
+ * overflows the translation term and the object jumps. 28000 leaves headroom. */
+#define BOUND_X      14000.0f
+#define BOUND_Y       6000.0f
+#define BOUND_Z_FAR -28000.0f
+#define BOUND_Z_NEAR  2000.0f
 
 /* Flight */
 #define THRUST          0.18f
@@ -87,12 +102,22 @@
  * Full tank ≈ 90 seconds of continuous thrust at 60 fps. */
 #define OXY_DRAIN_RATE  0.000185f
 
-/* Pioneer beacon ghost — placeholder until humanoid model is ready */
-#define PIONEER_X      200.0f
-#define PIONEER_Y        0.0f
-#define PIONEER_Z    -1800.0f
+/* DEV KNOB — scales the oxygen drain so we can fly the whole enormous void and
+ * tune the search without dying before first contact. The intended stage is
+ * brutal (you may not make it on the first visit — that's the design), but the
+ * 90s tank is unplayable while the space is this big and the signal this faint.
+ * Set back to 1.0f to restore the real tank. */
+#define OXY_DEV_SCALE   0.25f
+
+/* Pioneer beacon ghost — placeholder until humanoid model is ready.
+ * Buried deep in −Z and pushed off-axis in +X so the spawn heading (straight
+ * down −Z) does NOT point at it. Spawn-to-Pioneer distance (~23800) is well
+ * outside the signal's detection radius, so the player starts in dead silence. */
+#define PIONEER_X     9000.0f
+#define PIONEER_Y     1500.0f
+#define PIONEER_Z   -22000.0f
 #define PIONEER_RADIUS  100.0f    /* proximity for stage completion */
-#define PIONEER_SCALE   20.0f     /* placeholder scale — visible at distance */
+#define PIONEER_SCALE   50.0f     /* placeholder scale — a silhouette on arrival */
 
 /* Frames of red-screen death flash before returning to select */
 #define DEATH_FRAMES    90
@@ -127,6 +152,8 @@ void scene_void_init(void) {
         starcarpet_init(0x51A5F1E1u);
         dust_init(0x0D05721Du);
         beacon_init(0xBEAC04u, PIONEER_X, PIONEER_Y, PIONEER_Z);
+        /* Debris field — fixed seed; density gradient peaks at the Pioneer. */
+        debris_init(0xD3B215u, PIONEER_X, PIONEER_Y, PIONEER_Z);
 
         pioneerMat = malloc_uncached(sizeof(T3DMat4FP) * 3);
         float scale[3] = {PIONEER_SCALE, PIONEER_SCALE, PIONEER_SCALE};
@@ -136,9 +163,13 @@ void scene_void_init(void) {
             t3d_mat4fp_from_srt_euler(&pioneerMat[i], scale, rot, pos);
 
         viewport = t3d_viewport_create();
-        /* Far clip 4000 matches BOUND_Z_FAR so nothing inside the stage
-         * ever clips. Pioneer sits at 1800 — well inside range. */
-        t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(65.0f), 2.0f, 4000.0f);
+        /* Far clip is intentionally MUCH shorter than the stage is deep
+         * (8000 vs 28000). The void is too big to render end-to-end, and we
+         * don't want to: the 2D star backdrop is screen-space (no depth, always
+         * visible), and the only 3D objects — Pioneer, ghosts, dust, beacon —
+         * only matter when the player is near them. A shorter far plane also
+         * keeps the 16-bit depth buffer precise where it counts: up close. */
+        t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(65.0f), 2.0f, 8000.0f);
 
         initialized = true;
     }
@@ -175,7 +206,7 @@ void scene_void_update(void) {
     bool thrusting = flight_update(&flight, &flightCfg,
                                    pad.stick_x, pad.stick_y, held.z, held.r);
     if (thrusting) {
-        oxygen -= OXY_DRAIN_RATE;
+        oxygen -= OXY_DRAIN_RATE * OXY_DEV_SCALE;
         if (oxygen < 0.0f) oxygen = 0.0f;
     }
 
@@ -258,6 +289,11 @@ void scene_void_draw(void) {
         t3d_matrix_push(&pioneerMat[frameIdx]);
         draw_shape(SHAPE_OCTA);
         t3d_matrix_pop(1);
+
+        /* Layer 3 — debris field. Rock/ice chunks scattered through the void,
+         * thickening toward the Pioneer. Sets its own cold lighting; only the
+         * pieces within render range are emitted. */
+        debris_draw(flight.posX, flight.posY, flight.posZ);
 
         /* Layer 5 — the Pioneer's expanding beacon ring(s). */
         beacon_draw();
